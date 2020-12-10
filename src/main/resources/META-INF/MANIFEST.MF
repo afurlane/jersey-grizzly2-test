@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Implementation-Vendor: "Alessandro Furlanetto"
+Implementation-Title: "Test Jersey 3.0"
+Implementation-Version: "1.0-SNAPSHOT"
+Created-By: Alessandro Furlanetto
+Name: JerseyGrizzly2Test
