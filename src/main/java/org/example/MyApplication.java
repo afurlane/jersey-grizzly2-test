@@ -7,9 +7,11 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import org.examle.infrastructure.EndpointLoggingListener;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletConfig;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 import java.util.HashSet;
@@ -28,6 +30,8 @@ public class MyApplication extends Application {
         HashSet<Class<?>> addClasses = new HashSet<Class<?>>();
         addClasses.addAll(classes);
         addClasses.add(MyResource.class);
+        // super.packages("io.swagger.sample.resource", "io.swagger.v3.jaxrs2.integration.resources");
+        addClasses.add(EndpointLoggingListener.class);
         return addClasses;
     }
 

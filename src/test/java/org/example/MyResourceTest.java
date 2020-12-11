@@ -1,7 +1,6 @@
 package org.example;
 
 import org.junit.Test;
-import javax.ws.rs.core.Application;
 
 import static org.junit.Assert.assertEquals;
 
@@ -12,7 +11,7 @@ public class MyResourceTest extends CdiBaseTest {
      */
     @Test
     public void testGetIt() {
-        String responseMsg = target().path("myresource").request().get(String.class);
+        String responseMsg = target().path(MyResource.MyResourcePath).request().get(String.class);
         assertEquals("Got it!", responseMsg);
     }
 }

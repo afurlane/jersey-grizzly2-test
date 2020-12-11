@@ -14,8 +14,10 @@ import java.util.List;
 /**
  * Root resource (exposed at "myresource" path)
  */
-@Path("myresource")
+@Path(MyResource.MyResourcePath)
 public class MyResource {
+
+    final static String MyResourcePath = "myresource";
 
     /**
      * Method handling HTTP GET requests. The returned object will be sent
