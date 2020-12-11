@@ -12,12 +12,24 @@ import javax.annotation.PostConstruct;
 import javax.servlet.ServletConfig;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MyApplication extends Application {
 
     @Context ServletConfig servletConfig;
+
+    @Override
+    public Set<Class<?>> getClasses()
+    {
+        Set<Class<?>> classes = super.getClasses();
+        HashSet<Class<?>> addClasses = new HashSet<Class<?>>();
+        addClasses.addAll(classes);
+        addClasses.add(MyResource.class);
+        return addClasses;
+    }
 
     @PostConstruct
     public void InitOpenAPI()
