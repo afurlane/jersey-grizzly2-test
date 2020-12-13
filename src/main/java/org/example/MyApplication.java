@@ -1,6 +1,8 @@
 package org.example;
 
 import io.swagger.v3.jaxrs2.integration.JaxrsOpenApiContextBuilder;
+import io.swagger.v3.jaxrs2.integration.resources.AcceptHeaderOpenApiResource;
+import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
 import io.swagger.v3.oas.integration.OpenApiConfigurationException;
 import io.swagger.v3.oas.integration.SwaggerConfiguration;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -23,21 +25,7 @@ public class MyApplication extends Application {
 
     @Context ServletConfig servletConfig;
 
-    @Override
-    public Set<Class<?>> getClasses()
-    {
-        Set<Class<?>> classes = super.getClasses();
-        HashSet<Class<?>> addClasses = new HashSet<Class<?>>();
-        addClasses.addAll(classes);
-        addClasses.add(MyResource.class);
-        // super.packages("io.swagger.sample.resource", "io.swagger.v3.jaxrs2.integration.resources");
-        addClasses.add(EndpointLoggingListener.class);
-        return addClasses;
-    }
-
-    @PostConstruct
-    public void InitOpenAPI()
-    {
+    public void ConfigureApplication() {
         OpenAPI oas = new OpenAPI();
         Info info = new Info()
                 .title("Swagger Sample App bootstrap code")
@@ -55,7 +43,7 @@ public class MyApplication extends Application {
         SwaggerConfiguration oasConfig = new SwaggerConfiguration()
                 .openAPI(oas)
                 .prettyPrint(true)
-                .resourcePackages(Stream.of("org.example").collect(Collectors.toSet()));
+                .resourcePackages(Stream.of("io.swagger.sample.resource").collect(Collectors.toSet()));
 
         try {
             new JaxrsOpenApiContextBuilder()
@@ -66,5 +54,15 @@ public class MyApplication extends Application {
         } catch (OpenApiConfigurationException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
+    }
+
+    @Override
+    public Set<Class<?>> getClasses()
+    {
+        ConfigureApplication();
+        return Stream.of(MyResource.class,
+        EndpointLoggingListener.class,
+        OpenApiResource.class,
+        AcceptHeaderOpenApiResource.class).collect(Collectors.toSet());
     }
 }
