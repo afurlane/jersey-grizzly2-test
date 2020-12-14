@@ -9,14 +9,11 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
-import org.examle.infrastructure.EndpointLoggingListener;
+import org.example.infrastructure.EndpointLoggingListener;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.ServletConfig;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

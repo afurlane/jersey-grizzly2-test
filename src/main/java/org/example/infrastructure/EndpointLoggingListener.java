@@ -1,11 +1,11 @@
-package org.examle.infrastructure;
+package org.example.infrastructure;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import java.util.Comparator;
+
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
+
 import org.glassfish.jersey.server.model.Resource;
 import org.glassfish.jersey.server.model.ResourceMethod;
 import org.glassfish.jersey.server.model.ResourceModel;
@@ -13,10 +13,9 @@ import org.glassfish.jersey.server.monitoring.ApplicationEvent;
 import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
 import org.glassfish.jersey.server.monitoring.RequestEvent;
 import org.glassfish.jersey.server.monitoring.RequestEventListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.ws.rs.core.Context;
 
@@ -25,10 +24,12 @@ public class EndpointLoggingListener implements ApplicationEventListener {
     @Context
     ServletContext httpServletContext;
 
+    @Inject
+    ResourceLogDetails resourceLogDetails;
+
     private static final TypeResolver TYPE_RESOLVER = new TypeResolver();
 
     private String applicationPath = null;
-
     private boolean withOptions = false;
     private boolean withWadl = false;
 
@@ -36,11 +37,11 @@ public class EndpointLoggingListener implements ApplicationEventListener {
     public void onEvent(ApplicationEvent event) {
         if (event.getType() == ApplicationEvent.Type.INITIALIZATION_APP_FINISHED) {
             final ResourceModel resourceModel = event.getResourceModel();
-            final ResourceLogDetails logDetails = new ResourceLogDetails();
+            resourceLogDetails.clearEndpointLogLines();
             resourceModel.getResources().stream().forEach((resource) -> {
-                logDetails.addEndpointLogLines(getLinesFromResource(resource));
+                resourceLogDetails.addEndpointLogLines(getLinesFromResource(resource));
             });
-            logDetails.log();
+            resourceLogDetails.log();
         }
     }
 
@@ -128,47 +129,5 @@ public class EndpointLoggingListener implements ApplicationEventListener {
 
          */
         this.applicationPath = String.format(httpServletContext.getRealPath(httpServletContext.getContextPath()));
-    }
-
-    private static class ResourceLogDetails {
-
-        private static final Logger logger = LoggerFactory.getLogger(ResourceLogDetails.class);
-
-        private static final Comparator<EndpointLogLine> COMPARATOR
-                = Comparator.comparing((EndpointLogLine e) -> e.path)
-                .thenComparing((EndpointLogLine e) -> e.httpMethod);
-
-        private final Set<EndpointLogLine> logLines = new TreeSet<>(COMPARATOR);
-
-        private void log() {
-            StringBuilder sb = new StringBuilder("\nAll endpoints for Jersey application\n");
-            logLines.stream().forEach((line) -> {
-                sb.append(line).append("\n");
-            });
-            logger.info(sb.toString());
-        }
-
-        private void addEndpointLogLines(Set<EndpointLogLine> logLines) {
-            this.logLines.addAll(logLines);
-        }
-    }
-
-    private static class EndpointLogLine {
-
-        private static final String DEFAULT_FORMAT = "   %-7s %s";
-        final String httpMethod;
-        final String path;
-        final String format;
-
-        private EndpointLogLine(String httpMethod, String path, String format) {
-            this.httpMethod = httpMethod;
-            this.path = path;
-            this.format = format == null ? DEFAULT_FORMAT : format;
-        }
-
-        @Override
-        public String toString() {
-            return String.format(format, httpMethod, path);
-        }
     }
 }
