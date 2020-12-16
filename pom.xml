@@ -175,7 +175,8 @@
         <!-- JPA Support -->
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
-            <artifactId>org.eclipse.persistence.jpa</artifactId>
+            <!-- <artifactId>org.eclipse.persistence.jpa</artifactId> -->
+            <artifactId>eclipselink</artifactId>
             <version>${eclipselink.version}</version>
         </dependency>
 
@@ -191,10 +192,18 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <!--
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>${h2.version}</version>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>${derby.version}</version>
+            <scope>test</scope>
+        </dependency>
+        -->
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derbyclient</artifactId>
+            <version>${derby.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -310,8 +319,9 @@
         <javax-annotation.version>1.3.2</javax-annotation.version>
         <cdi-api.version>2.0.SP1</cdi-api.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <eclipselink.version>2.6.4</eclipselink.version>
+        <eclipselink.version>2.7.7</eclipselink.version>
         <junit.version>4.12</junit.version>
         <h2.version>1.4.200</h2.version>
+        <derby.version>10.15.2.0</derby.version>
     </properties>
 </project>

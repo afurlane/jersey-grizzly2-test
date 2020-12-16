@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
+import javax.persistence.EntityManagerFactory;
 
 public class Producer {
     // Interesting
@@ -13,5 +14,10 @@ public class Producer {
     public Logger getLogger(InjectionPoint p)
     {
         return LogManager.getLogger(p.getClass().getCanonicalName());
+    }
+
+    @Produces
+    public EntityManagerFactory getEntityManagerFactory() {
+        return javax.persistence.Persistence.createEntityManagerFactory("example-unit");
     }
 }

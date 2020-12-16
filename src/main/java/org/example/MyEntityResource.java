@@ -28,7 +28,8 @@ public class MyEntityResource {
     final static String MyEntityResourcePath = "myresourceentity";
     final static String MyEntityResourcePathId = "{id}";
 
-    @PersistenceUnit(unitName = "example-unit")
+    // @PersistenceUnit(unitName = "example-unit")
+    @Inject
     private EntityManagerFactory entityManagerFactory;
 
     @Inject Logger logger;
@@ -59,7 +60,7 @@ public class MyEntityResource {
                 .entity("Operation time out.").build()));
         asyncResponse.setTimeout(20, TimeUnit.SECONDS);
         new Thread(() -> {
-            entityManagerFactory = javax.persistence.Persistence.createEntityManagerFactory("example-unit");
+            // entityManagerFactory = javax.persistence.Persistence.createEntityManagerFactory("example-unit");
             EntityManager entityManager = entityManagerFactory.createEntityManager();
             ExampleEntity exampleEntity = entityManager.find(ExampleEntity.class, id);
             entityManager.close();
