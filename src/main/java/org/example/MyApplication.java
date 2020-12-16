@@ -58,6 +58,7 @@ public class MyApplication extends Application {
     {
         ConfigureApplication();
         return Stream.of(MyResource.class,
+        MyEntityResource.class,
         EndpointLoggingListener.class,
         OpenApiResource.class,
         AcceptHeaderOpenApiResource.class).collect(Collectors.toSet());
