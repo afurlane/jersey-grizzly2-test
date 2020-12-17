@@ -8,31 +8,18 @@
         <class>org.example.entities.ExampleDetailEntity</class>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
-            <!--
-            <property name="eclipselink.jdbc.platform"  value="org.eclipse.persistence.platform.database.H2Platform" />
-            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
-            <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test;DB_CLOSE_DELAY=-1" />
-            <property name="javax.persistence.jdbc.user" value="" />
-            <property name="javax.persistence.jdbc.password" value="" />
-            -->
-            <property name="eclipselink.target-database" value="Derby"/>
+            <!-- See https://www.eclipse.org/eclipselink/documentation/2.5/jpa/extensions/p_validation_only.htm#validation-only -->
+            <property name="eclipselink.target-database" value="Auto"/>
             <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:derby:derbyDB;create=true"/>
             <property name="javax.persistence.jdbc.user" value="APP"/>
             <property name="javax.persistence.jdbc.password" value="APP"/>
-            <property name="eclipselink.logging.level" value="ALL"/>
-            <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
-            <property name="eclipselink.ddl-generation.output-mode" value="database" />
-            <!--
-            <property name="oracle.orm.throw.exceptions" value="false"/>
             <property name="eclipselink.logging.parameters" value="true"/>
             <property name="eclipselink.logging.level" value="ALL"/>
             <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
             <property name="eclipselink.ddl-generation.output-mode" value="database" />
-            <property name="eclipselink.composite-unit.member" value="false"/>
-            <property name="eclipselink.composite-unit" value="false"/>
+            <!--  Non usage of eclipselink as java agent for bytecode dynamic change -->
             <property name="eclipselink.weaving" value="static"/>
-            -->
         </properties>
     </persistence-unit>
 </persistence>
