@@ -34,11 +34,44 @@ public class MyEntityResource {
 
     @Inject Logger logger;
 
+    @GET
+    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Operation(summary = "Get ExampleEntity by Id",
+            tags = {"Id Long"},
+            description = "Return the example Entity and connected entities",
+            responses = {
+                    @ApiResponse(description = "The ExampleEntity", content = @Content(
+                            schema = @Schema(implementation = ExampleEntity.class)
+                    )),
+                    @ApiResponse(responseCode = "400", description = "No Id supplied"),
+                    @ApiResponse(responseCode = "404", description = "ExampleEntity not found")
+            })
+    public void GetEntityById(@Suspended final AsyncResponse asyncResponse) {
+        asyncResponse.setTimeoutHandler(asyncResponse1 -> asyncResponse1.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
+                .entity("Operation time out.").build()));
+        asyncResponse.setTimeout(20, TimeUnit.SECONDS);
+        new Thread(() -> {
+            EntityManager entityManager = entityManagerFactory.createEntityManager();
+            ExampleEntity exampleEntity = entityManager
+                    .createQuery("select t from ExampleEntity t", ExampleEntity.class)
+                    .setFirstResult(0)
+                    .setMaxResults(1).getSingleResult();
+            entityManager.close();
+            Response response;
+            if (exampleEntity == null) {
+                response = Response.status(Response.Status.NOT_FOUND).build();
+            } else {
+                response = Response.status(Response.Status.OK).entity(exampleEntity).build();
+            }
+            asyncResponse.resume(response);
+        }).start();
+    }
+
     @Path(MyEntityResourcePathId)
     @GET
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Operation(summary = "Get ExampleEntity by Id",
-            tags = {"Id UUID"},
+            tags = {"Id Long"},
             description = "Return the example Entity and connected entities",
             responses = {
                     @ApiResponse(description = "The ExampleEntity", content = @Content(
@@ -51,16 +84,14 @@ public class MyEntityResource {
                               @Parameter(
                                       description = "Id of ExampleEntity",
                                       schema = @Schema(
-                                                      type = "UUID",
-                                                      format = "String",
-                                                      description = "Id to be searched"),
+                                              type = "Long",
+                                              description = "Id to be searched"),
                                       required = true)
-                              @NotEmpty(message ="Id cannot be null") @PathParam("id") UUID id) {
+                              @NotEmpty(message ="Id cannot be null") @PathParam("id") Long id) {
         asyncResponse.setTimeoutHandler(asyncResponse1 -> asyncResponse1.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
                 .entity("Operation time out.").build()));
         asyncResponse.setTimeout(20, TimeUnit.SECONDS);
         new Thread(() -> {
-            // entityManagerFactory = javax.persistence.Persistence.createEntityManagerFactory("example-unit");
             EntityManager entityManager = entityManagerFactory.createEntityManager();
             ExampleEntity exampleEntity = entityManager.find(ExampleEntity.class, id);
             entityManager.close();
@@ -91,11 +122,10 @@ public class MyEntityResource {
                                  @Parameter(
                                          description = "Id of ExampleEntity",
                                          schema = @Schema(
-                                                 type = "UUID",
-                                                 format = "String",
+                                                 type = "Long",
                                                  description = "Id of ExampleEntity to be deleted"),
                                          required = true)
-                                 @NotEmpty(message ="Id cannot be null") @PathParam("id") UUID id) {
+                                 @NotEmpty(message ="Id cannot be null") @PathParam("id") Long id) {
         asyncResponse.setTimeoutHandler(asyncResponse1 -> asyncResponse1.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
                 .entity("Operation time out.").build()));
         asyncResponse.setTimeout(20, TimeUnit.SECONDS);

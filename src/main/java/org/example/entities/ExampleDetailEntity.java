@@ -13,7 +13,7 @@ public class ExampleDetailEntity {
     private String name;
 
     @OneToMany(mappedBy="ExampleDetailEntity",cascade= CascadeType.PERSIST)
-    private List<ExampleEntity> employees = new ArrayList<>();
+    private List<ExampleEntity> exampleEntities = new ArrayList<>();
 
     public ExampleDetailEntity() {
         super();
@@ -34,9 +34,9 @@ public class ExampleDetailEntity {
         this.name = name;
     }
     public List<ExampleEntity> getExampleEntity() {
-        return employees;
+        return exampleEntities;
     }
-    public void setExampleEntity(List<ExampleEntity> employees) {
-        this.employees = employees;
+    public void setExampleEntity(List<ExampleEntity> exampleEntities) {
+        this.exampleEntities = exampleEntities;
     }
 }
