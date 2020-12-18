@@ -1,11 +1,7 @@
 package org.example;
 
 import org.junit.Test;
-
-import javax.persistence.metamodel.ListAttribute;
-import javax.ws.rs.core.Response;
 import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 

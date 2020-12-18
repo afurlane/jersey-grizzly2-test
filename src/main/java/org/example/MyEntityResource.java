@@ -12,14 +12,13 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnit;
+import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotEmpty;
 import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Path(MyEntityResource.MyEntityResourcePath)
@@ -27,7 +26,9 @@ public class MyEntityResource {
 
     final static String MyEntityResourcePath = "myresourceentity";
     final static String MyEntityResourcePathId = "{id}";
+    final static int APITimeoutInSeconds = 60;
 
+    // EJB -> look at specification
     // @PersistenceUnit(unitName = "example-unit")
     @Inject
     private EntityManagerFactory entityManagerFactory;
@@ -49,13 +50,12 @@ public class MyEntityResource {
     public void GetEntityById(@Suspended final AsyncResponse asyncResponse) {
         asyncResponse.setTimeoutHandler(asyncResponse1 -> asyncResponse1.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
                 .entity("Operation time out.").build()));
-        asyncResponse.setTimeout(20, TimeUnit.SECONDS);
+        asyncResponse.setTimeout(APITimeoutInSeconds, TimeUnit.SECONDS);
         new Thread(() -> {
             EntityManager entityManager = entityManagerFactory.createEntityManager();
-            ExampleEntity exampleEntity = entityManager
-                    .createQuery("select t from ExampleEntity t", ExampleEntity.class)
-                    .setFirstResult(0)
-                    .setMaxResults(1).getSingleResult();
+            TypedQuery<ExampleEntity> exampleEntityQuery =
+                        entityManager.createQuery("select t from ExampleEntity t", ExampleEntity.class).setMaxResults(1);
+            ExampleEntity exampleEntity = exampleEntityQuery.getSingleResult();
             entityManager.close();
             Response response;
             if (exampleEntity == null) {
@@ -90,7 +90,7 @@ public class MyEntityResource {
                               @NotEmpty(message ="Id cannot be null") @PathParam("id") Long id) {
         asyncResponse.setTimeoutHandler(asyncResponse1 -> asyncResponse1.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
                 .entity("Operation time out.").build()));
-        asyncResponse.setTimeout(20, TimeUnit.SECONDS);
+        asyncResponse.setTimeout(APITimeoutInSeconds, TimeUnit.SECONDS);
         new Thread(() -> {
             EntityManager entityManager = entityManagerFactory.createEntityManager();
             ExampleEntity exampleEntity = entityManager.find(ExampleEntity.class, id);
@@ -128,7 +128,7 @@ public class MyEntityResource {
                                  @NotEmpty(message ="Id cannot be null") @PathParam("id") Long id) {
         asyncResponse.setTimeoutHandler(asyncResponse1 -> asyncResponse1.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
                 .entity("Operation time out.").build()));
-        asyncResponse.setTimeout(20, TimeUnit.SECONDS);
+        asyncResponse.setTimeout(APITimeoutInSeconds, TimeUnit.SECONDS);
         new Thread(() -> {
             EntityManager entityManager = entityManagerFactory.createEntityManager();
             ExampleEntity exampleEntity = entityManager.find(ExampleEntity.class, id);

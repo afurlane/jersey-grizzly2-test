@@ -2,14 +2,12 @@ package org.example;
 
 import org.example.entities.ExampleDetailEntity;
 import org.example.entities.ExampleEntity;
-import org.example.infrastructure.Producer;
 import org.junit.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
-import java.util.UUID;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -49,12 +47,15 @@ public class MyEntityResourceTest extends CdiBaseTest {
     {
         EntityManagerFactory entityManagerFactory = container.select(EntityManagerFactory.class).get();
         EntityManager entityManager = entityManagerFactory.createEntityManager();
+        var transaction = entityManager.getTransaction();
+        transaction.begin();
         ExampleEntity exampleEntity = new ExampleEntity();
         ExampleDetailEntity exampleDetailEntity = new ExampleDetailEntity();
         exampleDetailEntity.setName("ExampleDetailEntityName");
         exampleEntity.setExampleDetailEntity(exampleDetailEntity);
         exampleEntity.setName("ExampleEntityName");
         entityManager.persist(exampleEntity);
+        transaction.commit();
         entityManager.close();
         entityManagerFactory.close();
     }

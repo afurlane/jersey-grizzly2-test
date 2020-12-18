@@ -12,7 +12,6 @@ import java.util.TreeSet;
 public class ResourceLogDetails {
 
     @Inject
-    // private static final Logger logger = LoggerFactory.getLogger(ResourceLogDetails.class);
     private Logger logger;
 
     private final Comparator<EndpointLogLine> COMPARATOR
@@ -36,5 +35,4 @@ public class ResourceLogDetails {
     public void addEndpointLogLines(Set<EndpointLogLine> logLines) {
         this.logLines.addAll(logLines);
     }
-
 }

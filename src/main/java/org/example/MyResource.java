@@ -33,7 +33,7 @@ public class MyResource {
 
     @GET
     @Path(MyResourceTryQuery)
-    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Operation(summary = "Get an array of strings from query param",
             tags = {"Array"},
             description = "Does nothing whith that",

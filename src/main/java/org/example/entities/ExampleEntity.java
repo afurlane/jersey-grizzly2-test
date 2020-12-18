@@ -15,7 +15,7 @@ public class ExampleEntity {
 
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private ExampleDetailEntity exampleDetailEntity;
 
     public ExampleEntity() {}

@@ -3,7 +3,6 @@ package org.example;
 import javax.enterprise.inject.se.SeContainer;
 import javax.enterprise.inject.se.SeContainerInitializer;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.UriBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

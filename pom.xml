@@ -5,7 +5,7 @@
 
     <groupId>org.example</groupId>
     <artifactId>jersey-grizzly2-test</artifactId>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>jersey-grizzly2-test</name>
 
@@ -213,6 +213,23 @@
             <version>${derby.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- JOOQ support -->
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>
+            <version>${jooq.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-meta</artifactId>
+            <version>${jooq.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-codegen</artifactId>
+            <version>${jooq.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -330,5 +347,6 @@
         <junit.version>4.12</junit.version>
         <h2.version>1.4.200</h2.version>
         <derby.version>10.15.2.0</derby.version>
+        <jooq.version>3.14.4</jooq.version>
     </properties>
 </project>
