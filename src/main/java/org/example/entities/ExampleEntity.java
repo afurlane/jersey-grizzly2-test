@@ -1,10 +1,6 @@
 package org.example.entities;
 
-import org.eclipse.persistence.internal.helper.ClassConstants;
-
 import javax.persistence.*;
-import java.time.Month;
-import java.util.UUID;
 
 @Entity
 public class ExampleEntity {

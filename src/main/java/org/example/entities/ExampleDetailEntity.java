@@ -1,6 +1,7 @@
 package org.example.entities;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,9 +34,12 @@ public class ExampleDetailEntity {
     public void setName(String name) {
         this.name = name;
     }
+    // TODO: Use model mapper to map entities to REST API models so you don't need xmltransient
+    @XmlTransient
     public List<ExampleEntity> getExampleEntity() {
         return exampleEntities;
     }
+    @XmlTransient
     public void setExampleEntity(List<ExampleEntity> exampleEntities) {
         this.exampleEntities = exampleEntities;
     }

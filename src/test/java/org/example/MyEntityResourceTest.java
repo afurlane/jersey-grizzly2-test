@@ -22,9 +22,9 @@ public class MyEntityResourceTest extends CdiBaseTest {
     @Test
     public void testGGetEntityByIdWhithNullParam() {
         Response responseMsg = target().path(MyEntityResource.MyEntityResourcePath).request().get();
-        String prova = responseMsg.readEntity(String.class);
+        ExampleEntity exampleEntity = responseMsg.readEntity(ExampleEntity.class);
         assertNotNull(responseMsg);
-        assertNotNull(prova);
+        assertNotNull(exampleEntity);
     }
 
     @Test(expected = NotFoundException.class)

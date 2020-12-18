@@ -174,10 +174,40 @@
 
         <!-- JPA Support -->
         <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>javax.persistence-api</artifactId>
+            <version>${persistence-api.version}</version>
+        </dependency>
+        <dependency>
+            <!-- This should be in tomcat/jetty/<other> packaging -->
             <groupId>org.eclipse.persistence</groupId>
             <!-- <artifactId>org.eclipse.persistence.jpa</artifactId> -->
             <artifactId>eclipselink</artifactId>
             <version>${eclipselink.version}</version>
+        </dependency>
+
+        <!-- JOOQ support -->
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>
+            <version>${jooq.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-meta</artifactId>
+            <version>${jooq.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-codegen</artifactId>
+            <version>${jooq.version}</version>
+        </dependency>
+
+        <!-- Model Mapper support -->
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>${modelmapper.version}</version>
         </dependency>
 
         <!-- Testing support -->
@@ -214,22 +244,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- JOOQ support -->
-        <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq</artifactId>
-            <version>${jooq.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq-meta</artifactId>
-            <version>${jooq.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq-codegen</artifactId>
-            <version>${jooq.version}</version>
-        </dependency>
+
     </dependencies>
 
     <build>
@@ -348,5 +363,7 @@
         <h2.version>1.4.200</h2.version>
         <derby.version>10.15.2.0</derby.version>
         <jooq.version>3.14.4</jooq.version>
+        <modelmapper.version>2.3.0</modelmapper.version>
+        <persistence-api.version>2.2</persistence-api.version>
     </properties>
 </project>
