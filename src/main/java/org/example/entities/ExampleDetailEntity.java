@@ -5,16 +5,17 @@ import javax.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Entity(name = "ExampleDetailEntity")
+@Table(name = "exampledetailentity")
 public class ExampleDetailEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
 
-    @OneToMany(mappedBy="ExampleDetailEntity",cascade= CascadeType.PERSIST)
-    private List<ExampleEntity> exampleEntities = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ExampleEntity exampleEntity;
 
     public ExampleDetailEntity() {
         super();
@@ -22,25 +23,25 @@ public class ExampleDetailEntity {
     public ExampleDetailEntity(String name) {
         this.name = name;
     }
+
     public Long getId() {
         return id;
     }
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getName() {
         return name;
     }
     public void setName(String name) {
         this.name = name;
     }
-    // TODO: Use model mapper to map entities to REST API models so you don't need xmltransient
-    @XmlTransient
-    public List<ExampleEntity> getExampleEntity() {
-        return exampleEntities;
+
+    public ExampleEntity getExampleEntity() {
+        return exampleEntity;
     }
-    @XmlTransient
-    public void setExampleEntity(List<ExampleEntity> exampleEntities) {
-        this.exampleEntities = exampleEntities;
+    public void setExampleEntity(ExampleEntity exampleEntity) {
+        this.exampleEntity = exampleEntity;
     }
 }

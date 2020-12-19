@@ -11,5 +11,5 @@ public class SwaggerTest extends CdiBaseTest {
     {
         String responseMsg = target().path("openapi.json").request().get(String.class);
         assertEquals("openapi", responseMsg.substring(6, 13));
-    }
+        }
 }

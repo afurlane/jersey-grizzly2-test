@@ -6,19 +6,26 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.apache.logging.log4j.Logger;
+import org.example.entities.ExampleDetailEntity;
 import org.example.entities.ExampleEntity;
+import org.example.models.ExampleModel;
+import org.modelmapper.ModelMapper;
 
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.validation.constraints.NotEmpty;
 import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Path(MyEntityResource.MyEntityResourcePath)
@@ -32,6 +39,9 @@ public class MyEntityResource {
     // @PersistenceUnit(unitName = "example-unit")
     @Inject
     private EntityManagerFactory entityManagerFactory;
+
+    @Inject
+    private ModelMapper modelMapper;
 
     @Inject Logger logger;
 
@@ -53,15 +63,20 @@ public class MyEntityResource {
         asyncResponse.setTimeout(APITimeoutInSeconds, TimeUnit.SECONDS);
         new Thread(() -> {
             EntityManager entityManager = entityManagerFactory.createEntityManager();
-            TypedQuery<ExampleEntity> exampleEntityQuery =
-                        entityManager.createQuery("select t from ExampleEntity t", ExampleEntity.class).setMaxResults(1);
-            ExampleEntity exampleEntity = exampleEntityQuery.getSingleResult();
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<ExampleEntity> criteriaQuery = criteriaBuilder.createQuery(ExampleEntity.class);
+            Root<ExampleEntity> exampleEntityRoot = criteriaQuery.from(ExampleEntity.class);
+            criteriaQuery.select(exampleEntityRoot);
+            TypedQuery<ExampleEntity> exampleEntityTypedQuery = entityManager.createQuery(criteriaQuery)
+                    .setFirstResult(0).setMaxResults(1);
+            ExampleEntity exampleEntity = exampleEntityTypedQuery.getSingleResult();
             entityManager.close();
             Response response;
             if (exampleEntity == null) {
                 response = Response.status(Response.Status.NOT_FOUND).build();
             } else {
-                response = Response.status(Response.Status.OK).entity(exampleEntity).build();
+                response = Response.status(Response.Status.OK).entity(
+                        modelMapper.map(exampleEntity, ExampleModel.class)).build();
             }
             asyncResponse.resume(response);
         }).start();
@@ -99,7 +114,8 @@ public class MyEntityResource {
             if (exampleEntity == null) {
                 response = Response.status(Response.Status.NOT_FOUND).build();
             } else {
-                response = Response.status(Response.Status.OK).entity(exampleEntity).build();
+                response = Response.status(Response.Status.OK).entity(
+                        modelMapper.map(exampleEntity, ExampleModel.class)).build();
             }
             asyncResponse.resume(response);
         }).start();

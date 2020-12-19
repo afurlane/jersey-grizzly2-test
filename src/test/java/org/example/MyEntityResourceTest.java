@@ -2,12 +2,15 @@ package org.example;
 
 import org.example.entities.ExampleDetailEntity;
 import org.example.entities.ExampleEntity;
+import org.example.models.ExampleModel;
 import org.junit.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
+
+import java.util.Collections;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -22,7 +25,7 @@ public class MyEntityResourceTest extends CdiBaseTest {
     @Test
     public void testGGetEntityByIdWhithNullParam() {
         Response responseMsg = target().path(MyEntityResource.MyEntityResourcePath).request().get();
-        ExampleEntity exampleEntity = responseMsg.readEntity(ExampleEntity.class);
+        ExampleModel exampleEntity = responseMsg.readEntity(ExampleModel.class);
         assertNotNull(responseMsg);
         assertNotNull(exampleEntity);
     }
@@ -52,7 +55,7 @@ public class MyEntityResourceTest extends CdiBaseTest {
         ExampleEntity exampleEntity = new ExampleEntity();
         ExampleDetailEntity exampleDetailEntity = new ExampleDetailEntity();
         exampleDetailEntity.setName("ExampleDetailEntityName");
-        exampleEntity.setExampleDetailEntity(exampleDetailEntity);
+        exampleEntity.setExampleDetailEntity(Collections.singletonList(exampleDetailEntity));
         exampleEntity.setName("ExampleEntityName");
         entityManager.persist(exampleEntity);
         transaction.commit();

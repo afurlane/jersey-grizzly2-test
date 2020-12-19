@@ -1,8 +1,11 @@
 package org.example.entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-@Entity
+@Entity(name = "ExampleEntity")
+@Table(name = "exampleentity")
 public class ExampleEntity {
 
     @Id
@@ -11,14 +14,17 @@ public class ExampleEntity {
 
     private String name;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    private ExampleDetailEntity exampleDetailEntity;
+    // READ:
+    // https://vladmihalcea.com/the-best-way-to-map-a-onetomany-association-with-jpa-and-hibernate/
+    // so mappedBy is the "navigation property" in linked entity
+    @OneToMany(mappedBy = "exampleEntity", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<ExampleDetailEntity> exampleDetailEntities = new ArrayList<>();
 
     public ExampleEntity() {}
 
-    public ExampleEntity(String name, ExampleDetailEntity exampleDetailEntity) {
+    public ExampleEntity(String name, List<ExampleDetailEntity> exampleDetailEntities) {
         this.name = name;
-        this.exampleDetailEntity = exampleDetailEntity;
+        this.exampleDetailEntities = exampleDetailEntities;
     }
 
     public ExampleEntity(String name) {
@@ -41,17 +47,11 @@ public class ExampleEntity {
         this.name = name;
     }
 
-    public ExampleDetailEntity getExampleDetailEntity() {
-        return exampleDetailEntity;
+    public List<ExampleDetailEntity> getExampleDetailEntity() {
+        return exampleDetailEntities;
     }
 
-    public void setExampleDetailEntity(ExampleDetailEntity exampleDetailEntity) {
-        this.exampleDetailEntity = exampleDetailEntity;
-    }
-
-    @Override
-    public String toString() {
-        return "Example [id=" + id + ", name=" + name + ", exampleDetailEntity="
-                + exampleDetailEntity.getName() + "]";
+    public void setExampleDetailEntity(List<ExampleDetailEntity> exampleDetailEntities) {
+        this.exampleDetailEntities = exampleDetailEntities;
     }
 }
