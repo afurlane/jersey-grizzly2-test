@@ -57,7 +57,7 @@ public class MyEntityResource {
             })
     public void GetEntityById(@Suspended final AsyncResponse asyncResponse) {
         asyncResponse.setTimeoutHandler(asyncResponse1 -> asyncResponse1.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
-                .entity("Operation time out.").build()));
+               .entity("Operation time out.").build()));
         asyncResponse.setTimeout(APITimeoutInSeconds, TimeUnit.SECONDS);
         new Thread(() -> {
             EntityManager entityManager = entityManagerFactory.createEntityManager();

@@ -2,12 +2,11 @@ package org.example;
 
 import org.apache.logging.log4j.Logger;
 import org.example.entities.ExampleEntity;
+import org.example.models.ExampleModel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.*;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 import org.modelmapper.ModelMapper;
 
 import javax.persistence.EntityManager;
@@ -19,9 +18,7 @@ import javax.persistence.criteria.Root;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.core.Response;
 
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -42,10 +39,12 @@ public class MyEntityResourceTest {
     TypedQuery<ExampleEntity> exampleEntityTypedQuery;
     @Mock
     ExampleEntity exampleEntity;
+    @Mock
+    ExampleModel exampleModel;
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     AsyncResponse asyncResponse;
     @Captor
-    private ArgumentCaptor<Response> captor;
+    ArgumentCaptor<Response> captor;
     @Mock
     Logger logger;
 
@@ -60,26 +59,24 @@ public class MyEntityResourceTest {
         when(entityManager.getCriteriaBuilder()).thenReturn(criteriaBuilder);
         when(criteriaBuilder.createQuery(ExampleEntity.class)).thenReturn(entityCriteriaQuery);
         when(entityCriteriaQuery.from(ExampleEntity.class)).thenReturn(exampleEntityRoot);
-        // when(entityCriteriaQuery.select(exampleEntityRoot));
         when(entityManager.createQuery( entityCriteriaQuery)).thenReturn(exampleEntityTypedQuery);
         when(exampleEntityTypedQuery.setFirstResult(0)).thenReturn(exampleEntityTypedQuery);
         when(exampleEntityTypedQuery.setMaxResults(1)).thenReturn(exampleEntityTypedQuery);
         when(exampleEntityTypedQuery.getSingleResult()).thenReturn(exampleEntity);
-        doAnswer(new Answer<Void>() {
-            public Void answer(InvocationOnMock invocation) {
-                Object[] args = invocation.getArguments();
-                return null;
-            }
-        }).when(asyncResponse).setTimeoutHandler(asyncResponse1 -> asyncResponse1.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
-                .entity("Operation time out.").build()));
-        when(asyncResponse.setTimeout(60, TimeUnit.SECONDS)).thenReturn(true);
-
+        when(modelMapper.map(exampleEntity, ExampleModel.class)).thenReturn(exampleModel);
         myEntityResource.GetEntityById(asyncResponse);
 
-        verify(asyncResponse).resume(this.captor.capture());
-        final Response res = this.captor.getValue();
+        // If you use ArgumentCaptor you should be sure that the other thread has completed.
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        verify(asyncResponse, atLeastOnce()).resume(captor.capture());
+        Response res = captor.getValue();
 
-        assertEquals(res.getEntity(), equals(exampleEntity));
-        assertEquals(res.getStatus(), Response.Status.OK);
+        assertNotNull(res);
+        assertEquals(res.getEntity(), exampleModel);
+        assertEquals(res.getStatus(), Response.Status.OK.getStatusCode());
     }
 }
