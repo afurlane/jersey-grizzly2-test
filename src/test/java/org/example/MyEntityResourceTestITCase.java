@@ -14,7 +14,7 @@ import java.util.Collections;
 
 import static org.junit.Assert.assertNotNull;
 
-public class MyEntityResourceTest extends CdiBaseTest {
+public class MyEntityResourceTestITCase extends CdiBaseTest {
 
     @Override
     public void setUp() throws Exception {

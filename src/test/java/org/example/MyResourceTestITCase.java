@@ -5,7 +5,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class MyResourceTest extends CdiBaseTest {
+public class MyResourceTestITCase extends CdiBaseTest {
 
     /**
      * Test to see that the message "Got it!" is sent in the response.
