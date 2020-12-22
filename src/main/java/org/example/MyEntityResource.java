@@ -8,9 +8,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.apache.logging.log4j.Logger;
 import org.example.entities.ExampleEntity;
 import org.example.models.ExampleModel;
+import org.glassfish.jersey.server.ManagedAsync;
 import org.modelmapper.ModelMapper;
 
 import javax.annotation.PreDestroy;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -32,10 +34,12 @@ public class MyEntityResource {
     final static String MyEntityResourcePath = "myresourceentity";
     final static String MyEntityResourcePathId = "{id}";
     final static int APITimeoutInSeconds = 60;
+    final static String timeOutMessage = "Operation time out.";
 
     // EJB -> look at specification
     // @PersistenceUnit(unitName = "example-unit")
     @Inject
+    @RequestScoped
     private EntityManagerFactory entityManagerFactory;
 
     @Inject
@@ -43,6 +47,11 @@ public class MyEntityResource {
 
     @Inject Logger logger;
 
+    /**
+     * @param asyncResponse used in async as per jax specification
+     * This is the "manual" managed way, you could use @ManagedAsync, that tell jersey to do it
+     *                      automatically but, this is a jersey specific & dependant implementation!
+     */
     @GET
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Operation(summary = "Get ExampleEntity by Id",
@@ -57,7 +66,7 @@ public class MyEntityResource {
             })
     public void GetEntityById(@Suspended final AsyncResponse asyncResponse) {
         asyncResponse.setTimeoutHandler(asyncResponse1 -> asyncResponse1.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
-               .entity("Operation time out.").build()));
+               .entity(timeOutMessage).build()));
         asyncResponse.setTimeout(APITimeoutInSeconds, TimeUnit.SECONDS);
         new Thread(() -> {
             EntityManager entityManager = entityManagerFactory.createEntityManager();
@@ -102,7 +111,7 @@ public class MyEntityResource {
                                       required = true)
                               @NotEmpty(message ="Id cannot be null") @PathParam("id") Long id) {
         asyncResponse.setTimeoutHandler(asyncResponse1 -> asyncResponse1.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
-                .entity("Operation time out.").build()));
+                .entity(timeOutMessage).build()));
         asyncResponse.setTimeout(APITimeoutInSeconds, TimeUnit.SECONDS);
         new Thread(() -> {
             EntityManager entityManager = entityManagerFactory.createEntityManager();
@@ -141,7 +150,7 @@ public class MyEntityResource {
                                          required = true)
                                  @NotEmpty(message ="Id cannot be null") @PathParam("id") Long id) {
         asyncResponse.setTimeoutHandler(asyncResponse1 -> asyncResponse1.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
-                .entity("Operation time out.").build()));
+                .entity(timeOutMessage).build()));
         asyncResponse.setTimeout(APITimeoutInSeconds, TimeUnit.SECONDS);
         new Thread(() -> {
             EntityManager entityManager = entityManagerFactory.createEntityManager();

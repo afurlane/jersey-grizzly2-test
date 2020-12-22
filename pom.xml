@@ -246,12 +246,101 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>tomcat8x</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.codehaus.cargo</groupId>
+                            <artifactId>cargo-maven2-plugin</artifactId>
+                            <configuration>
+                                <container>
+                                    <containerId>tomcat8x</containerId>
+                                </container>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.openclover</groupId>
+                <artifactId>clover-maven-plugin</artifactId>
+                <version>${clover-plugin.version}</version>
+                <!-- here or in the build section -->
+                <configuration>
+                    <generateHistorical>true</generateHistorical>
+                    <generateHtml>false</generateHtml>
+                    <generatePdf>false</generatePdf>
+                    <generateXml>true</generateXml>
+                    <encoding>UTF-8</encoding>
+                    <targetPercentage>50%</targetPercentage>
+                    <failOnViolation>false</failOnViolation>
+                    <cloverDatabase>${project.basedir}/clover/clover.db</cloverDatabase>
+                    <cloverMergeDatabase>${project.basedir}/clover/cloverMerge.db</cloverMergeDatabase>
+                    <historyDir>${project.basedir}/clover/history</historyDir>
+                    <outputDirectory>${sonar.clover.reportPath}</outputDirectory>
+                </configuration>
+            </plugin>
+            <!--
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${javadoc-plugin.version}</version>
+                <configuration>
+                    <show>public</show>
+                </configuration>
+            </plugin>
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>${surefire-report-plugin.version}</version>
+                <configuration>
+                    <reportsDirectory>${sonar.junit.reportPaths}</reportsDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.cargo</groupId>
+                    <artifactId>cargo-maven2-plugin</artifactId>
+                    <version>${cargo.version}</version>
+                    <configuration>
+                        <container>
+                            <type>remote</type>
+                        </container>
+                        <configuration>
+                            <type>runtime</type>
+                            <properties>
+                                <cargo.hostname>${hostname}</cargo.hostname>
+                                <cargo.servlet.port>${servlet.port}</cargo.servlet.port>
+                                <cargo.remote.username>${username}</cargo.remote.username>
+                                <cargo.remote.password>${password}</cargo.remote.password>
+                            </properties>
+                        </configuration>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <!-- Build with specified Java version. -->
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${mvn-compiler-plugin.version}</version>
+                <version>${maven-compiler.version}</version>
                 <inherited>true</inherited>
                 <configuration>
                     <source>${java.version}</source>
@@ -347,6 +436,158 @@
                     <mainClass>org.example.Main</mainClass>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire-plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-junit47</artifactId>
+                        <version>${surefire-plugin.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.junit.jupiter</groupId>
+                        <artifactId>junit-jupiter-engine</artifactId>
+                        <version>${junit.jupiter.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.junit.vintage</groupId>
+                        <artifactId>junit-vintage-engine</artifactId>
+                        <version>${junit.jupiter.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <systemPropertyVariables>
+                        <!--
+                        <jersey.config.test.container.port>${jersey2-port}</jersey.config.test.container.port>
+                        -->
+                    </systemPropertyVariables>
+                    <parallel>classesAndMethods</parallel>
+                    <useUnlimitedThreads>true</useUnlimitedThreads>
+                    <!-- <threadCount>10</threadCount> -->
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${failsafe-plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-junit47</artifactId>
+                        <version>${surefire-plugin.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.junit.jupiter</groupId>
+                        <artifactId>junit-jupiter-engine</artifactId>
+                        <version>${junit.jupiter.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.junit.vintage</groupId>
+                        <artifactId>junit-vintage-engine</artifactId>
+                        <version>${junit.jupiter.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <systemPropertyVariables>
+                        <!--
+                        <jersey.config.test.container.port>${jersey2-port}</jersey.config.test.container.port>
+                        -->
+                    </systemPropertyVariables>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>${sonar-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>install</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>sonar</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>test</id>
+                        <phase>test</phase>
+                        <goals></goals>
+                    </execution>
+                    <execution>
+                        <id>verify</id>
+                        <phase>verify</phase>
+                        <goals></goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.openclover</groupId>
+                <artifactId>clover-maven-plugin</artifactId>
+                <version>${clover-plugin.version}</version>
+                <configuration>
+                    <generateHistorical>true</generateHistorical>
+                    <generateHtml>false</generateHtml>
+                    <generatePdf>false</generatePdf>
+                    <generateXml>true</generateXml>
+                    <encoding>UTF-8</encoding>
+                    <targetPercentage>50%</targetPercentage>
+                    <failOnViolation>false</failOnViolation>
+                    <cloverDatabase>${project.basedir}/.clover/clover.db</cloverDatabase>
+                    <cloverMergeDatabase>${project.basedir}/.clover/cloverMerge.db</cloverMergeDatabase>
+                    <historyDir>${project.basedir}/.clover/history/</historyDir>
+                    <!--
+                    <baseDir>${project.basedir}</baseDir>
+                    <baseDir>${project.build.directory}/clover/clover.snapshot</baseDir>
+                    <cloverDatabase>${project.basedir}/.clover/clover.db</cloverDatabase>
+                    <cloverMergeDatabase>${project.basedir}/.clover/cloverMerge.db</cloverMergeDatabase>
+                    -->
+                    <encoding>UTF-8</encoding>
+                </configuration>
+                <!-- This seems not to work! -->
+                <executions>
+                    <execution>
+                        <id>pre-site</id>
+                        <phase>pre-site</phase>
+                        <goals>
+                            <goal>instrument</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>verify</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>instrument</goal>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.cargo</groupId>
+                <artifactId>cargo-maven2-plugin</artifactId>
+                <version>${cargo.version}</version>
+                <configuration>
+                    <container>
+                        <containerId>tomcat9x</containerId>
+                    </container>
+                    <deployables>
+                        <deployable>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>${project.artifactId}</artifactId>
+                            <type>war</type>
+                        </deployable>
+                    </deployables>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -356,18 +597,12 @@
         <junit.jupiter.version>5.6.2</junit.jupiter.version>
         <swagger.version>2.1.6</swagger.version>
         <swagger-ui.version>3.37.2</swagger-ui.version>
-        <mvn-compiler-plugin.version>3.8.1</mvn-compiler-plugin.version>
-        <maven-dependency-plugin.version>3.1.1</maven-dependency-plugin.version>
-        <maven-war-plugin.version>3.2.3</maven-war-plugin.version>
-        <replacer.version>1.5.3</replacer.version>
-        <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
         <weld.version>3.1.2.Final</weld.version>
         <jaxb-runtime.version>2.3.2</jaxb-runtime.version>
         <jakarta.servlet-api.version>4.0.3</jakarta.servlet-api.version>
         <jandex.version>2.1.3.Final</jandex.version>
         <javax-annotation.version>1.3.2</javax-annotation.version>
         <cdi-api.version>2.0.SP1</cdi-api.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <eclipselink.version>2.7.7</eclipselink.version>
         <junit.version>4.12</junit.version>
         <h2.version>1.4.200</h2.version>
@@ -377,7 +612,53 @@
         <persistence-api.version>2.2</persistence-api.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mockito.version>2.25.0</mockito.version>
+        <!-- Maven & build Settings -->
         <maven.failsafe.version>2.22.2</maven.failsafe.version>
         <maven.surefire.version>2.22.2</maven.surefire.version>
+        <maven-compiler.version>3.8.1</maven-compiler.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <maven-dependency-plugin.version>3.1.1</maven-dependency-plugin.version>
+        <maven-war-plugin.version>3.2.3</maven-war-plugin.version>
+        <surefire-plugin.version>2.22.1</surefire-plugin.version>
+        <failsafe-plugin.version>2.22.1</failsafe-plugin.version>
+        <surefire-report-plugin.version>2.20.1</surefire-report-plugin.version>
+        <replacer.version>1.5.3</replacer.version>
+        <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <rp.build.warname>${project.artifactId}</rp.build.warname>
+        <clover-plugin.version>4.2.0</clover-plugin.version>
+        <cargo.version>1.8.3</cargo.version>
+        <!-- SonarQube Settings -->
+        <sonar-plugin.version>3.3.0.603</sonar-plugin.version>
+        <sonar.exclusions>
+            **/clover/src-instrumented/**,
+            **/clover/src-test-instrumented/**
+        </sonar.exclusions>
+        <sonar.projectName>${project.name}</sonar.projectName>
+        <sonar.projectKey>${project.groupId}.${project.artifactId}</sonar.projectKey>
+        <sonar.projectVersion>${project.version}</sonar.projectVersion>
+        <sonar.log.level>DEBUG</sonar.log.level>
+        <sonar.sources>${project.build.sourceDirectory}</sonar.sources>
+        <!--
+        <sonar.clover.version>${clover.version}</sonar.clover.version>
+        -->
+        <sonar.java.coveragePlugin>clover</sonar.java.coveragePlugin>
+        <sonar.clover.reportPath>${project.build.directory}/site/clover/clover.xml</sonar.clover.reportPath>
+        <sonar.surefire.reportsPath>${project.build.directory}/surefire-reports</sonar.surefire.reportsPath>
+        <sonar.junit.reportPaths>${project.basedir}/target/surefire-reports</sonar.junit.reportPaths>
+        <sonar.clover.reportPath>${project.basedir}/target/site/clover/clover.xml</sonar.clover.reportPath>
+        <sonar.clover.reportPaths>${project.basedir}/target/site/clover/clover.xml</sonar.clover.reportPaths>
+        <!--
+        <sonar.findbugs.reportPaths></sonar.findbugs.reportPaths>
+        -->
+        <sonar.jacoco.reportPaths>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPaths>
+        <!--
+        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+        <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
+        <sonar.language>java</sonar.language>
+        -->
     </properties>
 </project>

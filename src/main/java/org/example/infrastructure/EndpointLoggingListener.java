@@ -19,6 +19,9 @@ import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.ws.rs.core.Context;
 
+/**
+ * This class is a nice example of how to extract information from deployed jax-rs application
+ */
 public class EndpointLoggingListener implements ApplicationEventListener {
 
     @Context

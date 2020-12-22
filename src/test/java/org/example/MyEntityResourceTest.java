@@ -23,6 +23,8 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MyEntityResourceTest {
+    private final long waitThreadTimeout = 5_000;
+
     @Mock
     EntityManagerFactory entityManagerFactory;
     @Mock
@@ -63,20 +65,35 @@ public class MyEntityResourceTest {
         when(exampleEntityTypedQuery.setFirstResult(0)).thenReturn(exampleEntityTypedQuery);
         when(exampleEntityTypedQuery.setMaxResults(1)).thenReturn(exampleEntityTypedQuery);
         when(exampleEntityTypedQuery.getSingleResult()).thenReturn(exampleEntity);
+        // First call; return example model
         when(modelMapper.map(exampleEntity, ExampleModel.class)).thenReturn(exampleModel);
         myEntityResource.GetEntityById(asyncResponse);
 
         // If you use ArgumentCaptor you should be sure that the other thread has completed.
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Sleep(waitThreadTimeout);
         verify(asyncResponse, atLeastOnce()).resume(captor.capture());
         Response res = captor.getValue();
-
         assertNotNull(res);
         assertEquals(res.getEntity(), exampleModel);
         assertEquals(res.getStatus(), Response.Status.OK.getStatusCode());
+
+        // second call, return null.
+        when(exampleEntityTypedQuery.getSingleResult()).thenReturn(null);
+        myEntityResource.GetEntityById(asyncResponse);
+        Sleep(waitThreadTimeout);
+        verify(asyncResponse, atLeastOnce()).resume(captor.capture());
+        res = captor.getValue();
+
+        assertNotNull(res);
+        assertEquals(res.getStatus(), Response.Status.NOT_FOUND.getStatusCode());
+    }
+
+    private void Sleep(long millis)
+    {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
