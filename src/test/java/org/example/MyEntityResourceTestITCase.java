@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response;
 import java.util.Collections;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class MyEntityResourceTestITCase extends CdiBaseTest {
 
@@ -30,11 +31,12 @@ public class MyEntityResourceTestITCase extends CdiBaseTest {
         assertNotNull(exampleEntity);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void testGGetEntityById() {
-        Long id = 1L;
+        Long id = 2L;
         Response responseMsg = target().path(MyEntityResource.MyEntityResourcePath).path(id.toString()).request().get();
         assertNotNull(responseMsg);
+        assertTrue(responseMsg.getStatusInfo().getStatusCode() == Response.Status.NOT_FOUND.getStatusCode());
     }
 
     @Test

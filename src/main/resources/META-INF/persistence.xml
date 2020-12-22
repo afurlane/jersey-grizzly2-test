@@ -11,7 +11,7 @@
             <!-- See https://www.eclipse.org/eclipselink/documentation/2.5/jpa/extensions/p_validation_only.htm#validation-only -->
             <property name="eclipselink.target-database" value="Auto"/>
             <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:derby:derbyDB;create=true"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:derby:memory:derbyDB;create=true"/>
             <property name="javax.persistence.jdbc.user" value="APP"/>
             <property name="javax.persistence.jdbc.password" value="APP"/>
             <property name="eclipselink.logging.parameters" value="true"/>
