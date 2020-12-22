@@ -326,10 +326,11 @@
                         <configuration>
                             <type>runtime</type>
                             <properties>
-                                <cargo.hostname>${hostname}</cargo.hostname>
-                                <cargo.servlet.port>${servlet.port}</cargo.servlet.port>
-                                <cargo.remote.username>${username}</cargo.remote.username>
-                                <cargo.remote.password>${password}</cargo.remote.password>
+                                <cargo.hostname>${container.hostname}</cargo.hostname>
+                                <cargo.servlet.port>${container.servlet.port}</cargo.servlet.port>
+                                <cargo.remote.username>${container.username}</cargo.remote.username>
+                                <cargo.remote.password>${container.password}</cargo.remote.password>
+                                <cargo.remote.uri>${container.uri}</cargo.remote.uri>
                             </properties>
                         </configuration>
                     </configuration>
@@ -660,5 +661,11 @@
         <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
         <sonar.language>java</sonar.language>
         -->
+        <!-- Deployer properties -->
+        <container.hostname>home.illogi.co</container.hostname>
+        <container.servlet.port>443</container.servlet.port>
+        <container.username>${home.tomcat.user}</container.username>
+        <container.password>${home.tomcat.password}</container.password>
+        <container.uri>https://home.illogi.co/</container.uri>
     </properties>
 </project>
