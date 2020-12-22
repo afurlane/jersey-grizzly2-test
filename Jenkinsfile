@@ -1,8 +1,12 @@
 pipeline {
+    // Tools can be global or "per-stage".
     // agent { label 'cloud' }
     agent any
     stages {
         stage('Build') {
+            tools {
+               jdk "OpenJDK11"
+            }
             steps {
                 withMaven (
                     // Maven installation declared in the Jenkins "Global Tool Configuration"
@@ -24,6 +28,9 @@ pipeline {
             }
         }
         stage('Deploy') {
+            tools {
+               jdk "OpenJDK11"
+            }
             steps {
                 withMaven (
                     // Maven installation declared in the Jenkins "Global Tool Configuration"
