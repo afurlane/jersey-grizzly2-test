@@ -340,6 +340,20 @@
             </plugins>
         </pluginManagement>
         <plugins>
+            <!-- jandex indexer -->
+            <plugin>
+                <groupId>org.jboss.jandex</groupId>
+                <artifactId>jandex-maven-plugin</artifactId>
+                <version>${jandex.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>make-index</id>
+                        <goals>
+                            <goal>jandex</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <!-- Build with specified Java version. -->
                 <groupId>org.apache.maven.plugins</groupId>
@@ -664,5 +678,6 @@
         <container.username>${home.tomcat.user}</container.username>
         <container.password>${home.tomcat.password}</container.password>
         <container.uri>https://home.illogi.co/</container.uri>
+        <jandex.plugin.version>1.0.8</jandex.plugin.version>
     </properties>
 </project>
