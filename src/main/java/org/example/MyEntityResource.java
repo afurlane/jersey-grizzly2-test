@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.apache.logging.log4j.Logger;
 import org.example.entities.ExampleEntity;
 import org.example.models.ExampleModel;
-import org.glassfish.jersey.server.ManagedAsync;
 import org.modelmapper.ModelMapper;
 
 import javax.annotation.PreDestroy;
