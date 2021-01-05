@@ -11,6 +11,8 @@ import org.example.models.ExampleModel;
 import org.modelmapper.ModelMapper;
 
 import javax.annotation.PreDestroy;
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -28,6 +30,8 @@ import javax.ws.rs.core.Response;
 import java.util.concurrent.TimeUnit;
 
 @Path(MyEntityResource.MyEntityResourcePath)
+@DeclareRoles({"DataAccess","DataAccess|Update"})
+@RolesAllowed({"DataAccess|Write","DataAccess|Update"})
 public class MyEntityResource {
 
     final static String MyEntityResourcePath = "myresourceentity";
