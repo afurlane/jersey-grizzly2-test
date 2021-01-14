@@ -11,12 +11,27 @@
             </urls>
         </license>
         <license>
-            <name>Eclipse Public License 1.0</name>
+            <name>Eclipse Public License - Version 1.0</name>
             <names>
+                <name>Eclipse Public License - Version 1.0</name>
                 <name>Eclipse Public License 1.0</name>
             </names>
             <urls>
+                <url>http://www.eclipse.org/org/documents/epl-v10.php</url>
                 <url>http://www.eclipse.org/legal/epl-v10.html</url>
+            </urls>
+        </license>
+        <license>
+            <name>Eclipse Public License 2.0</name>
+            <names>
+                <name>Eclipse Public License 2.0</name>
+                <name>Eclipse Public License v. 2.0</name>
+                <name>EPL 2.0</name>
+            </names>
+            <urls>
+                <url>https://projects.eclipse.org/license/epl-2.0</url>
+                <url>http://www.eclipse.org/legal/epl-v20.html</url>
+                <url>http://www.eclipse.org/legal/epl-2.0</url>
             </urls>
         </license>
         <license>
@@ -29,12 +44,14 @@
             </urls>
         </license>
         <license>
-            <name>Public Domain</name>
+            <name>Creative Commons Public Domain</name>
             <names>
                 <name>Public Domain</name>
+                <name>CC0</name>
             </names>
             <urls>
                 <url>https://creativecommons.org/publicdomain/zero/1.0/</url>
+                <url>http://creativecommons.org/publicdomain/zero/1.0/</url>
             </urls>
         </license>
         <license>
@@ -59,9 +76,11 @@
             <name>MIT license</name>
             <names>
                 <name>MIT License</name>
+                <name>The MIT License (MIT)</name>
             </names>
             <urls>
                 <url>http://www.opensource.org/licenses/mit-license.php</url>
+                <url>http://opensource.org/licenses/MIT</url>
             </urls>
         </license>
         <license>
@@ -70,15 +89,6 @@
                 <name>W3C license</name>
             </names>
             <url>https://www.w3.org/Consortium/Legal/copyright-documents-19990405</url>
-        </license>
-        <license>
-            <name>EPL 2.0</name>
-            <names>
-                <name>EPL 2.0</name>
-            </names>
-            <urls>
-                <url>http://www.eclipse.org/legal/epl-2.0</url>
-            </urls>
         </license>
         <license>
             <name>GPL2 w/ CPE</name>
@@ -98,6 +108,114 @@
             <urls>
                 <url>http://www.eclipse.org/legal/epl-2.0</url>
                 <url>https://www.gnu.org/software/classpath/license.html</url>
+            </urls>
+        </license>
+        <license>
+            <name>GNU General Public License (GPL) v3</name>
+            <names>
+                <name>GNU General Public License (GPL) v3</name>
+            </names>
+            <urls>
+                <url>https://www.gnu.org/licenses/gpl-3.0.txt</url>
+            </urls>
+        </license>
+        <license>
+            <name>GNU General Public License, version 2 with the GNU Classpath Exception</name>
+            <names>
+                <name>GNU General Public License, version 2 with the GNU Classpath Exception</name>
+                <name>GNU General Public License v2.0 only, with Classpath exception</name>
+                <name>GNU General Public License, Version 2 with the Classpath Exception</name>
+            </names>
+            <urls>
+                <url>https://projects.eclipse.org/license/secondary-gpl-2.0-cp</url>
+                <url>http://openjdk.java.net/legal/gplv2+ce.html</url>
+                <url>http://repository.jboss.org/licenses/gpl-2.0-ce.txt</url>
+            </urls>
+        </license>
+        <license>
+            <name>New BSD License</name>
+            <names>
+                <name>New BSD License</name>
+            </names>
+            <urls>
+                <url>http://www.opensource.org/licenses/bsd-license.php</url>
+            </urls>
+        </license>
+        <license>
+            <name>EDL 1.0</name>
+            <names>
+                <name>EDL 1.0</name>
+            </names>
+            <urls>
+                <url>http://www.eclipse.org/org/documents/edl-v10.php</url>
+            </urls>
+        </license>
+        <license>
+            <name>BSD 2-Clause</name>
+            <names>
+                <name>BSD 2-Clause</name>
+            </names>
+            <urls>
+                <url>https://opensource.org/licenses/BSD-2-Clause</url>
+            </urls>
+        </license>
+        <license>
+            <name>Apache License 2.0</name>
+            <names>
+                <name>Apache License, 2.0</name>
+                <name>Apache License 2.0</name>
+                <name>Apache Software License - Version 2.0</name>
+                <name>Apache License, Version 2.0</name>
+                <name>Apache 2.0</name>
+            </names>
+            <urls>
+                <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+                <url>http://www.apache.org/licenses/</url>
+                <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+                <url>http://www.opensource.org/licenses/apache2.0.php</url>
+                <url>https://github.com/swagger-api/swagger-ui</url>
+            </urls>
+        </license>
+        <license>
+            <name>CDDL + GPLv2 with classpath exception</name>
+            <names>
+                <name>CDDL + GPLv2 with classpath exception</name>
+                <name>CDDL/GPLv2+CE</name>
+            </names>
+            <urls>
+                <url>https://glassfish.dev.java.net/nonav/public/CDDL+GPL.html</url>
+                <url>https://github.com/javaee/activation/blob/master/LICENSE.txt</url>
+            </urls>
+        </license>
+        <license>
+            <name>MPL 1.1</name>
+            <names>
+                <name>MPL 1.1</name>
+            </names>
+            <urls>
+                <url>http://www.mozilla.org/MPL/MPL-1.1.html</url>
+            </urls>
+        </license>
+        <license>
+            <name>LGPL 2.1</name>
+            <names>
+                <name>LGPL 2.1</name>
+            </names>
+            <urls>
+                <url>http://www.gnu.org/licenses/lgpl-2.1.html</url>
+            </urls>
+        </license>
+        <license>
+            <name>Common Development And Distribution License 1.1</name>
+            <names>
+                <name>Common Development And Distribution License 1.1</name>
+                <name>Common Development and Distribution License</name>
+                <name>CDDL 1.1</name>
+            </names>
+            <urls>
+                <url>https://javaee.github.io/glassfish/LICENSE</url>
+                <url>http://repository.jboss.org/licenses/cddl.txt</url>
+                <url>https://oss.oracle.com/licenses/CDDL+GPL-1.1</url>
             </urls>
         </license>
     </valid>

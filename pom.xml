@@ -366,7 +366,7 @@
                         <licenseSet>
                             <multi>
                                 <preamble><![CDATA[This product is dual-licensed under both the GPLv2 and Apache 2.0 License.]]></preamble>
-                                <header>GPL-2.txt</header>
+                                <header>${project.basedir}/build-support/GPL-2.1.txt</header>
                                 <separator>======================================================================</separator>
                                 <header>com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
                             </multi>
@@ -374,6 +374,8 @@
                                 <exclude>**/README</exclude>
                                 <exclude>src/test/resources/**</exclude>
                                 <exclude>src/main/resources/**</exclude>
+                                <exclude>**/log4j2.xml</exclude>
+                                <exclude>**/build-support/**</exclude>
                             </excludes>
                         </licenseSet>
                     </licenseSets>
@@ -409,6 +411,7 @@
                     <failOnForbidden>true</failOnForbidden>
                     <failOnMissing>true</failOnMissing>
                     <failOnUnknown>true</failOnUnknown>
+                    <verbose>true</verbose>
                 </configuration>
             </plugin>
             <!-- vulnerability check against artifacts in build -->
