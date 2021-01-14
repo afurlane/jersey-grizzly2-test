@@ -9,6 +9,19 @@
     <version>1.0-SNAPSHOT</version>
     <name>jersey-grizzly2-test</name>
 
+    <organization>
+        <name>Alessandro Furlanetto</name>
+        <url>https://home.illogi.co</url>
+    </organization>
+
+    <!--
+    <licenses>
+        <license>
+            <name>GNU General Public License (GPL)</name>
+            <url>https://www.gnu.org/licenses/gpl-3.0.txt</url>
+        </license>
+    </licenses>
+    -->
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -344,6 +357,78 @@
             </plugins>
         </pluginManagement>
         <plugins>
+            <!-- Licenses compliance in source files -->
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>${license-maven-plugin.version}</version>
+                <configuration>
+                    <licenseSets>
+                        <licenseSet>
+                            <multi>
+                                <preamble><![CDATA[This product is dual-licensed under both the GPLv2 and Apache 2.0 License.]]></preamble>
+                                <header>GPL-2.txt</header>
+                                <separator>======================================================================</separator>
+                                <header>com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
+                            </multi>
+                            <excludes>
+                                <exclude>**/README</exclude>
+                                <exclude>src/test/resources/**</exclude>
+                                <exclude>src/main/resources/**</exclude>
+                            </excludes>
+                        </licenseSet>
+                    </licenseSets>
+                    <properties>
+                        <owner>Alessandro Furlanetto</owner>
+                        <email>alexfurla@hotmail.com</email>
+                    </properties>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Licenses check -->
+            <plugin>
+                <groupId>se.ayoy.maven-plugins</groupId>
+                <artifactId>ayoy-license-verifier-maven-plugin</artifactId>
+                <version>${ayoy-license-verifier-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <licenseFile>${project.basedir}/build-support/licenses.xml</licenseFile>
+                    <excludedMissingLicensesFile>${project.basedir}/build-support/allowedMissingLicense.xml</excludedMissingLicensesFile>
+                    <failOnForbidden>true</failOnForbidden>
+                    <failOnMissing>true</failOnMissing>
+                    <failOnUnknown>true</failOnUnknown>
+                </configuration>
+            </plugin>
+            <!-- vulnerability check against artifacts in build -->
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>${dependency-check-maven.version}</version>
+                <configuration>
+                    <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
+                    <failBuildOnCVSS>5</failBuildOnCVSS>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- jandex indexer -->
             <plugin>
                 <groupId>org.jboss.jandex</groupId>
@@ -686,5 +771,8 @@
         <container.password>${home.tomcat.password}</container.password>
         <container.uri>https://home.illogi.co/</container.uri>
         <jandex.plugin.version>1.0.8</jandex.plugin.version>
+        <license-maven-plugin.version>4.0.rc2</license-maven-plugin.version>
+        <ayoy-license-verifier-maven-plugin.version>1.1.0</ayoy-license-verifier-maven-plugin.version>
+        <dependency-check-maven.version>6.0.5</dependency-check-maven.version>
     </properties>
 </project>
