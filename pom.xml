@@ -422,6 +422,7 @@
                 <configuration>
                     <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
                     <failBuildOnCVSS>5</failBuildOnCVSS>
+                    <formats>HTML,JUNIT</formats>
                 </configuration>
                 <executions>
                     <execution>
