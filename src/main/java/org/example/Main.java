@@ -759,19 +759,15 @@ public class Main {
         SeContainerInitializer containerInit = SeContainerInitializer.newInstance();
         SeContainer container = containerInit.initialize();
 
-        // Weld weld = new Weld();
-        // weld.initialize();
-        // final Server server = startServer();
         final HttpServer server = startServer();
         System.out.println(String.format("App started with WADL available at "
-                + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
+                + "%s application.wadl\nHit enter to stop it...", BASE_URI));
         System.in.read();
         try {
             server.stop();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // weld.shutdown();
         container.close();
     }
 }

@@ -739,8 +739,8 @@ public class CdiBaseTest extends JerseyTest {
 
     protected Logger log = LogManager.getLogger();
 
-    SeContainerInitializer containerInit = SeContainerInitializer.newInstance();
-    SeContainer container = containerInit.initialize();
+    SeContainerInitializer containerInit;
+    SeContainer container;
 
     @Override
     public void setUp() throws Exception {
@@ -751,6 +751,7 @@ public class CdiBaseTest extends JerseyTest {
 
     @Override
     public void tearDown() throws Exception {
+        container.close();
         super.tearDown();
     }
 
