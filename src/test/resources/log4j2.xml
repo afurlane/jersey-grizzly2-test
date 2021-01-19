@@ -34,13 +34,13 @@
         <Logger name="org.example" leve="trace">
             <AppenderRef ref="app_file_log_rolling"/>
         </Logger>
-        <logger name="org.jboss.weld" leve="trace">
+        <logger name="org.jboss.weld" leve="info">
             <AppenderRef ref="app_file_log_rolling"/>
         </logger>
-        <logger name="org.jboss.jandex" leve="trace">
+        <logger name="org.jboss.jandex" leve="info">
             <AppenderRef ref="app_file_log_rolling"/>
         </logger>
-        <Root level="trace">
+        <Root level="info">
             <AppenderRef ref="console"/>
         </Root>
     </Loggers>

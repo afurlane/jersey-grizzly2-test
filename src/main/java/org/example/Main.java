@@ -738,7 +738,6 @@ public class Main {
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
      * @return Grizzly HTTP server.
      */
-    // public static Server startServer() {
     public static HttpServer startServer() {
         // create a resource config that scans for JAX-RS resources and providers
         // in org.example package
@@ -747,7 +746,6 @@ public class Main {
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
-        // return JettyHttpContainerFactory.createServer(URI.create(BASE_URI), rc);
     }
 
     /**
@@ -763,11 +761,6 @@ public class Main {
         System.out.println(String.format("App started with WADL available at "
                 + "%s application.wadl\nHit enter to stop it...", BASE_URI));
         System.in.read();
-        try {
-            server.stop();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         container.close();
     }
 }

@@ -732,7 +732,7 @@ public class MyResourceTestITCase extends CdiBaseTest {
 
     @Test
     public void getItWithQuery() {
-        List<String> responseMsg = target().path(MyResource.MyResourcePath)
+        List responseMsg = target().path(MyResource.MyResourcePath)
                 .path(MyResource.MyResourceTryQuery).request().get(List.class);
         assertNotNull(responseMsg);
     }

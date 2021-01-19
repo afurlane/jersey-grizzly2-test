@@ -10,6 +10,7 @@ plugins {
     id 'application'
     id 'org.sonarqube' version '3.0'
     id 'org.owasp.dependencycheck' version '6.0.5'
+    id 'org.kordamp.gradle.jandex' version '0.8.0'
 }
 
 sonarqube {
@@ -77,14 +78,16 @@ dependencies {
     implementation 'org.jooq:jooq-codegen:3.14.4'
     implementation 'org.modelmapper:modelmapper:2.3.0'
     testImplementation 'org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:2.33'
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.junit.vintage:junit-vintage-engine:5.6.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.6.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.2'
+    testCompileOnly 'junit:junit:4.13'
+    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.6.2'
+    // testCompileOnly  'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.25.0'
     testImplementation 'org.apache.derby:derby:10.15.2.0'
     testImplementation 'org.apache.derby:derbytools:10.15.2.0'
 }
-
+/*
 jacoco {
     toolVersion = "0.8.6"
     reportsDirectory = file("${project.buildDir}/customJacocoReportDir")
@@ -103,15 +106,20 @@ task applicationCodeCoverageReport(type:JacocoReport) {
     executionData run
     sourceSets sourceSets.main
 }
+*/
 
 test {
+    /*
     useJUnitPlatform {
         // includeTags 'fast', 'smoke & feature-a'
         // excludeTags 'slow', 'ci'
         includeEngines 'junit-vintage'
-        excludeEngines 'junit-jupiter'
+        // excludeEngines 'junit-jupiter'
     }
-    finalizedBy jacocoTestReport
+    */
+    // finalizedBy jacocoTestReport
+    useJUnit {
+    }
 }
 
 dependencyCheck {
@@ -129,6 +137,12 @@ java {
 
 compileJava {
     options.encoding = 'UTF-8'
+    options.compilerArgs << '-Xlint:deprecation'
+}
+
+compileTestJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-Xlint:deprecation'
 }
 
 javadoc {

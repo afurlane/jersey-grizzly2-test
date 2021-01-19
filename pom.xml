@@ -1092,6 +1092,14 @@
                                 <exclude>src/main/resources/**</exclude>
                                 <exclude>**/log4j2.xml</exclude>
                                 <exclude>**/build-support/**</exclude>
+                                <exclude>**/licenses/**</exclude>
+                                <exclude>**.gradle/**</exclude>
+                                <exclude>gradle.properties</exclude>
+                                <exclude>build.gradle</exclude>
+                                <exclude>settings.gradle</exclude>
+                                <exclude>gradlew</exclude>
+                                <exclude>gradlew.bat</exclude>
+                                <exclude>*.iml</exclude>
                             </excludes>
                         </licenseSet>
                     </licenseSets>
@@ -1127,7 +1135,7 @@
                     <failOnForbidden>true</failOnForbidden>
                     <failOnMissing>true</failOnMissing>
                     <failOnUnknown>true</failOnUnknown>
-                    <verbose>true</verbose>
+                    <verbose>false</verbose>
                 </configuration>
             </plugin>
             <!-- vulnerability check against artifacts in build -->
@@ -1141,10 +1149,7 @@
                     <formats>HTML,JUNIT</formats>
                     <skipTestScope>true</skipTestScope>
                     <!-- knowns CVE that don't have fixes for now -->
-                    <excludes>
-                        <exclude>*weld*</exclude>
-                        <exclude>*log4j*</exclude>
-                    </excludes>
+                    <suppressionFile>${project.basedir}/build-support/suppressions.xml</suppressionFile>
                 </configuration>
                 <executions>
                     <execution>

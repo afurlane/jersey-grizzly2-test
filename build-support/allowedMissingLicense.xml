@@ -1,8 +1,13 @@
 <?xml version="1.0"?>
 <missing>
     <dependency>
-        <groupId>com.oracle.weblogic</groupId>
-        <artifactId>wlthint3client</artifactId>
-        <version>12.2.1-2-1</version>
+        <groupId>org.openclover</groupId>
+        <artifactId>clover-maven-plugin</artifactId>
+        <version>4.2.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.openclover</groupId>
+        <artifactId>grover</artifactId>
+        <version>4.2.0</version>
     </dependency>
 </missing>

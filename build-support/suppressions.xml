@@ -53,6 +53,33 @@
         <cve>CVE-2020-9488</cve>
     </suppress>
     <suppress>
+        <notes><![CDATA[OpenClover]]></notes>
+        <packageUrl>pkg:maven/com.google.guava/guava@18.0</packageUrl>
+        <cve>CVE-2018-10237</cve>
+        <cve>CVE-2020-8908</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[OpenClover]]></notes>
+        <packageUrl>pkg:maven/commons-collections/commons-collections@3.2.1</packageUrl>
+        <cve>CVE-2015-6420</cve>
+        <cve>CVE-2017-15708</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[OpenClover]]></notes>
+        <packageUrl>pkg:maven/log4j/log4j@1.2.17</packageUrl>
+        <cve>CVE-2019-17571</cve>
+        <cve>CVE-2020-9488</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[OpenClover]]></notes>
+        <packageUrl>pkg:javascript/jquery@1.8.3.min</packageUrl>
+        <cve>CVE-2012-6708</cve>
+        <cve>CVE-2015-9251</cve>
+        <cve>CVE-2019-11358</cve>
+        <cve>CVE-2020-11022</cve>
+        <cve>CVE-2020-11023</cve>
+    </suppress>
+    <suppress>
         <gav regex="true">^org\.jboss\.weld\.probe:weld-probe-core.*$></gav>
         <cve>CVE-2015-9251</cve>
         <cve>CVE-2018-14040</cve>
