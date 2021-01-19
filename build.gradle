@@ -7,29 +7,32 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'jacoco'
+    id 'application'
     id 'org.sonarqube' version '3.0'
     id 'org.owasp.dependencycheck' version '6.0.5'
 }
 
 sonarqube {
     properties {
-        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.sourceEncoding", ${project.compileJava.options.encoding}
         property "sonar.exclusions", "**/clover/src-instrumented/**,**/clover/src-test-instrumented/**"
         property "sonar.projectName",${project.name}
         property "sonar.projectKey",${project.groupId}.${project.artifactId}
         property "sonar.projectVersion>",${project.version}
-        property "sonar.log.level",DEBUG
-        property "sonar.sources",${project.build.sourceDirectory}
+        property "sonar.log.level",'DEBUG'
+        property "sonar.sources",${sourceSets.main.allJava.srcDirs}
+        property "sonar.tests", ${sourceSets.test.allJava.srcDirs}
+        property "sonar.java.source", ${project.sourceCompatibility}
         /*
         <sonar.clover.version>${clover.version}</sonar.clover.version>
         */
-        property "sonar.java.coveragePlugin",clover
-        property "sonar.clover.reportPath",${project.build.directory}/site/clover/clover.xml
-        property "sonar.surefire.reportsPath",${project.build.directory}/surefire-reports
-        property "sonar.junit.reportPaths",${project.basedir}/target/surefire-reports
-        property "sonar.clover.reportPath",${project.basedir}/target/site/clover/clover.xml
-        property "sonar.clover.reportPaths",${project.basedir}/target/site/clover/clover.xml
-        
+        property "sonar.java.coveragePlugin",'clover'
+        property "sonar.clover.reportPath", "${project.buildDir}/site/clover/clover.xml"
+        property "sonar.surefire.reportsPath","${project.buildDir}/surefire-reports"
+        property "sonar.junit.reportPaths", "${project.rootDir}/target/surefire-reports"
+        property "sonar.clover.reportPath", "${project.rootDir}/target/site/clover/clover.xml"
+        property "sonar.clover.reportPaths", "${project.rootDir}/target/site/clover/clover.xml"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/jacoco/test/jacocoTestReport.xml"
     }
 }
 
@@ -75,34 +78,78 @@ dependencies {
     implementation 'org.modelmapper:modelmapper:2.3.0'
     testImplementation 'org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:2.33'
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.junit.vintage:junit-vintage-engine:5.6.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.6.2'
     testImplementation 'org.mockito:mockito-core:2.25.0'
     testImplementation 'org.apache.derby:derby:10.15.2.0'
     testImplementation 'org.apache.derby:derbytools:10.15.2.0'
 }
 
+jacoco {
+    toolVersion = "0.8.6"
+    reportsDirectory = file("${project.buildDir}/customJacocoReportDir")
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.enabled true
+        csv.enabled true
+        html.destination file("${project.buildDir}/jacocoHtml")
+    }
+}
+
+task applicationCodeCoverageReport(type:JacocoReport) {
+    executionData run
+    sourceSets sourceSets.main
+}
+
 test {
-    useJUnitPlatform()
+    useJUnitPlatform {
+        // includeTags 'fast', 'smoke & feature-a'
+        // excludeTags 'slow', 'ci'
+        includeEngines 'junit-vintage'
+        excludeEngines 'junit-jupiter'
+    }
+    finalizedBy jacocoTestReport
 }
 
 dependencyCheck {
     autoUpdate=true
-    cveValidForHours=1
     format='ALL'
-    
+    suppressionFile="${project.rootDir}/build-support/suppressions.xml"
 }
-check.dependsOn dependencyCheckUpdate, dependencyCheckAnalyze
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+    withJavadocJar()
+    withSourcesJar()
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+}
+
+javadoc {
+    options.encoding = 'UTF-8'
+}
+
+check.dependsOn dependencyCheckAnalyze
+
+project.tasks["sonarqube"].dependsOn "jacocoTestReport"
 
 group = 'org.example'
 version = '1.0-SNAPSHOT'
 description = 'jersey-grizzly2-test'
-java.sourceCompatibility = JavaVersion.VERSION_11
+
 
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId = 'org.example'
-            artifactId = 'jersey-grizzly2-test'
-            version = '1.0-SNAPSHOT'
+            groupId = group
+            artifactId = description
+            version = version
             from components.java
         }
     }
