@@ -767,7 +767,7 @@ public class MyEntityResource {
     /**
      * @param asyncResponse used in async as per jax specification
      * This is the "manual" managed way, you could use @ManagedAsync, that tell jersey to do it
-     *                      automatically but, this is a jersey specific & dependant implementation!
+     *                      automatically but, this is a jersey specific and dependant implementation!
      */
     @GET
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})

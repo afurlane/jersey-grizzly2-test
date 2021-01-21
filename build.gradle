@@ -8,7 +8,7 @@ plugins {
     id 'maven-publish'
     id 'jacoco'
     id 'application'
-//     id 'idea'
+    id 'idea'
     id 'org.sonarqube' version '3.0'
     id 'org.owasp.dependencycheck' version '6.0.5'
     id 'org.kordamp.gradle.jandex' version '0.8.0'
@@ -172,7 +172,7 @@ test {
     // finalizedBy jacocoTestReport
     // Like maven surefire plugin, excludes comes from failsafe plugin
     // explicitly include or exclude tests
-    include '**/Test*.*', '**/*Test.*', '**/*Tests.*', '**/*TestCase.*'
+    include '**/Test*.class', '**/*Test.class', '**/*Tests.class', '**/*TestCase.class'
     exclude '**/IT*.*', '**/*IT.*', '**/*ITCase.*', '**CdiBaseTest.*'
 }
 
@@ -186,16 +186,20 @@ dependencyCheck {
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
-    withJavadocJar()
-    withSourcesJar()
+    // withJavadocJar()
+    // withSourcesJar()
 }
 
 compileJava {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
     options.encoding = 'UTF-8'
     options.compilerArgs << '-Xlint:deprecation'
 }
 
 compileTestJava {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
     options.encoding = 'UTF-8'
     options.compilerArgs << '-Xlint:deprecation'
 }
@@ -204,7 +208,7 @@ javadoc {
     options.encoding = 'UTF-8'
 }
 
-check.dependsOn dependencyCheckAnalyze
+// check.dependsOn dependencyCheckAnalyze
 
 project.tasks["sonarqube"].dependsOn "jacocoTestReport"
 

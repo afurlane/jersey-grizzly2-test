@@ -731,7 +731,7 @@ import javax.persistence.Persistence;
 
 /**
  * This is the producer class; you could have producer methods anywhere in your code but,
- * keeping it together helps a lot deining scopes & way to build items. There is another
+ * keeping it together helps a lot deining scopes and way to build items. There is another
  * benefit of keeping it in a single package/class. It's related to circular reference.
  * If you have a producer method that needs a reference from another producer method, you know..
  */
