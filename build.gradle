@@ -8,9 +8,11 @@ plugins {
     id 'maven-publish'
     id 'jacoco'
     id 'application'
+//     id 'idea'
     id 'org.sonarqube' version '3.0'
     id 'org.owasp.dependencycheck' version '6.0.5'
     id 'org.kordamp.gradle.jandex' version '0.8.0'
+    id 'com.adarshr.test-logger' version '2.1.1'
 }
 
 sonarqube {
@@ -78,14 +80,14 @@ dependencies {
     implementation 'org.jooq:jooq-codegen:3.14.4'
     implementation 'org.modelmapper:modelmapper:2.3.0'
     testImplementation 'org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:2.33'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.2'
-    testCompileOnly 'junit:junit:4.13'
-    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.6.2'
-    // testCompileOnly  'junit:junit:4.12'
+    // Don't ask me wy, useJunitPlatform does not work with 5.6.2 as maven did!!!
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testImplementation  'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.25.0'
     testImplementation 'org.apache.derby:derby:10.15.2.0'
     testImplementation 'org.apache.derby:derbytools:10.15.2.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.7.0'
 }
 /*
 jacoco {
@@ -107,20 +109,73 @@ task applicationCodeCoverageReport(type:JacocoReport) {
     sourceSets sourceSets.main
 }
 */
+// If you have integration/smoke/functional in other dirs use intTest, funcTest, smokeTest etc.
+/*
+sourceSets {
+    intTest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+*/
+configurations {
+    intTestImplementation.extendsFrom implementation
+    intTestRuntimeOnly.extendsFrom runtimeOnly
+}
+testlogger {
+    theme 'standard'
+    showExceptions true
+    showStackTraces true
+    showFullStackTraces false
+    showCauses true
+    slowThreshold 2000
+    showSummary true
+    showSimpleNames false
+    showPassed true
+    showSkipped true
+    showFailed true
+    showStandardStreams true
+    showPassedStandardStreams true
+    showSkippedStandardStreams true
+    showFailedStandardStreams true
+    logLevel 'lifecycle'
+}
+
+task integrationTest(type: Test) {
+    useJUnitPlatform() {
+        includeEngines 'junit-vintage'
+        excludeEngines 'junit-jupiter'
+    }
+    description = 'Runs integration tests.'
+    group = 'verification'
+
+    // Here you can use the same path as the main test set or... sourceSets.intTest, .funcTest etc
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath += sourceSets.test.runtimeClasspath + sourceSets.main.output.classesDirs
+    // logger.lifecycle("Test: " + classpath.getAsPath())
+    outputs.upToDateWhen { false }
+    shouldRunAfter test
+    include '**/IT*.*', '**/*IT.*', '**/*ITCase.*'
+    exclude '**/Test*.*', '**/*Test.*', '**/*Tests.*', '**/*TestCase.*'
+}
+
+check.dependsOn integrationTest
 
 test {
-    /*
+    description = 'Runs unit tests.'
     useJUnitPlatform {
         // includeTags 'fast', 'smoke & feature-a'
         // excludeTags 'slow', 'ci'
-        includeEngines 'junit-vintage'
+        // includeEngines 'junit-vintage'
         // excludeEngines 'junit-jupiter'
     }
-    */
     // finalizedBy jacocoTestReport
-    useJUnit {
-    }
+    // Like maven surefire plugin, excludes comes from failsafe plugin
+    // explicitly include or exclude tests
+    include '**/Test*.*', '**/*Test.*', '**/*Tests.*', '**/*TestCase.*'
+    exclude '**/IT*.*', '**/*IT.*', '**/*ITCase.*', '**CdiBaseTest.*'
 }
+
 
 dependencyCheck {
     autoUpdate=true
