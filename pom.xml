@@ -1352,12 +1352,16 @@
                     <execution>
                         <id>test</id>
                         <phase>test</phase>
+                        <!--
                         <goals></goals>
+                        -->
                     </execution>
                     <execution>
                         <id>verify</id>
                         <phase>verify</phase>
+                        <!--
                         <goals></goals>
+                        -->
                     </execution>
                 </executions>
             </plugin>
