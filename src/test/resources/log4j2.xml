@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="debug" monitorInterval="60">
+<Configuration status="info" monitorInterval="60">
     <Appenders>
         <RollingFile name="app_file_log_rolling" fileName="${env:CATALINA_BASE:-.}/logs/example.log"
                      filePattern="${env:CATALINA_BASE:-.}/logs/example-%d{MM-dd-yyyy}-%i.log.gz">
@@ -31,17 +31,17 @@
         <Logger name="requests_completed" additivity="false">
             <AppenderRef ref="requests_file_log_rolling"/>
         </Logger>
-        <Logger name="org.example" leve="trace">
+        <Logger name="org.example" level="trace">
             <AppenderRef ref="app_file_log_rolling"/>
         </Logger>
-        <logger name="org.jboss.weld" leve="trace">
+        <logger name="org.jboss.weld" level="trace">
             <AppenderRef ref="app_file_log_rolling"/>
         </logger>
-        <logger name="org.jboss.jandex" leve="info">
+        <logger name="org.jboss.jandex" level="trace">
             <AppenderRef ref="app_file_log_rolling"/>
         </logger>
         <Root level="info">
-            <AppenderRef ref="console"/>
+            <AppenderRef ref="Console"/>
         </Root>
     </Loggers>
 </Configuration>

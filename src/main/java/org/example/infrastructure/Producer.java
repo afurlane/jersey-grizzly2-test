@@ -740,7 +740,7 @@ public class Producer {
 
     // Interesting
     // https://stackoverflow.com/questions/21781026/how-to-send-java-util-logging-to-log4j2
-    private static String persistenceUnitName = "example-unit";
+    private static final String persistenceUnitName = "example-unit";
     private ModelMapper modelMapper;
 
     @Produces

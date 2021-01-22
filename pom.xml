@@ -1100,6 +1100,7 @@
                                 <exclude>gradlew</exclude>
                                 <exclude>gradlew.bat</exclude>
                                 <exclude>*.iml</exclude>
+                                <exclude>build/**</exclude>
                             </excludes>
                         </licenseSet>
                     </licenseSets>
