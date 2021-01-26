@@ -15,6 +15,7 @@ plugins {
     id 'jacoco'
     id 'application'
     id 'idea'
+    id 'war'
     id 'org.sonarqube' version '3.0'
     id 'org.owasp.dependencycheck' version '6.0.5'
     id 'org.kordamp.gradle.jandex' version '0.8.0'
@@ -150,6 +151,8 @@ configurations {
 sourceSets.main.resources {
     exclude 'META-INF/beans.xml'
 }
+
+// War  ispluginn't enough for running CDI tests. Shame on gradle.
 
 task copyResources(type: Copy) {
     from "${projectDir}/src/main/resources"
