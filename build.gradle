@@ -114,16 +114,6 @@ task applicationCodeCoverageReport(type:JacocoReport) {
     sourceSets sourceSets.main
 }
 */
-// If you have integration/smoke/functional in other dirs use intTest, funcTest, smokeTest etc.
-/*
-sourceSets {
-    intTest {
-        compileClasspath += sourceSets.main.output
-        runtimeClasspath += sourceSets.main.output
-    }
-}
-*/
-
 testlogger {
     theme 'standard'
     showExceptions true
@@ -148,12 +138,20 @@ configurations {
     intTestRuntimeOnly.extendsFrom runtimeOnly
 }
 
+// Added by war plugin!!!
 sourceSets.main.resources {
     exclude 'META-INF/beans.xml'
 }
 
-// War  ispluginn't enough for running CDI tests. Shame on gradle.
+war {
+    // from 'src/rootContent' // adds a file-set to the root of the archive
+    // webInf { from 'src/additionalWebInf' } // adds a file-set to the WEB-INF dir.
+    // classpath fileTree('additionalLibs') // adds a file-set to the WEB-INF/lib dir.
+    // classpath configurations.moreLibs // adds a configuration to the WEB-INF/lib dir.
+    // webXml = file('src/someWeb.xml') // copies a file to WEB-INF/web
+}
 
+// War plugin isn't enough for running CDI tests. Shame on gradle.
 task copyResources(type: Copy) {
     from "${projectDir}/src/main/resources"
     into "${buildDir}/classes/java/main"
