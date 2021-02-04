@@ -943,6 +943,18 @@
             <version>${modelmapper.version}</version>
         </dependency>
 
+        <!-- XML WS Support -->
+        <dependency>
+            <groupId>javax.xml.ws</groupId>
+            <artifactId>jaxws-api</artifactId>
+            <version>${jaxws-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.jws</groupId>
+            <artifactId>javax.jws-api</artifactId>
+            <version>${javax.jws-api.version}</version>
+        </dependency>
+
         <!-- Testing support -->
         <dependency>
             <groupId>org.glassfish.jersey.test-framework.providers</groupId>
@@ -1443,6 +1455,25 @@
                     </deployables>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <version>${jaxws-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>wsimport</goal>
+                        </goals>
+                        <configuration>
+                            <wsdlUrls>
+                                <wsdlUrl>http://www.ebi.ac.uk/webservices/chebi/2.0/webservice?wsdl</wsdlUrl>
+                            </wsdlUrls>
+                            <!-- for JDK 6 compilation compatibility -->
+                            <xnocompile>false</xnocompile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -1529,5 +1560,8 @@
         <ayoy-license-verifier-maven-plugin.version>1.1.0</ayoy-license-verifier-maven-plugin.version>
         <dependency-check-maven.version>6.0.5</dependency-check-maven.version>
         <cucumber.version>6.9.1</cucumber.version>
+        <jaxws-maven-plugin.version>2.6</jaxws-maven-plugin.version>
+        <jaxws-api.version>2.3.1</jaxws-api.version>
+        <javax.jws-api.version>1.1</javax.jws-api.version>
     </properties>
 </project>
