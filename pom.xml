@@ -1245,6 +1245,7 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
+                    <optimize>true</optimize>
                 </configuration>
             </plugin>
             <plugin>
@@ -1356,6 +1357,7 @@
                     <parallel>classesAndMethods</parallel>
                     <useUnlimitedThreads>true</useUnlimitedThreads>
                     <!-- <threadCount>10</threadCount> -->
+                    <reportsDirectory>${surefire.and.failsafe.report.dir}</reportsDirectory>
                 </configuration>
             </plugin>
             <plugin>
@@ -1385,6 +1387,7 @@
                         <jersey.config.test.container.port>${jersey2-port}</jersey.config.test.container.port>
                         -->
                     </systemPropertyVariables>
+                    <reportsDirectory>${surefire.and.failsafe.report.dir}</reportsDirectory>
                 </configuration>
                 <executions>
                     <execution>
@@ -1439,27 +1442,38 @@
                     <cloverMergeDatabase>${project.basedir}/.clover/cloverMerge.db</cloverMergeDatabase>
                     <historyDir>${project.basedir}/.clover/history/</historyDir>
                     <!--
+                    <reportDescriptor>clover-report.xml</reportDescriptor>
+                    -->
+                    <!--
                     <baseDir>${project.basedir}</baseDir>
                     <baseDir>${project.build.directory}/clover/clover.snapshot</baseDir>
-                    <cloverDatabase>${project.basedir}/.clover/clover.db</cloverDatabase>
-                    <cloverMergeDatabase>${project.basedir}/.clover/cloverMerge.db</cloverMergeDatabase>
                     -->
+                    <!--
+                    <includes>
+                        <include>**/main/**/*.java</include>
+                        <include>**/test/**/*.java</include>
+                    </includes>
+                    -->
+                    <excludes>
+                        <exclude>**/generated-sources/**/*.java</exclude>
+                    </excludes>
                     <encoding>UTF-8</encoding>
                 </configuration>
                 <!-- This seems not to work! -->
                 <executions>
                     <execution>
-                        <id>pre-site</id>
-                        <phase>pre-site</phase>
+                        <id>clover</id>
                         <goals>
-                            <goal>instrument</goal>
+                            <goal>setup</goal>
+                            <goal>optimize</goal>
+                            <goal>snapshot</goal>
                         </goals>
                     </execution>
                     <execution>
-                        <id>verify</id>
                         <phase>verify</phase>
                         <goals>
-                            <goal>instrument</goal>
+                            <goal>clover</goal>
+                            <goal>log</goal>
                             <goal>check</goal>
                         </goals>
                     </execution>
@@ -1488,6 +1502,7 @@
                 <version>${jaxws-maven-plugin.version}</version>
                 <executions>
                     <execution>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>wsimport</goal>
                         </goals>
@@ -1497,6 +1512,11 @@
                             </wsdlUrls>
                             <!-- for JDK 6 compilation compatibility -->
                             <xnocompile>false</xnocompile>
+                            <packageName>org.http.chebi</packageName>
+                            <!-- conflict with clover -->
+                            <!--
+                            <sourceDestDir>${project.build.sourceDirectory}</sourceDestDir>
+                            -->
                         </configuration>
                     </execution>
                 </executions>
@@ -1551,6 +1571,7 @@
         <sonar.exclusions>
             **/clover/src-instrumented/**,
             **/clover/src-test-instrumented/**
+            **/generated-sources/wsimport/**
         </sonar.exclusions>
         <sonar.projectName>${project.name}</sonar.projectName>
         <sonar.projectKey>${project.groupId}.${project.artifactId}</sonar.projectKey>
@@ -1593,5 +1614,6 @@
         <jaxws-ri.version>3.0.0</jaxws-ri.version>
         <assertj-core.version>3.18.1</assertj-core.version>
         <catch-exception.version>1.2.0</catch-exception.version>
+        <surefire.and.failsafe.report.dir>target/test-report</surefire.and.failsafe.report.dir>
     </properties>
 </project>

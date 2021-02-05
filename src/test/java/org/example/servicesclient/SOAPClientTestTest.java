@@ -714,7 +714,7 @@
  */
 package org.example.servicesclient;
 
-import https.www_ebi_ac_uk.webservices.chebi.*;
+import org.http.chebi.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -722,7 +722,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
-import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doReturn;
 import static org.assertj.core.api.BDDAssertions.then;
