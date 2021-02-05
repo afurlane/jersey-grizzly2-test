@@ -753,10 +753,12 @@ public class SOAPClientTestTest {
     public void testCall() throws ChebiWebServiceFault_Exception {
         doReturn(chebiWebServicePortType).when(chebiWebServiceService).getChebiWebServicePort();
         when(chebiWebServicePortType.getCompleteEntity(param)).thenReturn(entity);
-        entity2 = chebiWebServicePortType.getCompleteEntity(param);
-        assertNotNull(entity2);
-        assertEquals(entity, entity2);
-
+        soapClientTest.TestCall();
+        /*
+            entity2 = chebiWebServicePortType.getCompleteEntity(param);
+            assertNotNull(entity2);
+            assertEquals(entity, entity2);
+        */
         given(chebiWebServicePortType.getCompleteEntity(param)).willThrow(new ChebiWebServiceFault_Exception(param, chebiWebServiceFault));
         Throwable thrown = catchThrowable(() -> { chebiWebServicePortType.getCompleteEntity(param); });
         then(thrown).isInstanceOf(ChebiWebServiceFault_Exception.class).hasMessageContaining(param);

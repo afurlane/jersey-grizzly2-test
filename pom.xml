@@ -1052,13 +1052,6 @@
                     <version>${jaxws-ri.version}</version>
                     <type>pom</type>
                 </dependency>
-                <!--
-                <dependency>
-                    <groupId>com.sun.xml.ws</groupId>
-                    <artifactId>jaxws-tools</artifactId>
-                    <version>${jaxws-ri.version}</version>
-                </dependency>
-                -->
                 <!-- Eclipse Link as JPA Provider -->
                 <dependency>
                     <groupId>org.eclipse.persistence</groupId>
@@ -1067,26 +1060,6 @@
                 </dependency>
             </dependencies>
         </profile>
-        <!--
-        <profile>
-            <id>default-tools.jar</id>
-            <activation>
-                <property>
-                    <name>java.vendor</name>
-                    <value>Sun Microsystems Inc.</value>
-                </property>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>com.sun</groupId>
-                    <artifactId>tools</artifactId>
-                    <version>1.6</version>
-                    <scope>system</scope>
-                    <systemPath>${java.home}/../jdk-11/lib/jfr/tools.jar</systemPath>
-                </dependency>
-            </dependencies>
-        </profile>
-        -->
     </profiles>
 
     <reporting>
@@ -1612,7 +1585,7 @@
         <jandex.plugin.version>1.0.8</jandex.plugin.version>
         <license-maven-plugin.version>4.0.rc2</license-maven-plugin.version>
         <ayoy-license-verifier-maven-plugin.version>1.1.0</ayoy-license-verifier-maven-plugin.version>
-        <dependency-check-maven.version>6.0.5</dependency-check-maven.version>
+        <dependency-check-maven.version>6.1.0</dependency-check-maven.version>
         <cucumber.version>6.9.1</cucumber.version>
         <jaxws-maven-plugin.version>2.6</jaxws-maven-plugin.version>
         <jaxws-api.version>2.3.1</jaxws-api.version>
