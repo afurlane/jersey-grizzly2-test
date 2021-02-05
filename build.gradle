@@ -86,6 +86,7 @@ dependencies {
     implementation 'org.jooq:jooq-meta:3.14.4'
     implementation 'org.jooq:jooq-codegen:3.14.4'
     implementation 'org.modelmapper:modelmapper:2.3.0'
+    implementation 'com.sun.xml.ws:jaxws-ri:3.0.0'
     testImplementation 'org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:2.33'
     // Don't ask me wy, useJunitPlatform does not work with 5.6.2 as maven did!!!
     // testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
