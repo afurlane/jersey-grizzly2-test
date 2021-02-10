@@ -714,9 +714,9 @@
  */
 package org.example.servicesclient;
 
-import https.www_ebi_ac_uk.webservices.chebi.ChebiWebServiceFault_Exception;
-import https.www_ebi_ac_uk.webservices.chebi.ChebiWebServicePortType;
-import https.www_ebi_ac_uk.webservices.chebi.ChebiWebServiceService;
+import org.http.chebi.ChebiWebServiceFault_Exception;
+import org.http.chebi.ChebiWebServicePortType;
+import org.http.chebi.ChebiWebServiceService;
 
 import javax.inject.Inject;
 
