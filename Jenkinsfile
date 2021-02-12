@@ -22,7 +22,8 @@ pipeline {
                     // sh "mvn test sonar:sonar"
                     configFileProvider(
                                     [configFile(fileId: '3eb54662-52ab-4d94-afa2-e20c41c452e5', variable: 'MAVEN_SETTINGS')]) {
-                        sh "mvn -s $MAVEN_SETTINGS clean clover:setup test clover:aggregate clover:clover sonar:sonar clean compile package"
+                        // sh "mvn -s $MAVEN_SETTINGS clean clover:setup test clover:aggregate clover:clover sonar:sonar clean compile package"
+                        sh "mvn -s $MAVEN_SETTINGS clean verify"
                         }
                 } // withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe reports and FindBugs reports
             }
@@ -45,7 +46,7 @@ pipeline {
                     // Run the maven build
                     configFileProvider(
                                     [configFile(fileId: '3eb54662-52ab-4d94-afa2-e20c41c452e5', variable: 'MAVEN_SETTINGS')]) {
-                        sh "mvn -s $MAVEN_SETTINGS tomcat7:deploy-only"
+                        sh "mvn -s $MAVEN_SETTINGS cargo:deploy"
                     }
 
                 }
