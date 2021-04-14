@@ -720,15 +720,19 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.microprofile.jwt.Claim;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.example.entities.ExampleEntity;
 import org.example.models.ExampleModel;
 import org.modelmapper.ModelMapper;
 
 import javax.annotation.PreDestroy;
 import javax.annotation.security.DeclareRoles;
-import javax.annotation.security.RolesAllowed;
+import javax.annotation.security.PermitAll;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import javax.json.JsonString;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
@@ -741,17 +745,24 @@ import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Path(MyEntityResource.MyEntityResourcePath)
-@DeclareRoles({"DataAccess","DataAccess|Update"})
-@RolesAllowed({"DataAccess|Write","DataAccess|Update"})
+@DeclareRoles({"admin","user"})
 public class MyEntityResource {
 
     final static String MyEntityResourcePath = "myresourceentity";
     final static String MyEntityResourcePathId = "{id}";
     final static int APITimeoutInSeconds = 60;
     final static String timeOutMessage = "Operation time out.";
+
+
+    @Inject
+    private JsonWebToken jwt;
+    @Inject
+    @Claim("email")
+    private Instance<Optional<JsonString>> emailAddress;
 
     // EJB -> look at specification
     // @PersistenceUnit(unitName = "example-unit")
@@ -770,6 +781,7 @@ public class MyEntityResource {
      *                      automatically but, this is a jersey specific and dependant implementation!
      */
     @GET
+    @PermitAll
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Operation(summary = "Get ExampleEntity by Id",
             tags = {"Id Long"},
@@ -808,6 +820,7 @@ public class MyEntityResource {
 
     @Path(MyEntityResourcePathId)
     @GET
+    @PermitAll
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Operation(summary = "Get ExampleEntity by Id",
             tags = {"Id Long"},
@@ -846,6 +859,7 @@ public class MyEntityResource {
     }
 
     @Path(MyEntityResourcePathId)
+    @PermitAll
     @DELETE
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Operation(summary = "Delete ExampleEntity by Id",

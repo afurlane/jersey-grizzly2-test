@@ -720,18 +720,34 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.eclipse.microprofile.jwt.Claim;
+import org.eclipse.microprofile.jwt.JsonWebToken;
+
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.RolesAllowed;
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
+import javax.json.JsonString;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Root resource (exposed at "myresource" path)
  */
 @Path(MyResource.MyResourcePath)
+@DeclareRoles({"admin","user"})
 public class MyResource {
 
     final static String MyResourcePath = "myresource";
     final static String MyResourceTryQuery = "tryQuery";
+
+    @Inject
+    private JsonWebToken jwt;
+    @Inject
+    @Claim("email")
+    private Instance<Optional<JsonString>> emailAddress;
 
     /**
      * Method handling HTTP GET requests. The returned object will be sent
@@ -740,13 +756,15 @@ public class MyResource {
      * @return String that will be returned as a text/plain response.
      */
     @GET
+    @RolesAllowed("user")
     @Produces(MediaType.TEXT_PLAIN)
     public String getIt() {
-        return "Got it!";
+        return new StringBuilder().append("GotIt!").append(" ").append(emailAddress).toString();
     }
 
     @GET
     @Path(MyResourceTryQuery)
+    @RolesAllowed("user")
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Operation(summary = "Get an array of strings from query param",
             tags = {"Array"},

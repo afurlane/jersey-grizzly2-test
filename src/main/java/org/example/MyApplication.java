@@ -723,8 +723,10 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import org.eclipse.microprofile.auth.LoginConfig;
 import org.example.infrastructure.EndpointLoggingListener;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.servlet.ServletConfig;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
@@ -732,6 +734,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@LoginConfig(authMethod = "MP-JWT", realmName = "jwt-jaspi")
+@ApplicationScoped
 public class MyApplication extends Application {
 
     @Context ServletConfig servletConfig;
