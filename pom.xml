@@ -1020,6 +1020,13 @@
             <version>${derby.version}</version>
             <scope>test</scope>
         </dependency>
+        <!-- JWT Microprofile -->
+        <dependency>
+            <groupId>org.eclipse.microprofile.jwt</groupId>
+            <artifactId>microprofile-jwt-auth-tck</artifactId>
+            <version>${eclipse.jwt.version}</version>
+            <scope>test</scope>
+        </dependency>
         <!-- JDBC DRIVER HERE!! -->
         <dependency>
             <groupId>org.apache.derby</groupId>
@@ -1070,25 +1077,6 @@
 
     <reporting>
         <plugins>
-            <plugin>
-                <groupId>org.openclover</groupId>
-                <artifactId>clover-maven-plugin</artifactId>
-                <version>${clover-plugin.version}</version>
-                <!-- here or in the build section -->
-                <configuration>
-                    <generateHistorical>true</generateHistorical>
-                    <generateHtml>false</generateHtml>
-                    <generatePdf>false</generatePdf>
-                    <generateXml>true</generateXml>
-                    <encoding>UTF-8</encoding>
-                    <targetPercentage>50%</targetPercentage>
-                    <failOnViolation>false</failOnViolation>
-                    <cloverDatabase>${project.basedir}/clover/clover.db</cloverDatabase>
-                    <cloverMergeDatabase>${project.basedir}/clover/cloverMerge.db</cloverMergeDatabase>
-                    <historyDir>${project.basedir}/clover/history</historyDir>
-                    <outputDirectory>${sonar.clover.reportPath}</outputDirectory>
-                </configuration>
-            </plugin>
             <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -1102,7 +1090,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>${surefire-report-plugin.version}</version>
+                <version>${maven-surefire-report-plugi.version}</version>
                 <configuration>
                     <reportsDirectory>${sonar.junit.reportPaths}</reportsDirectory>
                 </configuration>
@@ -1113,6 +1101,25 @@
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.8.6</version>
+                    <executions>
+                        <execution>
+                            <id>prepare-agent</id>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>report</id>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
                 <plugin>
                     <groupId>org.codehaus.cargo</groupId>
                     <artifactId>cargo-maven2-plugin</artifactId>
@@ -1433,59 +1440,6 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.openclover</groupId>
-                <artifactId>clover-maven-plugin</artifactId>
-                <version>${clover-plugin.version}</version>
-                <configuration>
-                    <generateHistorical>true</generateHistorical>
-                    <generateHtml>false</generateHtml>
-                    <generatePdf>false</generatePdf>
-                    <generateXml>true</generateXml>
-                    <encoding>UTF-8</encoding>
-                    <targetPercentage>50%</targetPercentage>
-                    <failOnViolation>false</failOnViolation>
-                    <cloverDatabase>${project.basedir}/.clover/clover.db</cloverDatabase>
-                    <cloverMergeDatabase>${project.basedir}/.clover/cloverMerge.db</cloverMergeDatabase>
-                    <historyDir>${project.basedir}/.clover/history/</historyDir>
-                    <!--
-                    <reportDescriptor>clover-report.xml</reportDescriptor>
-                    -->
-                    <!--
-                    <baseDir>${project.basedir}</baseDir>
-                    <baseDir>${project.build.directory}/clover/clover.snapshot</baseDir>
-                    -->
-                    <!--
-                    <includes>
-                        <include>**/main/**/*.java</include>
-                        <include>**/test/**/*.java</include>
-                    </includes>
-                    -->
-                    <excludes>
-                        <exclude>**/generated-sources/**/*.java</exclude>
-                    </excludes>
-                    <encoding>UTF-8</encoding>
-                </configuration>
-                <!-- This seems not to work! -->
-                <executions>
-                    <execution>
-                        <id>clover</id>
-                        <goals>
-                            <goal>setup</goal>
-                            <goal>optimize</goal>
-                            <goal>snapshot</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>clover</goal>
-                            <goal>log</goal>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.codehaus.cargo</groupId>
                 <artifactId>cargo-maven2-plugin</artifactId>
                 <version>${cargo.version}</version>
@@ -1570,13 +1524,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <rp.build.warname>${project.artifactId}</rp.build.warname>
-        <clover-plugin.version>4.2.0</clover-plugin.version>
         <cargo.version>1.8.3</cargo.version>
         <!-- SonarQube Settings -->
         <sonar-plugin.version>3.3.0.603</sonar-plugin.version>
         <sonar.exclusions>
-            **/clover/src-instrumented/**,
-            **/clover/src-test-instrumented/**
             **/generated-sources/wsimport/**
         </sonar.exclusions>
         <sonar.projectName>${project.name}</sonar.projectName>
@@ -1584,23 +1535,17 @@
         <sonar.projectVersion>${project.version}</sonar.projectVersion>
         <sonar.log.level>DEBUG</sonar.log.level>
         <sonar.sources>${project.build.sourceDirectory}</sonar.sources>
-        <!--
-        <sonar.clover.version>${clover.version}</sonar.clover.version>
-        -->
-        <sonar.java.coveragePlugin>clover</sonar.java.coveragePlugin>
-        <sonar.clover.reportPath>${project.build.directory}/site/clover/clover.xml</sonar.clover.reportPath>
+        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.surefire.reportsPath>${project.build.directory}/surefire-reports</sonar.surefire.reportsPath>
         <sonar.junit.reportPaths>${project.basedir}/target/surefire-reports</sonar.junit.reportPaths>
-        <sonar.clover.reportPath>${project.basedir}/target/site/clover/clover.xml</sonar.clover.reportPath>
-        <sonar.clover.reportPaths>${project.basedir}/target/site/clover/clover.xml</sonar.clover.reportPaths>
         <!--
         <sonar.findbugs.reportPaths></sonar.findbugs.reportPaths>
         -->
         <sonar.jacoco.reportPaths>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPaths>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/../target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <!--
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-        <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
         <sonar.language>java</sonar.language>
         -->
         <!-- Deployer properties -->
@@ -1622,5 +1567,6 @@
         <assertj-core.version>3.18.1</assertj-core.version>
         <catch-exception.version>1.2.0</catch-exception.version>
         <surefire.and.failsafe.report.dir>target/test-report</surefire.and.failsafe.report.dir>
+        <maven-surefire-report-plugi.version>3.0.0-M5</maven-surefire-report-plugi.version>
     </properties>
 </project>

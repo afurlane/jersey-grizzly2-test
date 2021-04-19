@@ -714,6 +714,7 @@
  */
 package org.example;
 
+import org.eclipse.microprofile.jwt.tck.util.TokenUtils;
 import org.example.entities.ExampleDetailEntity;
 import org.example.entities.ExampleEntity;
 import org.example.models.ExampleModel;
@@ -722,8 +723,11 @@ import org.junit.Test;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
+import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 
 import static org.junit.Assert.assertNotNull;
@@ -735,11 +739,28 @@ public class MyEntityResourceTestITCase extends CdiBaseTest {
     public void setUp() throws Exception {
         super.setUp();
         seedData();
+
+    }
+
+    private String GetToken () {
+        KeyPair pair = null;
+        String token = "";
+        try {
+            pair = TokenUtils.generateKeyPair(1024);
+            token = TokenUtils.signClaims(pair.getPrivate(), "kid", "/Token1.json", null, null);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return token == "" ? token : "Bearer " + token;
     }
 
     @Test
-    public void testGGetEntityByIdWhithNullParam() {
-        Response responseMsg = target().path(MyEntityResource.MyEntityResourcePath).request().get();
+    public void testGGetEntityByIdWhithNullParam() throws NoSuchAlgorithmException {
+        String token = GetToken();
+        Response responseMsg = target().path(MyEntityResource.MyEntityResourcePath)
+                .request().header(HttpHeaders.AUTHORIZATION, token).get();
         ExampleModel exampleEntity = responseMsg.readEntity(ExampleModel.class);
         assertNotNull(responseMsg);
         assertNotNull(exampleEntity);
@@ -748,7 +769,9 @@ public class MyEntityResourceTestITCase extends CdiBaseTest {
     @Test
     public void testGGetEntityById() {
         Long id = 2L;
-        Response responseMsg = target().path(MyEntityResource.MyEntityResourcePath).path(id.toString()).request().get();
+        String token = GetToken();
+        Response responseMsg = target().path(MyEntityResource.MyEntityResourcePath)
+                .path(id.toString()).request().header(HttpHeaders.AUTHORIZATION, token).get();
         assertNotNull(responseMsg);
         assertTrue(responseMsg.getStatusInfo().getStatusCode() == Response.Status.NOT_FOUND.getStatusCode());
     }

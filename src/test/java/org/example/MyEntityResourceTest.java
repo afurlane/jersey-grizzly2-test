@@ -715,6 +715,7 @@
 package org.example;
 
 import org.apache.logging.log4j.Logger;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.example.entities.ExampleEntity;
 import org.example.models.ExampleModel;
 import org.junit.Test;
@@ -723,6 +724,8 @@ import org.mockito.*;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
 
+import javax.enterprise.inject.Instance;
+import javax.json.JsonString;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
@@ -731,6 +734,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.core.Response;
+
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -763,6 +768,10 @@ public class MyEntityResourceTest {
     ArgumentCaptor<Response> captor;
     @Mock
     Logger logger;
+    @Mock
+    JsonWebToken jwt;
+    @Mock
+    Instance<Optional<JsonString>> emailAddress;
 
     @InjectMocks
     MyEntityResource myEntityResource;

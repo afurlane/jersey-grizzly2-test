@@ -760,6 +760,7 @@ public class MyEntityResource {
 
     @Inject
     private JsonWebToken jwt;
+
     @Inject
     @Claim("email")
     private Instance<Optional<JsonString>> emailAddress;

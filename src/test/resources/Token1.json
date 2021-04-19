@@ -1,0 +1,27 @@
+{
+  "exp" : 1618839900,
+  "iat" : 1618839840,
+  "jti" : "ecca15af-a3a3-432d-8804-e3cd56a73293",
+  "iss" : "http://localhost:8080/auth/realms/Sage-X3",
+  "aud" : "account",
+  "sub" : "be9dcc99-30e7-4bae-9136-9a59f7611d7f",
+  "typ" : "Bearer",
+  "azp" : "REST-API",
+  "session_state" : "91ebce9b-f0a7-4c66-8d81-5106c7817a24",
+  "acr" : "1",
+  "realm_access" : {
+    "roles" : [ "offline_access", "user" ]
+  },
+  "resource_access" : {
+    "account" : {
+      "roles" : [ "manage-account", "manage-account-links" ]
+    }
+  },
+  "scope" : "profile email",
+  "email_verified" : false,
+  "name" : "Test User 1",
+  "preferred_username" : "testuser1",
+  "given_name" : "Test",
+  "family_name" : "User 1",
+  "email" : "testuser1@rch.it"
+}

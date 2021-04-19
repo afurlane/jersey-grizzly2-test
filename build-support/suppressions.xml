@@ -90,4 +90,30 @@
         <cve>CVE-2020-11022</cve>
         <cve>CVE-2020-11023</cve>
     </suppress>
+    <suppress>
+        <notes><![CDATA[file name: microprofile JWT]]></notes>
+        <packageUrl>pkg:maven/org.eclipse.microprofile.jwt/microprofile-jwt-auth-api@1.2</packageUrl>
+        <cve>CVE-2010-4647</cve>
+        <cve>CVE-2018-1000413</cve>
+        <cve>CVE-2008-7271</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: jsoup]]></notes>
+        <packageUrl>pkg:maven/org.jsoup/jsoup@1.7.2</packageUrl>
+        <cve>CVE-2015-6748</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: plesk-utils]]></notes>
+        <packageUrl>pkg:maven/org.codehaus.plexus/plexus-utils@3.0.20</packageUrl>
+        <cve>CVE-2015-6748</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: testng]]></notes>
+        <packageUrl>pkg:maven/org.testng/testng@6.10</packageUrl>
+        <cve>CVE-2015-9251</cve>
+        <cve>CVE-2012-6708</cve>
+        <cve>CVE-2019-11358</cve>
+        <cve>CVE-2020-11023</cve>
+        <cve>CVE-2020-11022</cve>
+    </suppress>
 </suppressions>
