@@ -837,6 +837,11 @@
             <artifactId>microprofile-jwt-auth-api</artifactId>
             <version>${eclipse.jwt.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.smallrye</groupId>
+            <artifactId>smallrye-jwt</artifactId>
+            <version>${smallrye-jwt.version}</version>
+        </dependency>
         <!-- CDI support -->
         <dependency>
             <groupId>org.glassfish.jersey.ext.cdi</groupId>
@@ -1568,5 +1573,6 @@
         <catch-exception.version>1.2.0</catch-exception.version>
         <surefire.and.failsafe.report.dir>target/test-report</surefire.and.failsafe.report.dir>
         <maven-surefire-report-plugi.version>3.0.0-M5</maven-surefire-report-plugi.version>
+        <smallrye-jwt.version>3.1.0</smallrye-jwt.version>
     </properties>
 </project>
