@@ -714,6 +714,8 @@
  */
 package org.example.models;
 
+import org.javamoney.moneta.Money;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
@@ -721,6 +723,8 @@ import java.util.List;
 public class ExampleModel {
     private Long id;
     private String name;
+
+    private Money amount;
 
     private List<ExampleDetailModel> exampleDetailModels;
 
@@ -744,6 +748,14 @@ public class ExampleModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Money getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Money amount) {
+        this.amount = amount;
     }
 
     public List<ExampleDetailModel> getExampleDetailModels() {
