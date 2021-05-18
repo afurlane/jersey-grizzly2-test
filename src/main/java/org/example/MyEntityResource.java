@@ -740,6 +740,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
@@ -750,16 +751,15 @@ import java.util.concurrent.TimeUnit;
 
 @Path(MyEntityResource.MyEntityResourcePath)
 @DeclareRoles({"admin","user"})
-public class MyEntityResource {
+public class    MyEntityResource {
 
     final static String MyEntityResourcePath = "myresourceentity";
     final static String MyEntityResourcePathId = "{id}";
     final static int APITimeoutInSeconds = 60;
     final static String timeOutMessage = "Operation time out.";
 
-
-    @Inject
-    private JsonWebToken jwt;
+//    @Inject
+//    private JsonWebToken jwt;
 
     @Inject
     @Claim("email")
@@ -895,6 +895,48 @@ public class MyEntityResource {
                 response = Response.status(Response.Status.NOT_FOUND).build();
             }
             entityManager.close();
+            asyncResponse.resume(response);
+        }).start();
+    }
+
+    @Path(MyEntityResourcePathId)
+    @PUT
+    @PermitAll
+    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Operation(summary = "Get ExampleEntity by Id",
+            tags = {"Id Long"},
+            description = "Return the example Entity and connected entities",
+            responses = {
+                    @ApiResponse(description = "The ExampleEntity", content = @Content(
+                            schema = @Schema(implementation = ExampleEntity.class)
+                    )),
+                    @ApiResponse(responseCode = "400", description = "No Id supplied"),
+                    @ApiResponse(responseCode = "404", description = "ExampleEntity not found")
+            })
+    public void UpdateEntityById(@Suspended final AsyncResponse asyncResponse,
+                              @Parameter(
+                                      description = "FullEntity",
+                                      schema = @Schema(
+                                              implementation = ExampleModel.class,
+                                              description = "Entity to update"),
+                                      required = true)
+                              @NotNull(message ="Entity is mandatory") @PathParam("Entity") ExampleModel exampleModel) {
+        asyncResponse.setTimeoutHandler(asyncResponse1 -> asyncResponse1.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
+                .entity(timeOutMessage).build()));
+        asyncResponse.setTimeout(APITimeoutInSeconds, TimeUnit.SECONDS);
+        new Thread(() -> {
+            EntityManager entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+            ExampleEntity mergedEntity = entityManager.merge(modelMapper.map(exampleModel, ExampleEntity.class));
+            entityManager.getTransaction().commit();
+            entityManager.close();
+            Response response;
+            if (mergedEntity == null) {
+                response = Response.status(Response.Status.NOT_FOUND).build();
+            } else {
+                response = Response.status(Response.Status.OK).entity(
+                        modelMapper.map(mergedEntity, ExampleModel.class)).build();
+            }
             asyncResponse.resume(response);
         }).start();
     }

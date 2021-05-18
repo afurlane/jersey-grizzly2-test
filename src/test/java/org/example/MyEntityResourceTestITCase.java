@@ -723,7 +723,9 @@ import org.junit.Test;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import java.security.KeyPair;
@@ -764,6 +766,15 @@ public class MyEntityResourceTestITCase extends CdiBaseTest {
         ExampleModel exampleEntity = responseMsg.readEntity(ExampleModel.class);
         assertNotNull(responseMsg);
         assertNotNull(exampleEntity);
+    }
+
+    @Test
+    public void updateEntityWithQuery() {
+        String testString = "";
+        Response put = target().path(MyEntityResource.MyEntityResourcePath)
+                .path(MyResource.MyResourceTryQuery)
+                .request().put(Entity.entity(testString, MediaType.APPLICATION_JSON));
+        assertNotNull(put);
     }
 
     @Test

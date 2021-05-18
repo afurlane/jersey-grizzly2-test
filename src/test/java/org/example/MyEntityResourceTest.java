@@ -768,8 +768,10 @@ public class MyEntityResourceTest {
     ArgumentCaptor<Response> captor;
     @Mock
     Logger logger;
+/*
     @Mock
     JsonWebToken jwt;
+*/
     @Mock
     Instance<Optional<JsonString>> emailAddress;
 

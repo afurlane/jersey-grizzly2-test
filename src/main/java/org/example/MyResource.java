@@ -743,8 +743,8 @@ public class MyResource {
     final static String MyResourcePath = "myresource";
     final static String MyResourceTryQuery = "tryQuery";
 
-    @Inject
-    private JsonWebToken jwt;
+//    @Inject
+//    private JsonWebToken jwt;
 
     @Inject
     @Claim("email")

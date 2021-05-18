@@ -779,7 +779,10 @@
             <groupId>org.glassfish.jersey.inject</groupId>
             <artifactId>jersey-hk2</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.glassfish.jersey.ext</groupId>
+            <artifactId>jersey-bean-validation</artifactId>
+        </dependency>
         <!-- Jersey support -->
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
@@ -956,6 +959,13 @@
             <groupId>javax.jws</groupId>
             <artifactId>javax.jws-api</artifactId>
             <version>${javax.jws-api.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.javamoney</groupId>
+            <artifactId>moneta</artifactId>
+            <version>${moneta.version}</version>
+            <type>pom</type>
         </dependency>
 
         <!-- Testing support -->
@@ -1574,5 +1584,6 @@
         <surefire.and.failsafe.report.dir>target/test-report</surefire.and.failsafe.report.dir>
         <maven-surefire-report-plugi.version>3.0.0-M5</maven-surefire-report-plugi.version>
         <smallrye-jwt.version>3.1.0</smallrye-jwt.version>
+        <moneta.version>1.4.2</moneta.version>
     </properties>
 </project>
