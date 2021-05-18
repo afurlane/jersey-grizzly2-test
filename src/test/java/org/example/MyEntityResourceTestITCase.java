@@ -774,6 +774,9 @@ public class MyEntityResourceTestITCase extends CdiBaseTest {
         Response put = target().path(MyEntityResource.MyEntityResourcePath)
                 .path(MyResource.MyResourceTryQuery)
                 .request().put(Entity.entity(testString, MediaType.APPLICATION_JSON));
+        String body = put.readEntity(String.class);
+        System.out.println(body);
+        assertNotNull(body);
         assertNotNull(put);
     }
 

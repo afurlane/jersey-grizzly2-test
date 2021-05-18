@@ -724,7 +724,9 @@ import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import org.eclipse.microprofile.auth.LoginConfig;
+import org.example.infrastructure.CustomConstraintViolationExceptionMapper;
 import org.example.infrastructure.EndpointLoggingListener;
+import org.example.infrastructure.JsonProcessingExceptionMapper;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.servlet.ServletConfig;
@@ -776,8 +778,10 @@ public class MyApplication extends Application {
     {
         ConfigureApplication();
         return Stream.of(MyResource.class,
-        MyEntityResource.class,
         EndpointLoggingListener.class,
+        CustomConstraintViolationExceptionMapper.class,
+        JsonProcessingExceptionMapper.class,
+        MyEntityResource.class,
         OpenApiResource.class,
         AcceptHeaderOpenApiResource.class).collect(Collectors.toSet());
     }

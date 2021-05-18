@@ -105,3 +105,143 @@ All endpoints for Jersey application
    GET     D:\Progetti\Progetti\jersey-grizzly2-test/openapi.{type:json|yaml}
 
 2021-05-18T15:09:45,305 [main] INFO jboss.weld.Bootstrap - WELD-ENV-002001: Weld SE container e7fd5369-9bfa-449d-be6e-24ce2294c27a shut down
+2021-05-18T16:45:12,724 [main] INFO jboss.weld.Version - WELD-000900: 3.1.2 (Final)
+2021-05-18T16:45:13,199 [main] INFO jboss.weld.Bootstrap - WELD-ENV-000020: Using jandex for bean discovery
+2021-05-18T16:45:14,490 [main] INFO jboss.weld.Bootstrap - WELD-000101: Transactional services not available. Injection of @Inject UserTransaction not available. Transactional observers will be invoked synchronously.
+2021-05-18T16:45:15,185 [main] INFO jboss.weld.Event - WELD-000411: Observer method [BackedAnnotatedMethod] public org.glassfish.jersey.ext.cdi1x.internal.ProcessAllAnnotatedTypes.processAnnotatedType(@Observes ProcessAnnotatedType<?>, BeanManager) receives events for all annotated types. Consider restricting events using @WithAnnotations or a generic type with bounds.
+2021-05-18T16:45:17,755 [ForkJoinPool.commonPool-worker-5] WARN jboss.weld.Validator - WELD-001440: Scope type @javax.enterprise.context.RequestScoped() used on injection point [BackedAnnotatedField] @Inject @RequestScoped private org.example.MyEntityResource.entityManagerFactory
+	at org.example.MyEntityResource.entityManagerFactory(MyEntityResource.java:0)
+  StackTrace
+2021-05-18T16:45:17,826 [main] INFO jboss.weld.Bootstrap - WELD-ENV-002003: Weld SE container 2f416210-4ac0-4707-b47d-0d2f9ffc7c32 initialized
+2021-05-18T16:45:25,053 [main] INFO util.bean.SerializableForwardingInjectionPoint - 
+All endpoints for Jersey application
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresource
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresource/tryQuery
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity
+   DELETE  D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity/{id}
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity/{id}
+   PUT     D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity/{id}
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/openapi
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/openapi.{type:json|yaml}
+
+2021-05-18T17:09:16,871 [main] INFO jboss.weld.Bootstrap - WELD-ENV-002001: Weld SE container 2f416210-4ac0-4707-b47d-0d2f9ffc7c32 shut down
+2021-05-18T17:17:55,822 [main] INFO jboss.weld.Version - WELD-000900: 3.1.2 (Final)
+2021-05-18T17:17:56,326 [main] INFO jboss.weld.Bootstrap - WELD-ENV-000020: Using jandex for bean discovery
+2021-05-18T17:17:57,339 [main] INFO jboss.weld.Bootstrap - WELD-000101: Transactional services not available. Injection of @Inject UserTransaction not available. Transactional observers will be invoked synchronously.
+2021-05-18T17:17:58,021 [main] INFO jboss.weld.Event - WELD-000411: Observer method [BackedAnnotatedMethod] public org.glassfish.jersey.ext.cdi1x.internal.ProcessAllAnnotatedTypes.processAnnotatedType(@Observes ProcessAnnotatedType<?>, BeanManager) receives events for all annotated types. Consider restricting events using @WithAnnotations or a generic type with bounds.
+2021-05-18T17:18:00,351 [ForkJoinPool.commonPool-worker-5] WARN jboss.weld.Validator - WELD-001440: Scope type @javax.enterprise.context.RequestScoped() used on injection point [BackedAnnotatedField] @Inject @RequestScoped private org.example.MyEntityResource.entityManagerFactory
+	at org.example.MyEntityResource.entityManagerFactory(MyEntityResource.java:0)
+  StackTrace
+2021-05-18T17:18:00,399 [main] INFO jboss.weld.Bootstrap - WELD-ENV-002003: Weld SE container 31684284-2c5b-4675-ab23-9454c6db0b5c initialized
+2021-05-18T17:18:07,475 [main] INFO util.bean.SerializableForwardingInjectionPoint - 
+All endpoints for Jersey application
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresource
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresource/tryQuery
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity
+   DELETE  D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity/{id}
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity/{id}
+   PUT     D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity/{id}
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/openapi
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/openapi.{type:json|yaml}
+
+2021-05-18T17:20:43,558 [main] INFO jboss.weld.Bootstrap - WELD-ENV-002001: Weld SE container 31684284-2c5b-4675-ab23-9454c6db0b5c shut down
+2021-05-18T17:27:19,892 [main] INFO jboss.weld.Version - WELD-000900: 3.1.2 (Final)
+2021-05-18T17:27:20,293 [main] INFO jboss.weld.Bootstrap - WELD-ENV-000020: Using jandex for bean discovery
+2021-05-18T17:27:21,265 [main] INFO jboss.weld.Bootstrap - WELD-000101: Transactional services not available. Injection of @Inject UserTransaction not available. Transactional observers will be invoked synchronously.
+2021-05-18T17:27:21,861 [main] INFO jboss.weld.Event - WELD-000411: Observer method [BackedAnnotatedMethod] public org.glassfish.jersey.ext.cdi1x.internal.ProcessAllAnnotatedTypes.processAnnotatedType(@Observes ProcessAnnotatedType<?>, BeanManager) receives events for all annotated types. Consider restricting events using @WithAnnotations or a generic type with bounds.
+2021-05-18T17:27:23,650 [ForkJoinPool.commonPool-worker-3] WARN jboss.weld.Validator - WELD-001440: Scope type @javax.enterprise.context.RequestScoped() used on injection point [BackedAnnotatedField] @Inject @RequestScoped private org.example.MyEntityResource.entityManagerFactory
+	at org.example.MyEntityResource.entityManagerFactory(MyEntityResource.java:0)
+  StackTrace
+2021-05-18T17:27:23,697 [main] INFO jboss.weld.Bootstrap - WELD-ENV-002003: Weld SE container ea89ddca-78fe-4c07-8759-f7ecade59c8d initialized
+2021-05-18T17:27:31,411 [main] INFO util.bean.SerializableForwardingInjectionPoint - 
+All endpoints for Jersey application
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresource
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresource/tryQuery
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity
+   DELETE  D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity/{id}
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity/{id}
+   PUT     D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity/{id}
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/openapi
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/openapi.{type:json|yaml}
+
+2021-05-18T17:29:21,927 [main] INFO jboss.weld.Bootstrap - WELD-ENV-002001: Weld SE container ea89ddca-78fe-4c07-8759-f7ecade59c8d shut down
+2021-05-18T17:29:43,120 [main] INFO jboss.weld.Version - WELD-000900: 3.1.2 (Final)
+2021-05-18T17:29:43,455 [main] INFO jboss.weld.Bootstrap - WELD-ENV-000020: Using jandex for bean discovery
+2021-05-18T17:29:44,032 [main] INFO jboss.weld.Bootstrap - WELD-000101: Transactional services not available. Injection of @Inject UserTransaction not available. Transactional observers will be invoked synchronously.
+2021-05-18T17:29:44,561 [main] INFO jboss.weld.Event - WELD-000411: Observer method [BackedAnnotatedMethod] public org.glassfish.jersey.ext.cdi1x.internal.ProcessAllAnnotatedTypes.processAnnotatedType(@Observes ProcessAnnotatedType<?>, BeanManager) receives events for all annotated types. Consider restricting events using @WithAnnotations or a generic type with bounds.
+2021-05-18T17:29:47,741 [ForkJoinPool.commonPool-worker-5] WARN jboss.weld.Validator - WELD-001440: Scope type @javax.enterprise.context.RequestScoped() used on injection point [BackedAnnotatedField] @Inject @RequestScoped private org.example.MyEntityResource.entityManagerFactory
+	at org.example.MyEntityResource.entityManagerFactory(MyEntityResource.java:0)
+  StackTrace
+2021-05-18T17:29:47,795 [main] INFO jboss.weld.Bootstrap - WELD-ENV-002003: Weld SE container 3c25fe5a-b67d-4e75-87e8-fa1254c83dc3 initialized
+2021-05-18T17:29:55,035 [main] INFO util.bean.SerializableForwardingInjectionPoint - 
+All endpoints for Jersey application
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresource
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresource/tryQuery
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity
+   DELETE  D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity/{id}
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity/{id}
+   PUT     D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity/{id}
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/openapi
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/openapi.{type:json|yaml}
+
+2021-05-18T17:32:36,296 [main] INFO jboss.weld.Bootstrap - WELD-ENV-002001: Weld SE container 3c25fe5a-b67d-4e75-87e8-fa1254c83dc3 shut down
+2021-05-18T17:34:21,914 [main] INFO jboss.weld.Version - WELD-000900: 3.1.2 (Final)
+2021-05-18T17:34:22,318 [main] INFO jboss.weld.Bootstrap - WELD-ENV-000020: Using jandex for bean discovery
+2021-05-18T17:34:23,170 [main] INFO jboss.weld.Bootstrap - WELD-000101: Transactional services not available. Injection of @Inject UserTransaction not available. Transactional observers will be invoked synchronously.
+2021-05-18T17:34:23,729 [main] INFO jboss.weld.Event - WELD-000411: Observer method [BackedAnnotatedMethod] public org.glassfish.jersey.ext.cdi1x.internal.ProcessAllAnnotatedTypes.processAnnotatedType(@Observes ProcessAnnotatedType<?>, BeanManager) receives events for all annotated types. Consider restricting events using @WithAnnotations or a generic type with bounds.
+2021-05-18T17:34:25,714 [ForkJoinPool.commonPool-worker-7] WARN jboss.weld.Validator - WELD-001440: Scope type @javax.enterprise.context.RequestScoped() used on injection point [BackedAnnotatedField] @Inject @RequestScoped private org.example.MyEntityResource.entityManagerFactory
+	at org.example.MyEntityResource.entityManagerFactory(MyEntityResource.java:0)
+  StackTrace
+2021-05-18T17:34:25,752 [main] INFO jboss.weld.Bootstrap - WELD-ENV-002003: Weld SE container b0782eed-8c1e-4bb3-bd97-d7301e819694 initialized
+2021-05-18T17:34:32,773 [main] INFO util.bean.SerializableForwardingInjectionPoint - 
+All endpoints for Jersey application
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresource
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresource/tryQuery
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity
+   DELETE  D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity/{id}
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity/{id}
+   PUT     D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity/{id}
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/openapi
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/openapi.{type:json|yaml}
+
+2021-05-18T17:37:58,017 [main] INFO jboss.weld.Bootstrap - WELD-ENV-002001: Weld SE container b0782eed-8c1e-4bb3-bd97-d7301e819694 shut down
+2021-05-18T17:41:55,219 [main] INFO jboss.weld.Version - WELD-000900: 3.1.2 (Final)
+2021-05-18T17:41:55,568 [main] INFO jboss.weld.Bootstrap - WELD-ENV-000020: Using jandex for bean discovery
+2021-05-18T17:41:56,211 [main] INFO jboss.weld.Bootstrap - WELD-000101: Transactional services not available. Injection of @Inject UserTransaction not available. Transactional observers will be invoked synchronously.
+2021-05-18T17:41:56,629 [main] INFO jboss.weld.Event - WELD-000411: Observer method [BackedAnnotatedMethod] public org.glassfish.jersey.ext.cdi1x.internal.ProcessAllAnnotatedTypes.processAnnotatedType(@Observes ProcessAnnotatedType<?>, BeanManager) receives events for all annotated types. Consider restricting events using @WithAnnotations or a generic type with bounds.
+2021-05-18T17:41:58,255 [ForkJoinPool.commonPool-worker-3] WARN jboss.weld.Validator - WELD-001440: Scope type @javax.enterprise.context.RequestScoped() used on injection point [BackedAnnotatedField] @Inject @RequestScoped private org.example.MyEntityResource.entityManagerFactory
+	at org.example.MyEntityResource.entityManagerFactory(MyEntityResource.java:0)
+  StackTrace
+2021-05-18T17:41:58,298 [main] INFO jboss.weld.Bootstrap - WELD-ENV-002003: Weld SE container d633803f-c1bc-41f7-989e-a6a380cdede0 initialized
+2021-05-18T17:42:03,588 [main] INFO util.bean.SerializableForwardingInjectionPoint - 
+All endpoints for Jersey application
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresource
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresource/tryQuery
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity
+   DELETE  D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity/{id}
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity/{id}
+   PUT     D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity/{id}
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/openapi
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/openapi.{type:json|yaml}
+
+2021-05-18T17:42:31,381 [main] INFO jboss.weld.Bootstrap - WELD-ENV-002001: Weld SE container d633803f-c1bc-41f7-989e-a6a380cdede0 shut down
+2021-05-18T17:45:14,255 [main] INFO jboss.weld.Version - WELD-000900: 3.1.2 (Final)
+2021-05-18T17:45:14,674 [main] INFO jboss.weld.Bootstrap - WELD-ENV-000020: Using jandex for bean discovery
+2021-05-18T17:45:15,651 [main] INFO jboss.weld.Bootstrap - WELD-000101: Transactional services not available. Injection of @Inject UserTransaction not available. Transactional observers will be invoked synchronously.
+2021-05-18T17:45:16,295 [main] INFO jboss.weld.Event - WELD-000411: Observer method [BackedAnnotatedMethod] public org.glassfish.jersey.ext.cdi1x.internal.ProcessAllAnnotatedTypes.processAnnotatedType(@Observes ProcessAnnotatedType<?>, BeanManager) receives events for all annotated types. Consider restricting events using @WithAnnotations or a generic type with bounds.
+2021-05-18T17:45:18,865 [ForkJoinPool.commonPool-worker-7] WARN jboss.weld.Validator - WELD-001440: Scope type @javax.enterprise.context.RequestScoped() used on injection point [BackedAnnotatedField] @Inject @RequestScoped private org.example.MyEntityResource.entityManagerFactory
+	at org.example.MyEntityResource.entityManagerFactory(MyEntityResource.java:0)
+  StackTrace
+2021-05-18T17:45:18,976 [main] INFO jboss.weld.Bootstrap - WELD-ENV-002003: Weld SE container 45eaafee-d9e7-4063-895b-c8c5666e4101 initialized
+2021-05-18T17:45:27,612 [main] INFO util.bean.SerializableForwardingInjectionPoint - 
+All endpoints for Jersey application
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresource
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresource/tryQuery
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity
+   DELETE  D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity/{id}
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity/{id}
+   PUT     D:\Progetti\Progetti\jersey-grizzly2-test/myresourceentity/{id}
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/openapi
+   GET     D:\Progetti\Progetti\jersey-grizzly2-test/openapi.{type:json|yaml}
+
+2021-05-18T17:46:19,099 [main] INFO jboss.weld.Bootstrap - WELD-ENV-002001: Weld SE container 45eaafee-d9e7-4063-895b-c8c5666e4101 shut down
