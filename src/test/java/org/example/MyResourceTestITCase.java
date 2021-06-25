@@ -757,7 +757,7 @@ public class MyResourceTestITCase extends CdiBaseTest {
 
         // https://www.rfc-editor.org/rfc/rfc3778.txt
         Response response;
-        FileDataBodyPart multiPart;
+        FormDataMultiPart multiPart;
         Client client = ClientBuilder.newBuilder().register(MultiPartFeature.class).build();
         FileDataBodyPart filePart = new FileDataBodyPart("file", new File(ClassLoader.getSystemResource("Example.pdf").toURI()),
                 MediaType.APPLICATION_OCTET_STREAM_TYPE);
@@ -766,9 +766,10 @@ public class MyResourceTestITCase extends CdiBaseTest {
 
             WebTarget target = client.target(target().path(MyResource.MyResourcePath).getUri());
             response = target.request().post(Entity.entity(formDataMultiPart, formDataMultiPart.getMediaType()));
-            multiPart = response.readEntity(FileDataBodyPart.class);
+            multiPart = response.readEntity(FormDataMultiPart.class);
         }
         //Use response object to verify upload success
         client.close();
     }
+
 }
