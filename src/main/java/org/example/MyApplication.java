@@ -727,6 +727,8 @@ import org.eclipse.microprofile.auth.LoginConfig;
 import org.example.infrastructure.CustomConstraintViolationExceptionMapper;
 import org.example.infrastructure.EndpointLoggingListener;
 import org.example.infrastructure.JsonProcessingExceptionMapper;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.glassfish.jersey.server.ResourceConfig;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.servlet.ServletConfig;
@@ -777,12 +779,15 @@ public class MyApplication extends Application {
     public Set<Class<?>> getClasses()
     {
         ConfigureApplication();
+
+
         return Stream.of(MyResource.class,
         EndpointLoggingListener.class,
         CustomConstraintViolationExceptionMapper.class,
         JsonProcessingExceptionMapper.class,
         MyEntityResource.class,
         OpenApiResource.class,
-        AcceptHeaderOpenApiResource.class).collect(Collectors.toSet());
+        AcceptHeaderOpenApiResource.class,
+        MultiPartFeature.class).collect(Collectors.toSet());
     }
 }

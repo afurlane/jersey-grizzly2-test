@@ -715,6 +715,7 @@
 package org.example;
 
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.MultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import org.junit.Test;
@@ -727,6 +728,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -750,21 +753,22 @@ public class MyResourceTestITCase extends CdiBaseTest {
     }
 
     @Test
-    public void TestMultipart() throws IOException {
+    public void TestMultipart() throws IOException, URISyntaxException {
 
         // https://www.rfc-editor.org/rfc/rfc3778.txt
-        final Client client = ClientBuilder.newBuilder().register(MultiPartFeature.class).build();
+        Response response;
+        FileDataBodyPart multiPart;
+        Client client = ClientBuilder.newBuilder().register(MultiPartFeature.class).build();
+        FileDataBodyPart filePart = new FileDataBodyPart("file", new File(ClassLoader.getSystemResource("Example.pdf").toURI()),
+                MediaType.APPLICATION_OCTET_STREAM_TYPE);
+        try (FormDataMultiPart formDataMultiPart = new FormDataMultiPart();) {
+            formDataMultiPart.field("foo", "bar").bodyPart(filePart);
 
-        final FileDataBodyPart filePart = new FileDataBodyPart("file", new File("C:/temp/sample.pdf"), new MediaType("application", "pdf"));
-        FormDataMultiPart formDataMultiPart = new FormDataMultiPart();
-        final FormDataMultiPart multipart = (FormDataMultiPart) formDataMultiPart.field("foo", "bar").bodyPart(filePart);
-
-        final WebTarget target = client.target("http://localhost:8080/JerseyDemos/rest/upload/pdf");
-        final Response response = target.request().post(Entity.entity(multipart, multipart.getMediaType()));
-
+            WebTarget target = client.target(target().path(MyResource.MyResourcePath).getUri());
+            response = target.request().post(Entity.entity(formDataMultiPart, formDataMultiPart.getMediaType()));
+            multiPart = response.readEntity(FileDataBodyPart.class);
+        }
         //Use response object to verify upload success
-
-        formDataMultiPart.close();
-        multipart.close();
+        client.close();
     }
 }

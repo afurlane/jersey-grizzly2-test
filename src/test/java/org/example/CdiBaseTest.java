@@ -723,6 +723,7 @@ import org.apache.logging.log4j.Logger;
 import org.example.infrastructure.HttpSessionFactory;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.logging.LoggingFeature;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.glassfish.jersey.test.DeploymentContext;
@@ -776,6 +777,7 @@ public class CdiBaseTest extends JerseyTest {
                 bindFactory(HttpSessionFactory.class).to(HttpSession.class);
             }
         });
+        // config.register(MultiPartFeature.class);
         enable(TestProperties.LOG_TRAFFIC);
         enable(TestProperties.DUMP_ENTITY);
         return ServletDeploymentContext.forServlet(

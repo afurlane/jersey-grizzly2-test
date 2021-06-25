@@ -722,6 +722,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.eclipse.microprofile.jwt.Claim;
 import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.MultiPart;
 
 import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.RolesAllowed;
@@ -792,4 +794,19 @@ public class MyResource {
         return parameters;
     }
 
+    @POST
+    @Produces(MediaType.MULTIPART_FORM_DATA) // "multipart/mixed"
+    @Operation(summary = "Receive a multipart form data post",
+            tags = {"Form multipart"},
+            description = "",
+            responses = {
+                    @ApiResponse(description = "The same data incoming from the post", content = @Content(
+                            array = @ArraySchema(schema = @Schema(implementation = FormDataMultiPart.class))
+                    )),
+                    @ApiResponse(responseCode = "400", description = "No array supplied since is required"),
+                    @ApiResponse(responseCode = "404", description = "Some other error because we don't find something")
+            })
+    public MultiPart post(final FormDataMultiPart multiPart) {
+        return multiPart;
+    }
 }
