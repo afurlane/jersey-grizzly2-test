@@ -714,14 +714,31 @@
  */
 package org.example;
 
+import org.glassfish.grizzly.Grizzly;
+import org.glassfish.grizzly.http.server.HttpHandler;
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.grizzly.servlet.WebappContext;
+import org.glassfish.hk2.api.ServiceLocatorFactory;
+import org.glassfish.hk2.utilities.binding.AbstractBinder;
+import org.glassfish.hk2.utilities.general.Hk2ThreadLocal;
+import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpContainer;
+import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpContainerProvider;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
+import org.glassfish.jersey.inject.hk2.Hk2BootstrapBinder;
+import org.glassfish.jersey.logging.LoggingFeature;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.jvnet.hk2.external.runtime.Hk2LocatorUtilities;
 
 import javax.enterprise.inject.se.SeContainer;
 import javax.enterprise.inject.se.SeContainerInitializer;
+import javax.servlet.FilterRegistration;
+import javax.servlet.ServletContextListener;
+import javax.servlet.ServletRegistration;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.WatchEvent;
+import java.util.logging.Level;
 
 /**
  * Main class.
@@ -730,21 +747,41 @@ import java.net.URI;
 public class Main {
     // Base URI the Grizzly HTTP server will listen on
     public static final String BASE_URI = "http://localhost:8091/";
+    private static GrizzlyHttpContainerProvider grizzlyHttpContainerProvider;
+    private static WebappContext webappContext;
 
     /**
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
      * @return Grizzly HTTP server.
      */
-    public static HttpServer startServer() {
+    public static GrizzlyHttpContainer startServer() throws IOException {
         // create a resource config that scans for JAX-RS resources and providers
         // in org.example package
-        final ResourceConfig rc = new ResourceConfig().forApplicationClass(MyApplication.class);
-        // .packages("io.swagger.jaxrs.listing", "org.example");
-        // create and start a new instance of grizzly http server
-        // exposing the Jersey application at BASE_URI
-        return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
+        final ResourceConfig resourceConfig = new ResourceConfig().forApplicationClass(MyApplication.class)
+                        .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_SERVER, Level.FINEST.getName())
+                        .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL, Level.FINEST.getName());
+        ServiceLocatorFactory serviceLocatorFactory = ServiceLocatorFactory.getInstance();
+        grizzlyHttpContainerProvider = new GrizzlyHttpContainerProvider();
+        GrizzlyHttpContainer grizzlyHttpContainer = grizzlyHttpContainerProvider.createContainer(GrizzlyHttpContainer.class, resourceConfig);
+        grizzlyHttpContainer.start();
+        return grizzlyHttpContainer;
     }
 
+    public static void CreateServer() throws IOException {
+        WebappContext webappContext = new WebappContext("grizzly web context", "");
+
+        // FilterRegistration testFilterReg = webappContext.addFilter("TestFilter", TestFilter.class);
+        // testFilterReg.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), "/*");
+
+        ServletRegistration servletRegistration = webappContext.addServlet("Jersey", org.glassfish.jersey.servlet.ServletContainer.class);
+        servletRegistration.addMapping("/myapp/*");
+        servletRegistration.setInitParameter("jersey.config.server.provider.packages", "com.example");
+
+
+        HttpServer server = HttpServer.createSimpleServer();
+        webappContext.deploy(server);
+        server.start();
+    }
     /**
      * Main method.
      * @param args
@@ -753,11 +790,11 @@ public class Main {
     public static void main(String[] args) throws IOException {
         SeContainerInitializer containerInit = SeContainerInitializer.newInstance();
         SeContainer container = containerInit.initialize();
-
-        final HttpServer server = startServer();
+        final GrizzlyHttpContainer server = startServer();
         System.out.println(String.format("App started with WADL available at "
                 + "%s application.wadl\nHit enter to stop it...", BASE_URI));
         System.in.read();
+        server.destroy();
         container.close();
     }
 }
