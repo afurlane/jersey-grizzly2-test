@@ -796,16 +796,19 @@
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>
         </dependency>
+        <!--
         <dependency>
             <groupId>org.glassfish.jersey.security</groupId>
             <artifactId>oauth1-server</artifactId>
         </dependency>
+        -->
+        <!--
         <dependency>
             <groupId>javax.annotation</groupId>
             <artifactId>javax.annotation-api</artifactId>
             <version>${javax-annotation.version}</version>
         </dependency>
-
+        -->
         <!-- Jersey Jackson & JAX-B support -->
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
@@ -833,6 +836,13 @@
             <version>${jakarta.servlet-api.version}</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>jakarta.el</artifactId>
+            <version>3.0.3</version>
+        </dependency>
+
+
 
         <!-- JWT MicroProfile -->
         <dependency>
@@ -846,10 +856,6 @@
             <version>${smallrye-jwt.version}</version>
         </dependency>
         <!-- CDI support -->
-        <dependency>
-            <groupId>org.glassfish.jersey.ext.cdi</groupId>
-            <artifactId>jersey-cdi1x</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.ext.cdi</groupId>
             <artifactId>jersey-weld2-se</artifactId>
@@ -968,6 +974,12 @@
             <type>pom</type>
         </dependency>
 
+        <dependency>
+            <groupId>org.zalando</groupId>
+            <artifactId>jackson-datatype-money</artifactId>
+            <version>${jackson-datatype-money.version}</version>
+        </dependency>
+
         <!-- Testing support -->
         <dependency>
             <groupId>org.glassfish.jersey.test-framework.providers</groupId>
@@ -1053,7 +1065,7 @@
 
     <profiles>
         <profile>
-            <id>tomcat8x</id>
+            <id>Tomcat packaging</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
@@ -1087,6 +1099,60 @@
                     <version>${eclipselink.version}</version>
                 </dependency>
             </dependencies>
+        </profile>
+        <profile>
+            <id>Tomcat local container</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.codehaus.cargo</groupId>
+                            <artifactId>cargo-maven2-plugin</artifactId>
+                            <configuration>
+                                <container>
+                                    <containerId>tomcat9x</containerId>
+                                    <type>embedded</type>
+                                </container>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+        <profile>
+            <id>Tomcat remote container</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+            <pluginManagement>
+            <plugins>
+            <plugin>
+                <groupId>org.codehaus.cargo</groupId>
+                <artifactId>cargo-maven2-plugin</artifactId>
+                <version>${cargo.version}</version>
+                <configuration>
+                    <container>
+                        <type>remote</type>
+                    </container>
+                    <configuration>
+                        <type>runtime</type>
+                        <properties>
+                            <cargo.hostname>${container.hostname}</cargo.hostname>
+                            <cargo.servlet.port>${container.servlet.port}</cargo.servlet.port>
+                            <cargo.remote.username>${container.username}</cargo.remote.username>
+                            <cargo.remote.password>${container.password}</cargo.remote.password>
+                            <cargo.remote.uri>${container.uri}</cargo.remote.uri>
+                        </properties>
+                    </configuration>
+                </configuration>
+            </plugin>
+            </plugins>
+            </pluginManagement>
+            </build>
         </profile>
     </profiles>
 
@@ -1139,21 +1205,6 @@
                     <groupId>org.codehaus.cargo</groupId>
                     <artifactId>cargo-maven2-plugin</artifactId>
                     <version>${cargo.version}</version>
-                    <configuration>
-                        <container>
-                            <type>remote</type>
-                        </container>
-                        <configuration>
-                            <type>runtime</type>
-                            <properties>
-                                <cargo.hostname>${container.hostname}</cargo.hostname>
-                                <cargo.servlet.port>${container.servlet.port}</cargo.servlet.port>
-                                <cargo.remote.username>${container.username}</cargo.remote.username>
-                                <cargo.remote.password>${container.password}</cargo.remote.password>
-                                <cargo.remote.uri>${container.uri}</cargo.remote.uri>
-                            </properties>
-                        </configuration>
-                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -1500,7 +1551,7 @@
     </build>
 
     <properties>
-        <jersey.version>2.33</jersey.version>
+        <jersey.version>2.34</jersey.version>
         <log4j2.version>2.12.1</log4j2.version>
         <junit.jupiter.version>5.6.2</junit.jupiter.version>
         <swagger.version>2.1.6</swagger.version>
@@ -1585,5 +1636,6 @@
         <maven-surefire-report-plugi.version>3.0.0-M5</maven-surefire-report-plugi.version>
         <smallrye-jwt.version>3.1.0</smallrye-jwt.version>
         <moneta.version>1.4.2</moneta.version>
+        <jackson-datatype-money.version>1.2.2</jackson-datatype-money.version>
     </properties>
 </project>

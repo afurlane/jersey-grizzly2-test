@@ -762,7 +762,7 @@ public class MyResource {
     @RolesAllowed("user")
     @Produces(MediaType.TEXT_PLAIN)
     public String getIt() {
-        return new StringBuilder().append("GotIt!").append(" ").append(emailAddress).toString();
+        return new StringBuilder().append("Got it!").toString();
     }
 
     @GET

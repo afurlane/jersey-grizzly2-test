@@ -716,6 +716,8 @@ package org.example.infrastructure;
 
 import org.glassfish.hk2.api.Factory;
 
+import org.glassfish.jersey.spi.Contract;
+
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.servlet.http.HttpServletRequest;

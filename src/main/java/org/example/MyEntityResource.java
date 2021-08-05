@@ -840,7 +840,7 @@ public class    MyEntityResource {
                                               type = "Long",
                                               description = "Id to be searched"),
                                       required = true)
-                              @NotEmpty(message ="Id cannot be null") @PathParam("id") Long id) {
+                              @NotNull(message ="Id cannot be null") @PathParam("id") Long id) {
         asyncResponse.setTimeoutHandler(asyncResponse1 -> asyncResponse1.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
                 .entity(timeOutMessage).build()));
         asyncResponse.setTimeout(APITimeoutInSeconds, TimeUnit.SECONDS);
@@ -880,7 +880,7 @@ public class    MyEntityResource {
                                                  type = "Long",
                                                  description = "Id of ExampleEntity to be deleted"),
                                          required = true)
-                                 @NotEmpty(message ="Id cannot be null") @PathParam("id") Long id) {
+                                 @NotNull(message ="Id cannot be null") @PathParam("id") Long id) {
         asyncResponse.setTimeoutHandler(asyncResponse1 -> asyncResponse1.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
                 .entity(timeOutMessage).build()));
         asyncResponse.setTimeout(APITimeoutInSeconds, TimeUnit.SECONDS);
