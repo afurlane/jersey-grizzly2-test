@@ -712,7 +712,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.example.infrastructure;
+package org.example.infrastructure.hk2;
 
 import org.glassfish.hk2.api.Factory;
 

@@ -714,10 +714,13 @@
  */
 package org.example;
 
+import org.example.infrastructure.hk2.AutoScanFeature;
+import org.example.infrastructure.hk2.HttpSessionFactory;
 import org.glassfish.grizzly.Grizzly;
 import org.glassfish.grizzly.http.server.HttpHandler;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.servlet.WebappContext;
+import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.hk2.api.ServiceLocatorFactory;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.hk2.utilities.general.Hk2ThreadLocal;
@@ -727,11 +730,14 @@ import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.inject.hk2.Hk2BootstrapBinder;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.servlet.ServletContainer;
+import org.glassfish.jersey.servlet.ServletProperties;
 import org.jvnet.hk2.external.runtime.Hk2LocatorUtilities;
 
 import javax.enterprise.inject.se.SeContainer;
 import javax.enterprise.inject.se.SeContainerInitializer;
 import javax.servlet.FilterRegistration;
+import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletRegistration;
 import javax.servlet.http.HttpSession;
@@ -739,6 +745,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.file.WatchEvent;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Main class.
@@ -747,54 +754,82 @@ import java.util.logging.Level;
 public class Main {
     // Base URI the Grizzly HTTP server will listen on
     public static final String BASE_URI = "http://localhost:8091/";
-    private static GrizzlyHttpContainerProvider grizzlyHttpContainerProvider;
-    private static WebappContext webappContext;
 
     /**
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
-     * @return Grizzly HTTP server.
+     * @return HttpServer.
      */
-    public static GrizzlyHttpContainer startServer() throws IOException {
-        // create a resource config that scans for JAX-RS resources and providers
-        // in org.example package
-        final ResourceConfig resourceConfig = new ResourceConfig().forApplicationClass(MyApplication.class)
-                        .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_SERVER, Level.FINEST.getName())
-                        .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL, Level.FINEST.getName());
+    private static HttpServer BootApp() throws IOException {
+        final WebappContext webappContext = new WebappContext("jersey-grizzly2-test-wac");
+
+        final ResourceConfig resourceConfig = ResourceConfig.forApplicationClass(MyApplication.class)
+                .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_SERVER, Level.FINEST.getName())
+                .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL, Level.FINEST.getName());
+        resourceConfig.register(AutoScanFeature.class);
+        resourceConfig.register(new AbstractBinder() {
+            @Override
+            protected void configure() {
+                bindFactory(HttpSessionFactory.class).to(HttpSession.class);
+            }
+        });
         ServiceLocatorFactory serviceLocatorFactory = ServiceLocatorFactory.getInstance();
-        grizzlyHttpContainerProvider = new GrizzlyHttpContainerProvider();
-        GrizzlyHttpContainer grizzlyHttpContainer = grizzlyHttpContainerProvider.createContainer(GrizzlyHttpContainer.class, resourceConfig);
-        grizzlyHttpContainer.start();
-        return grizzlyHttpContainer;
+        ServiceLocator serviceLocator = serviceLocatorFactory.create("Basic HK2 SL");
+        webappContext.addListener(new ServletContextListener() {
+            @Override
+            public void contextInitialized(ServletContextEvent sce) {
+                sce.getServletContext().setAttribute(ServletProperties.SERVICE_LOCATOR, serviceLocator);
+            }
+            @Override
+            public void contextDestroyed(ServletContextEvent sce) { }
+        });
+
+        ServletRegistration servlet = webappContext.addServlet("jersey-grizzly2-test-app", new ServletContainer(resourceConfig));
+        servlet.addMapping("/*");
+
+        // ServletRegistration hello = webappContext.addServlet("myServlet", MyServlet.class);
+        // hello.addMapping("/servlet/*");
+
+        HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), false);
+        webappContext.deploy(httpServer);
+        httpServer.start();
+        return httpServer;
     }
 
-    public static void CreateServer() throws IOException {
-        WebappContext webappContext = new WebappContext("grizzly web context", "");
-
-        // FilterRegistration testFilterReg = webappContext.addFilter("TestFilter", TestFilter.class);
-        // testFilterReg.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), "/*");
-
-        ServletRegistration servletRegistration = webappContext.addServlet("Jersey", org.glassfish.jersey.servlet.ServletContainer.class);
-        servletRegistration.addMapping("/myapp/*");
-        servletRegistration.setInitParameter("jersey.config.server.provider.packages", "com.example");
-
-
-        HttpServer server = HttpServer.createSimpleServer();
-        webappContext.deploy(server);
-        server.start();
-    }
     /**
      * Main method.
      * @param args
-     * @throws IOException
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
+
         SeContainerInitializer containerInit = SeContainerInitializer.newInstance();
         SeContainer container = containerInit.initialize();
-        final GrizzlyHttpContainer server = startServer();
-        System.out.println(String.format("App started with WADL available at "
-                + "%s application.wadl\nHit enter to stop it...", BASE_URI));
-        System.in.read();
-        server.destroy();
+        try {
+
+            final HttpServer httpServer = BootApp();
+
+            // add jvm shutdown hook
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                try {
+                    System.out.println("Shutting down the application...");
+
+                    httpServer.shutdownNow();
+
+                    System.out.println("Done, exit.");
+                } catch (Exception e) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }));
+
+            System.out.println(String.format("Application started.%nStop the application using CTRL+C"));
+
+            // block and wait shut down signal, like CTRL+C
+            Thread.currentThread().join();
+
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
         container.close();
     }
 }

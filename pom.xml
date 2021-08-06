@@ -802,13 +802,6 @@
             <artifactId>oauth1-server</artifactId>
         </dependency>
         -->
-        <!--
-        <dependency>
-            <groupId>javax.annotation</groupId>
-            <artifactId>javax.annotation-api</artifactId>
-            <version>${javax-annotation.version}</version>
-        </dependency>
-        -->
         <!-- Jersey Jackson & JAX-B support -->
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
@@ -841,8 +834,6 @@
             <artifactId>jakarta.el</artifactId>
             <version>3.0.3</version>
         </dependency>
-
-
 
         <!-- JWT MicroProfile -->
         <dependency>
@@ -974,6 +965,7 @@
             <type>pom</type>
         </dependency>
 
+        <!-- Jackson additional module -->
         <dependency>
             <groupId>org.zalando</groupId>
             <artifactId>jackson-datatype-money</artifactId>
@@ -1066,6 +1058,12 @@
             <groupId>org.glassfish.grizzly</groupId>
             <artifactId>grizzly-http-servlet</artifactId>
             <version>2.4.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-report-plugin</artifactId>
+            <version>${maven-surefire-report-plugi.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
