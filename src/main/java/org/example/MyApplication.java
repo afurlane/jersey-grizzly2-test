@@ -727,6 +727,7 @@ import org.eclipse.microprofile.auth.LoginConfig;
 import org.example.infrastructure.CustomConstraintViolationExceptionMapper;
 import org.example.infrastructure.EndpointLoggingListener;
 import org.example.infrastructure.JsonProcessingExceptionMapper;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
@@ -788,6 +789,7 @@ public class MyApplication extends Application {
         MyEntityResource.class,
         OpenApiResource.class,
         AcceptHeaderOpenApiResource.class,
+        JacksonFeature.class,
         MultiPartFeature.class).collect(Collectors.toSet());
     }
 }

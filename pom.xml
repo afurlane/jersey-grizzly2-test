@@ -1059,12 +1059,6 @@
             <artifactId>grizzly-http-servlet</artifactId>
             <version>2.4.4</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-report-plugin</artifactId>
-            <version>${maven-surefire-report-plugi.version}</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <profiles>
