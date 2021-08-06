@@ -716,6 +716,7 @@ package org.example.entities;
 
 import org.javamoney.moneta.Money;
 
+import javax.money.MonetaryAmount;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -730,7 +731,7 @@ public class ExampleEntity {
 
     private String name;
 
-    private Money amount;
+    private MonetaryAmount amount;
 
     // READ:
     // https://vladmihalcea.com/the-best-way-to-map-a-onetomany-association-with-jpa-and-hibernate/
@@ -765,9 +766,9 @@ public class ExampleEntity {
         this.name = name;
     }
 
-    public Money getAmount() { return amount; }
+    public MonetaryAmount getAmount() { return amount; }
 
-    public void setAmount(Money amount) { this.amount = amount; }
+    public void setAmount(MonetaryAmount amount) { this.amount = amount; }
 
     public List<ExampleDetailEntity> getExampleDetailEntity() {
         return exampleDetailEntities;

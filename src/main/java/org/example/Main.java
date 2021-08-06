@@ -714,6 +714,7 @@
  */
 package org.example;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.infrastructure.hk2.AutoScanFeature;
 import org.example.infrastructure.hk2.HttpSessionFactory;
 import org.glassfish.grizzly.Grizzly;
@@ -803,6 +804,7 @@ public class Main {
 
         SeContainerInitializer containerInit = SeContainerInitializer.newInstance();
         SeContainer container = containerInit.initialize();
+        ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
         try {
 
             final HttpServer httpServer = BootApp();
