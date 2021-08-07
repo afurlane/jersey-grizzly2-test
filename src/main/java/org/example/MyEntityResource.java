@@ -769,7 +769,7 @@ public class    MyEntityResource {
     // @PersistenceUnit(unitName = "example-unit")
     @Inject
     @RequestScoped
-    private EntityManagerFactory entityManagerFactory;
+    public EntityManagerFactory entityManagerFactory;
 
     @Inject
     private ModelMapper modelMapper;
