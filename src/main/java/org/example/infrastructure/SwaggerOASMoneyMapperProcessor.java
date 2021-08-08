@@ -716,24 +716,35 @@ package org.example.infrastructure;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.core.converter.ModelConverters;
+import io.swagger.v3.core.util.Json;
 import io.swagger.v3.oas.integration.api.ObjectMapperProcessor;
+import org.apache.logging.log4j.Logger;
 import org.zalando.jackson.datatype.money.MoneyModule;
 
+import javax.inject.Inject;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryAmountFactory;
 import javax.xml.bind.annotation.XmlTransient;
 
 public class SwaggerOASMoneyMapperProcessor implements ObjectMapperProcessor {
 
-    // private static MoneyModule moneyModule = new MoneyModule();
+    @Inject
+    private Logger log;
+
+    private static MoneyModule moneyModule = new MoneyModule().withQuotedDecimalNumbers();
+    private static SwaggerMonetaryAmountConverter swaggerMonetaryAmountConverter;
 
     @Override
     public void processJsonObjectMapper(ObjectMapper objectMapper) {
-        // objectMapper.registerModule(moneyModule);
-        addMixIns( objectMapper );
+        objectMapper.registerModule(moneyModule);
+        if (swaggerMonetaryAmountConverter == null)
+            swaggerMonetaryAmountConverter = new SwaggerMonetaryAmountConverter(objectMapper);
+        ModelConverters.getInstance().addConverter(swaggerMonetaryAmountConverter);
+        // addMixIns( objectMapper );
     }
 
-
+    /*
     private void addMixIns(ObjectMapper objectMapper) {
         objectMapper.addMixIn(MonetaryAmount.class , MixIn.class );
     }
@@ -743,4 +754,5 @@ public class SwaggerOASMoneyMapperProcessor implements ObjectMapperProcessor {
         @XmlTransient
         public abstract MonetaryAmountFactory<? extends MonetaryAmount> getFactory();
     }
+    */
 }

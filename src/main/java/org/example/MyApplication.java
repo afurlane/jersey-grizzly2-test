@@ -724,13 +724,9 @@ import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import org.eclipse.microprofile.auth.LoginConfig;
-import org.example.infrastructure.CustomConstraintViolationExceptionMapper;
-import org.example.infrastructure.EndpointLoggingListener;
-import org.example.infrastructure.JsonProcessingExceptionMapper;
-import org.example.infrastructure.SwaggerOASMoneyMapperProcessor;
+import org.example.infrastructure.*;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.server.ResourceConfig;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -767,8 +763,7 @@ public class MyApplication extends Application {
                 .openAPI(oas)
                 .prettyPrint(true)
                 .objectMapperProcessorClass(SwaggerOASMoneyMapperProcessor.class.getName())
-                .resourcePackages(Stream.of("io.swagger.sample.resource").collect(Collectors.toSet()));
-
+                .resourcePackages(Stream.of("org.example").collect(Collectors.toSet()));
         try {
             new JaxrsOpenApiContextBuilder()
                     .servletConfig(servletConfig)

@@ -716,19 +716,15 @@ package org.example;
 
 import javax.enterprise.inject.se.SeContainer;
 import javax.enterprise.inject.se.SeContainerInitializer;
-import javax.enterprise.inject.spi.Bean;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLParameters;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.UriBuilder;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.infrastructure.hk2.HttpSessionFactory;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
-import org.glassfish.jersey.jackson.JacksonFeature;
-import org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
@@ -739,9 +735,7 @@ import org.glassfish.jersey.test.TestProperties;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
 
-import java.beans.Beans;
 import java.net.URI;
-import java.util.Set;
 import java.util.logging.Level;
 
 public class CdiBaseTest extends JerseyTest {
@@ -772,7 +766,6 @@ public class CdiBaseTest extends JerseyTest {
         grizzlyWebTestContainerFactory = new GrizzlyWebTestContainerFactory();
         containerInit = SeContainerInitializer.newInstance();
         container = containerInit.initialize();
-        // MyApplication myApplication = container.select(MyApplication.class).get();
 
         ResourceConfig resourceConfig = new ResourceConfig().forApplicationClass(MyApplication.class)
                 .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_SERVER, Level.FINEST.getName())
@@ -783,15 +776,6 @@ public class CdiBaseTest extends JerseyTest {
                 bindFactory(HttpSessionFactory.class).to(HttpSession.class);
             }
         });
-        // ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
-
-        // create JsonProvider to provide custom ObjectMapper
-        // JacksonJaxbJsonProvider provider = new JacksonJaxbJsonProvider();
-        // provider.setMapper(mapper);
-        // resourceConfig.register(provider);
-        // resourceConfig.register(JacksonFeature.class);
-        // resourceConfig.register(MultiPartFeature.class);
-        // ServletDeploymentContext servletDeploymentContext = ServletDeploymentContext.newInstance(resourceConfig);
         ServletContainer servletContainer = new ServletContainer(resourceConfig);
         ServletDeploymentContext.Builder servletDeploymentContextBuilder = ServletDeploymentContext.forServlet(servletContainer);
 
@@ -802,6 +786,5 @@ public class CdiBaseTest extends JerseyTest {
         enable(TestProperties.LOG_TRAFFIC);
         enable(TestProperties.DUMP_ENTITY);
         return servletDeploymentContextBuilder.build();
-        // return contextBuilder.build();
     }
 }
