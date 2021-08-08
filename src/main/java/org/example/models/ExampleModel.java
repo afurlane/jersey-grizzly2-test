@@ -719,6 +719,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.javamoney.moneta.Money;
 
 import javax.money.MonetaryAmount;
+import javax.money.MonetaryAmountFactory;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
@@ -728,7 +729,7 @@ public class ExampleModel {
     private String name;
 
     // private MonetaryAmount amount;
-    private Money amount;
+    private MonetaryAmount amount;
 
     private List<ExampleDetailModel> exampleDetailModels;
 
@@ -758,7 +759,7 @@ public class ExampleModel {
         return amount;
     }
 
-    public void setAmount(Money amount) {
+    public void setAmount(MonetaryAmount amount) {
         this.amount = amount;
     }
 
