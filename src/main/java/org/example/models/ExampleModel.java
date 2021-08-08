@@ -714,9 +714,9 @@
  */
 package org.example.models;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.javamoney.moneta.Money;
-import org.zalando.jackson.datatype.money.MoneyModule;
 
 import javax.money.MonetaryAmount;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -727,7 +727,8 @@ public class ExampleModel {
     private Long id;
     private String name;
 
-    private MonetaryAmount amount;
+    // private MonetaryAmount amount;
+    private Money amount;
 
     private List<ExampleDetailModel> exampleDetailModels;
 
@@ -757,7 +758,7 @@ public class ExampleModel {
         return amount;
     }
 
-    public void setAmount(MonetaryAmount amount) {
+    public void setAmount(Money amount) {
         this.amount = amount;
     }
 

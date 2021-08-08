@@ -721,7 +721,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.microprofile.jwt.Claim;
-import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.example.entities.ExampleEntity;
 import org.example.models.ExampleModel;
 import org.modelmapper.ModelMapper;
@@ -739,7 +738,6 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
@@ -768,7 +766,6 @@ public class    MyEntityResource {
     // EJB -> look at specification
     // @PersistenceUnit(unitName = "example-unit")
     @Inject
-    @RequestScoped
     public EntityManagerFactory entityManagerFactory;
 
     @Inject

@@ -727,10 +727,12 @@ import org.eclipse.microprofile.auth.LoginConfig;
 import org.example.infrastructure.CustomConstraintViolationExceptionMapper;
 import org.example.infrastructure.EndpointLoggingListener;
 import org.example.infrastructure.JsonProcessingExceptionMapper;
+import org.example.infrastructure.SwaggerOASMoneyMapperProcessor;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.servlet.ServletConfig;
 import javax.ws.rs.core.Application;
@@ -745,6 +747,7 @@ public class MyApplication extends Application {
 
     @Context ServletConfig servletConfig;
 
+    @PostConstruct
     public void ConfigureApplication() {
         OpenAPI oas = new OpenAPI();
         Info info = new Info()
@@ -763,6 +766,7 @@ public class MyApplication extends Application {
         SwaggerConfiguration oasConfig = new SwaggerConfiguration()
                 .openAPI(oas)
                 .prettyPrint(true)
+                .objectMapperProcessorClass(SwaggerOASMoneyMapperProcessor.class.getName())
                 .resourcePackages(Stream.of("io.swagger.sample.resource").collect(Collectors.toSet()));
 
         try {
@@ -779,17 +783,16 @@ public class MyApplication extends Application {
     @Override
     public Set<Class<?>> getClasses()
     {
-        ConfigureApplication();
-
+        // ConfigureApplication();
 
         return Stream.of(MyResource.class,
         EndpointLoggingListener.class,
         CustomConstraintViolationExceptionMapper.class,
         JsonProcessingExceptionMapper.class,
         MyEntityResource.class,
-        OpenApiResource.class,
         AcceptHeaderOpenApiResource.class,
         JacksonFeature.class,
+        OpenApiResource.class,
         MultiPartFeature.class).collect(Collectors.toSet());
     }
 }

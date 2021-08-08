@@ -14,6 +14,10 @@
             <property name="javax.persistence.jdbc.url" value="jdbc:derby:memory:derbyDB;create=true"/>
             <property name="javax.persistence.jdbc.user" value="APP"/>
             <property name="javax.persistence.jdbc.password" value="APP"/>
+            <property name="eclipselink.connection-pool.default.initial" value="2" />
+            <property name="eclipselink.connection-pool.shared" value="false"/>
+            <property name="eclipselink.connection-pool.default.min" value="16"/>
+            <property name="eclipselink.connection-pool.default.max" value="16"/>
             <property name="eclipselink.logging.parameters" value="true"/>
             <property name="eclipselink.logging.level" value="ALL"/>
             <property name="eclipselink.ddl-generation" value="create-tables"/>
