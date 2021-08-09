@@ -19,7 +19,8 @@
             <property name="eclipselink.connection-pool.default.min" value="16"/>
             <property name="eclipselink.connection-pool.default.max" value="16"/>
             <property name="eclipselink.logging.parameters" value="true"/>
-            <property name="eclipselink.logging.level" value="ALL"/>
+            <property name="eclipselink.logging.level" value="FINEST"/>
+            <property name="eclipselink.logging.level.sql" value="FINEST"/>
             <property name="eclipselink.ddl-generation" value="create-tables"/>
             <property name="eclipselink.ddl-generation.output-mode" value="database" />
             <!--  Non usage of eclipselink as java agent for bytecode dynamic change -->

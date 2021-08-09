@@ -712,47 +712,234 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.example.infrastructure;
+package org.example.controllers.webapi;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.v3.core.converter.ModelConverters;
-import io.swagger.v3.core.util.Json;
-import io.swagger.v3.oas.integration.api.ObjectMapperProcessor;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.apache.logging.log4j.Logger;
-import org.zalando.jackson.datatype.money.MoneyModule;
+import org.eclipse.microprofile.jwt.Claim;
+import org.example.entities.ExampleEntity;
+import org.example.models.ExampleModel;
+import org.modelmapper.ModelMapper;
 
+import javax.annotation.PreDestroy;
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.PermitAll;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import javax.money.MonetaryAmount;
-import javax.money.MonetaryAmountFactory;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.json.JsonString;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import javax.validation.constraints.NotNull;
+import javax.ws.rs.*;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
-public class SwaggerOASMoneyMapperProcessor implements ObjectMapperProcessor {
+@Path(MyEntityResource.MyEntityResourcePath)
+@DeclareRoles({"admin","user"})
+public class    MyEntityResource {
+
+    final public static String MyEntityResourcePath = "myresourceentity";
+    final public static String MyEntityResourcePathId = "{id}";
+    final public static int APITimeoutInSeconds = 60;
+    final public static String timeOutMessage = "Operation time out.";
+
+//    @Inject
+//    private JsonWebToken jwt;
 
     @Inject
-    private Logger log;
+    @Claim("email")
+    private Instance<Optional<JsonString>> emailAddress;
 
-    private static MoneyModule moneyModule = new MoneyModule().withQuotedDecimalNumbers();
-    private static SwaggerMonetaryAmountConverter swaggerMonetaryAmountConverter;
+    // EJB -> look at specification
+    // @PersistenceUnit(unitName = "example-unit")
+    @Inject
+    public EntityManagerFactory entityManagerFactory;
 
-    @Override
-    public void processJsonObjectMapper(ObjectMapper objectMapper) {
-        objectMapper.registerModule(moneyModule);
-        if (swaggerMonetaryAmountConverter == null)
-            swaggerMonetaryAmountConverter = new SwaggerMonetaryAmountConverter(objectMapper);
-        ModelConverters.getInstance().addConverter(swaggerMonetaryAmountConverter);
-        // addMixIns( objectMapper );
+    @Inject
+    private ModelMapper modelMapper;
+
+    @Inject Logger logger;
+
+    /**
+     * @param asyncResponse used in async as per jax specification
+     * This is the "manual" managed way, you could use @ManagedAsync, that tell jersey to do it
+     *                      automatically but, this is a jersey specific and dependant implementation!
+     */
+    @GET
+    @PermitAll
+    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Operation(summary = "Get ExampleEntity by Id",
+            tags = {"Id Long"},
+            description = "Return the example Entity and connected entities",
+            responses = {
+                    @ApiResponse(description = "The ExampleEntity", content = @Content(
+                            schema = @Schema(implementation = ExampleEntity.class)
+                    )),
+                    @ApiResponse(responseCode = "400", description = "No Id supplied"),
+                    @ApiResponse(responseCode = "404", description = "ExampleEntity not found")
+            })
+    public void GetEntityById(@Suspended final AsyncResponse asyncResponse) {
+        asyncResponse.setTimeoutHandler(asyncResponse1 -> asyncResponse1.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
+               .entity(timeOutMessage).build()));
+        asyncResponse.setTimeout(APITimeoutInSeconds, TimeUnit.SECONDS);
+        new Thread(() -> {
+            EntityManager entityManager = entityManagerFactory.createEntityManager();
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<ExampleEntity> criteriaQuery = criteriaBuilder.createQuery(ExampleEntity.class);
+            Root<ExampleEntity> exampleEntityRoot = criteriaQuery.from(ExampleEntity.class);
+            criteriaQuery.select(exampleEntityRoot);
+            TypedQuery<ExampleEntity> exampleEntityTypedQuery = entityManager.createQuery(criteriaQuery)
+                    .setFirstResult(0).setMaxResults(1);
+            ExampleEntity exampleEntity = exampleEntityTypedQuery.getSingleResult();
+            entityManager.close();
+            Response response;
+            if (exampleEntity == null) {
+                response = Response.status(Response.Status.NOT_FOUND).build();
+            } else {
+                response = Response.status(Response.Status.OK).entity(
+                        modelMapper.map(exampleEntity, ExampleModel.class)).build();
+            }
+            asyncResponse.resume(response);
+        }).start();
     }
 
-    /*
-    private void addMixIns(ObjectMapper objectMapper) {
-        objectMapper.addMixIn(MonetaryAmount.class , MixIn.class );
+    @Path(MyEntityResourcePathId)
+    @GET
+    @PermitAll
+    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Operation(summary = "Get ExampleEntity by Id",
+            tags = {"Id Long"},
+            description = "Return the example Entity and connected entities",
+            responses = {
+                    @ApiResponse(description = "The ExampleEntity", content = @Content(
+                            schema = @Schema(implementation = ExampleEntity.class)
+                    )),
+                    @ApiResponse(responseCode = "400", description = "No Id supplied"),
+                    @ApiResponse(responseCode = "404", description = "ExampleEntity not found")
+            })
+    public void GetEntityById(@Suspended final AsyncResponse asyncResponse,
+                              @Parameter(
+                                      description = "Id of ExampleEntity",
+                                      schema = @Schema(
+                                              type = "Long",
+                                              description = "Id to be searched"),
+                                      required = true)
+                              @NotNull(message ="Id cannot be null") @PathParam("id") Long id) {
+        asyncResponse.setTimeoutHandler(asyncResponse1 -> asyncResponse1.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
+                .entity(timeOutMessage).build()));
+        asyncResponse.setTimeout(APITimeoutInSeconds, TimeUnit.SECONDS);
+        new Thread(() -> {
+            EntityManager entityManager = entityManagerFactory.createEntityManager();
+            ExampleEntity exampleEntity = entityManager.find(ExampleEntity.class, id);
+            entityManager.close();
+            Response response;
+            if (exampleEntity == null) {
+                response = Response.status(Response.Status.NOT_FOUND).build();
+            } else {
+                response = Response.status(Response.Status.OK).entity(
+                        modelMapper.map(exampleEntity, ExampleModel.class)).build();
+            }
+            asyncResponse.resume(response);
+        }).start();
     }
 
-    public abstract class MixIn {
-        @JsonIgnore
-        @XmlTransient
-        public abstract MonetaryAmountFactory<? extends MonetaryAmount> getFactory();
+    @Path(MyEntityResourcePathId)
+    @PermitAll
+    @DELETE
+    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Operation(summary = "Delete ExampleEntity by Id",
+            tags = {"Id UUID"},
+            description = "Delete the ExampleEntity and connected entities by ExampleEntity Id",
+            responses = {
+                    @ApiResponse(description = "", content = @Content(
+                            schema = @Schema(implementation = ExampleEntity.class)
+                    )),
+                    @ApiResponse(responseCode = "400", description = "No Id supplied"),
+                    @ApiResponse(responseCode = "404", description = "ExampleEntity not found")
+            })
+    public void DeleteEntityById(@Suspended final AsyncResponse asyncResponse,
+                                 @Parameter(
+                                         description = "Id of ExampleEntity",
+                                         schema = @Schema(
+                                                 type = "Long",
+                                                 description = "Id of ExampleEntity to be deleted"),
+                                         required = true)
+                                 @NotNull(message ="Id cannot be null") @PathParam("id") Long id) {
+        asyncResponse.setTimeoutHandler(asyncResponse1 -> asyncResponse1.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
+                .entity(timeOutMessage).build()));
+        asyncResponse.setTimeout(APITimeoutInSeconds, TimeUnit.SECONDS);
+        new Thread(() -> {
+            EntityManager entityManager = entityManagerFactory.createEntityManager();
+            ExampleEntity exampleEntity = entityManager.find(ExampleEntity.class, id);
+            Response response;
+            if (exampleEntity != null) {
+                entityManager.remove(exampleEntity);
+                response = Response.status(Response.Status.OK).build();
+            } else {
+                response = Response.status(Response.Status.NOT_FOUND).build();
+            }
+            entityManager.close();
+            asyncResponse.resume(response);
+        }).start();
     }
-    */
+
+    @Path(MyEntityResourcePathId)
+    @PUT
+    @PermitAll
+    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Operation(summary = "Get ExampleEntity by Id",
+            tags = {"Id Long"},
+            description = "Return the example Entity and connected entities",
+            responses = {
+                    @ApiResponse(description = "The ExampleEntity", content = @Content(
+                            schema = @Schema(implementation = ExampleEntity.class)
+                    )),
+                    @ApiResponse(responseCode = "400", description = "No Id supplied"),
+                    @ApiResponse(responseCode = "404", description = "ExampleEntity not found")
+            })
+    public void UpdateEntityById(@Suspended final AsyncResponse asyncResponse,
+                              @Parameter(
+                                      description = "FullEntity",
+                                      schema = @Schema(
+                                              implementation = ExampleModel.class,
+                                              description = "Entity to update"),
+                                      required = true)
+                              @NotNull(message ="Entity is mandatory") @PathParam("Entity") ExampleModel exampleModel) {
+        asyncResponse.setTimeoutHandler(asyncResponse1 -> asyncResponse1.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
+                .entity(timeOutMessage).build()));
+        asyncResponse.setTimeout(APITimeoutInSeconds, TimeUnit.SECONDS);
+        new Thread(() -> {
+            EntityManager entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+            ExampleEntity mergedEntity = entityManager.merge(modelMapper.map(exampleModel, ExampleEntity.class));
+            entityManager.getTransaction().commit();
+            entityManager.close();
+            Response response;
+            if (mergedEntity == null) {
+                response = Response.status(Response.Status.NOT_FOUND).build();
+            } else {
+                response = Response.status(Response.Status.OK).entity(
+                        modelMapper.map(mergedEntity, ExampleModel.class)).build();
+            }
+            asyncResponse.resume(response);
+        }).start();
+    }
+
+    @PreDestroy
+    public void PreDestroyMyEntityResource()
+    {
+        entityManagerFactory.close();
+    }
 }

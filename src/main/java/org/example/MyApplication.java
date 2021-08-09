@@ -714,25 +714,34 @@
  */
 package org.example;
 
+import io.swagger.v3.core.converter.ModelConverter;
+import io.swagger.v3.core.converter.ModelConverters;
+import io.swagger.v3.core.util.Json;
 import io.swagger.v3.jaxrs2.integration.JaxrsOpenApiContextBuilder;
 import io.swagger.v3.jaxrs2.integration.resources.AcceptHeaderOpenApiResource;
 import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
 import io.swagger.v3.oas.integration.OpenApiConfigurationException;
 import io.swagger.v3.oas.integration.SwaggerConfiguration;
+import io.swagger.v3.oas.integration.api.OpenApiContext;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import org.eclipse.microprofile.auth.LoginConfig;
+import org.example.controllers.webapi.MyEntityResource;
+import org.example.controllers.webapi.MyResource;
 import org.example.infrastructure.*;
-import org.glassfish.jersey.jackson.JacksonFeature;
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.example.infrastructure.swagger.SwaggerMonetaryAmountConverter;
+import org.example.infrastructure.swagger.SwaggerOASMoneyMapperProcessor;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Model;
+import javax.money.MonetaryAmountFactory;
 import javax.servlet.ServletConfig;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -743,8 +752,13 @@ public class MyApplication extends Application {
 
     @Context ServletConfig servletConfig;
 
+    // Cannot inject in costructor with WELD, in this configuration.
     @PostConstruct
     public void ConfigureApplication() {
+        InitOpenAPI(servletConfig);
+    }
+
+    private void InitOpenAPI(ServletConfig servletConfig) {
         OpenAPI oas = new OpenAPI();
         Info info = new Info()
                 .title("Swagger Sample App bootstrap code")
@@ -763,9 +777,9 @@ public class MyApplication extends Application {
                 .openAPI(oas)
                 .prettyPrint(true)
                 .objectMapperProcessorClass(SwaggerOASMoneyMapperProcessor.class.getName())
-                .resourcePackages(Stream.of("org.example").collect(Collectors.toSet()));
+                .resourcePackages(Stream.of("org.example.controllers.webapi").collect(Collectors.toSet()));
         try {
-            new JaxrsOpenApiContextBuilder()
+            OpenApiContext openAPIContext = new JaxrsOpenApiContextBuilder()
                     .servletConfig(servletConfig)
                     .application(this)
                     .openApiConfiguration(oasConfig)
@@ -786,8 +800,6 @@ public class MyApplication extends Application {
         JsonProcessingExceptionMapper.class,
         MyEntityResource.class,
         AcceptHeaderOpenApiResource.class,
-        JacksonFeature.class,
-        OpenApiResource.class,
-        MultiPartFeature.class).collect(Collectors.toSet());
+        OpenApiResource.class).collect(Collectors.toSet());
     }
 }

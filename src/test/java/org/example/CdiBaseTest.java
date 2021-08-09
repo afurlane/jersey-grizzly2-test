@@ -723,10 +723,18 @@ import javax.ws.rs.core.UriBuilder;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.infrastructure.ObjectMapperProvider;
+import org.example.infrastructure.hk2.AutoScanFeature;
 import org.example.infrastructure.hk2.HttpSessionFactory;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
+import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpContainerProvider;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.logging.LoggingFeature;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.filter.UriConnegFilter;
+import org.glassfish.jersey.server.validation.ValidationFeature;
+import org.glassfish.jersey.server.wadl.WadlFeature;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.glassfish.jersey.test.DeploymentContext;
 import org.glassfish.jersey.test.JerseyTest;
@@ -763,13 +771,22 @@ public class CdiBaseTest extends JerseyTest {
 
     @Override
     protected DeploymentContext configureDeployment() {
-        grizzlyWebTestContainerFactory = new GrizzlyWebTestContainerFactory();
         containerInit = SeContainerInitializer.newInstance();
         container = containerInit.initialize();
+        grizzlyWebTestContainerFactory = new GrizzlyWebTestContainerFactory();
 
         ResourceConfig resourceConfig = new ResourceConfig().forApplicationClass(MyApplication.class)
                 .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_SERVER, Level.FINEST.getName())
                 .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL, Level.FINEST.getName());
+        resourceConfig.register(AutoScanFeature.class);
+        resourceConfig.register(ObjectMapperProvider.class);
+        resourceConfig.register(JacksonFeature.class);
+        resourceConfig.register(UriConnegFilter.class);
+        resourceConfig.register(ValidationFeature.class);
+        resourceConfig.register(WadlFeature.class);
+        resourceConfig.register(GrizzlyHttpContainerProvider.class);
+        resourceConfig.register(MultiPartFeature.class);
+
         resourceConfig.register(new AbstractBinder() {
             @Override
             protected void configure() {

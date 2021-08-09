@@ -712,101 +712,49 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.example;
+package org.example.infrastructure.swagger;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import org.eclipse.microprofile.jwt.Claim;
-import org.eclipse.microprofile.jwt.JsonWebToken;
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-import org.glassfish.jersey.media.multipart.MultiPart;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.core.converter.ModelConverters;
+import io.swagger.v3.core.util.Json;
+import io.swagger.v3.oas.integration.api.ObjectMapperProcessor;
+import org.apache.logging.log4j.Logger;
+import org.zalando.jackson.datatype.money.MoneyModule;
 
-import javax.annotation.security.DeclareRoles;
-import javax.annotation.security.RolesAllowed;
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import javax.json.JsonString;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import java.util.List;
-import java.util.Optional;
+import javax.money.MonetaryAmount;
+import javax.money.MonetaryAmountFactory;
+import javax.xml.bind.annotation.XmlTransient;
 
-/**
- * Root resource (exposed at "myresource" path)
- */
-@Path(MyResource.MyResourcePath)
-@DeclareRoles({"admin","user"})
-public class MyResource {
-
-    final static String MyResourcePath = "myresource";
-    final static String MyResourceTryQuery = "tryQuery";
-
-//    @Inject
-//    private JsonWebToken jwt;
+public class SwaggerOASMoneyMapperProcessor implements ObjectMapperProcessor {
 
     @Inject
-    @Claim("email")
-    private Instance<Optional<JsonString>> emailAddress;
+    private Logger log;
 
-    /**
-     * Method handling HTTP GET requests. The returned object will be sent
-     * to the client as "text/plain" media type.
-     *
-     * @return String that will be returned as a text/plain response.
-     */
-    @GET
-    @RolesAllowed("user")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getIt() {
-        return new StringBuilder().append("Got it!").toString();
+    private static MoneyModule moneyModule = new MoneyModule().withQuotedDecimalNumbers();
+    // private static SwaggerMonetaryAmountConverter swaggerMonetaryAmountConverter;
+
+    @Override
+    public void processJsonObjectMapper(ObjectMapper objectMapper) {
+        objectMapper.registerModule(moneyModule);
+        /*
+        if (swaggerMonetaryAmountConverter == null)
+            swaggerMonetaryAmountConverter = new SwaggerMonetaryAmountConverter(objectMapper);
+         */
+        // ModelConverters.getInstance().addConverter(swaggerMonetaryAmountConverter);
+        // addMixIns( objectMapper );
     }
 
-    @GET
-    @Path(MyResourceTryQuery)
-    @RolesAllowed("user")
-    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Operation(summary = "Get an array of strings from query param",
-            tags = {"Array"},
-            description = "Does nothing whith that",
-            responses = {
-                    @ApiResponse(description = "The array", content = @Content(
-                            array = @ArraySchema(schema = @Schema(implementation = String.class))
-                    )),
-                    @ApiResponse(responseCode = "400", description = "No array supplied since is required"),
-                    @ApiResponse(responseCode = "404", description = "Some other error because we don't find something")
-            })
-    public List<String> getItWithQuery(
-            @Parameter(
-            description = "An array of strings",
-            array = @ArraySchema(
-                schema = @Schema(
-                        type = "String",
-                        format = "String",
-                        description = "Array to be searched")
-            ),
-            required = true)
-            @QueryParam("array") List<String> parameters)
-    {
-        return parameters;
+    /*
+    private void addMixIns(ObjectMapper objectMapper) {
+        objectMapper.addMixIn(MonetaryAmount.class , MixIn.class );
     }
 
-    @POST
-    @Produces(MediaType.MULTIPART_FORM_DATA) // "multipart/mixed"
-    @Operation(summary = "Receive a multipart form data post",
-            tags = {"Form multipart"},
-            description = "",
-            responses = {
-                    @ApiResponse(description = "The same data incoming from the post", content = @Content(
-                            array = @ArraySchema(schema = @Schema(implementation = FormDataMultiPart.class))
-                    )),
-                    @ApiResponse(responseCode = "400", description = "No array supplied since is required"),
-                    @ApiResponse(responseCode = "404", description = "Some other error because we don't find something")
-            })
-    public MultiPart post(final FormDataMultiPart multiPart) {
-        return multiPart;
+    public abstract class MixIn {
+        @JsonIgnore
+        @XmlTransient
+        public abstract MonetaryAmountFactory<? extends MonetaryAmount> getFactory();
     }
+    */
 }

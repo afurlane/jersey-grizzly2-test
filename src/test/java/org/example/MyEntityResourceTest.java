@@ -715,7 +715,7 @@
 package org.example;
 
 import org.apache.logging.log4j.Logger;
-import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.example.controllers.webapi.MyEntityResource;
 import org.example.entities.ExampleEntity;
 import org.example.models.ExampleModel;
 import org.junit.Test;

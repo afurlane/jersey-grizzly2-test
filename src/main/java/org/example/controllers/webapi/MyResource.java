@@ -712,49 +712,37 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.example;
+package org.example.controllers.webapi;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import org.apache.logging.log4j.Logger;
 import org.eclipse.microprofile.jwt.Claim;
-import org.example.entities.ExampleEntity;
-import org.example.models.ExampleModel;
-import org.modelmapper.ModelMapper;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.MultiPart;
 
-import javax.annotation.PreDestroy;
 import javax.annotation.security.DeclareRoles;
-import javax.annotation.security.PermitAll;
-import javax.enterprise.context.RequestScoped;
+import javax.annotation.security.RolesAllowed;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.json.JsonString;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
-import javax.ws.rs.container.AsyncResponse;
-import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
-@Path(MyEntityResource.MyEntityResourcePath)
+/**
+ * Root resource (exposed at "myresource" path)
+ */
+@Path(MyResource.MyResourcePath)
 @DeclareRoles({"admin","user"})
-public class    MyEntityResource {
+public class MyResource {
 
-    final static String MyEntityResourcePath = "myresourceentity";
-    final static String MyEntityResourcePathId = "{id}";
-    final static int APITimeoutInSeconds = 60;
-    final static String timeOutMessage = "Operation time out.";
+    final public static String MyResourcePath = "myresource";
+    final public static String MyResourceTryQuery = "tryQuery";
 
 //    @Inject
 //    private JsonWebToken jwt;
@@ -763,184 +751,61 @@ public class    MyEntityResource {
     @Claim("email")
     private Instance<Optional<JsonString>> emailAddress;
 
-    // EJB -> look at specification
-    // @PersistenceUnit(unitName = "example-unit")
-    @Inject
-    public EntityManagerFactory entityManagerFactory;
-
-    @Inject
-    private ModelMapper modelMapper;
-
-    @Inject Logger logger;
-
     /**
-     * @param asyncResponse used in async as per jax specification
-     * This is the "manual" managed way, you could use @ManagedAsync, that tell jersey to do it
-     *                      automatically but, this is a jersey specific and dependant implementation!
+     * Method handling HTTP GET requests. The returned object will be sent
+     * to the client as "text/plain" media type.
+     *
+     * @return String that will be returned as a text/plain response.
      */
     @GET
-    @PermitAll
-    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Operation(summary = "Get ExampleEntity by Id",
-            tags = {"Id Long"},
-            description = "Return the example Entity and connected entities",
-            responses = {
-                    @ApiResponse(description = "The ExampleEntity", content = @Content(
-                            schema = @Schema(implementation = ExampleEntity.class)
-                    )),
-                    @ApiResponse(responseCode = "400", description = "No Id supplied"),
-                    @ApiResponse(responseCode = "404", description = "ExampleEntity not found")
-            })
-    public void GetEntityById(@Suspended final AsyncResponse asyncResponse) {
-        asyncResponse.setTimeoutHandler(asyncResponse1 -> asyncResponse1.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
-               .entity(timeOutMessage).build()));
-        asyncResponse.setTimeout(APITimeoutInSeconds, TimeUnit.SECONDS);
-        new Thread(() -> {
-            EntityManager entityManager = entityManagerFactory.createEntityManager();
-            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-            CriteriaQuery<ExampleEntity> criteriaQuery = criteriaBuilder.createQuery(ExampleEntity.class);
-            Root<ExampleEntity> exampleEntityRoot = criteriaQuery.from(ExampleEntity.class);
-            criteriaQuery.select(exampleEntityRoot);
-            TypedQuery<ExampleEntity> exampleEntityTypedQuery = entityManager.createQuery(criteriaQuery)
-                    .setFirstResult(0).setMaxResults(1);
-            ExampleEntity exampleEntity = exampleEntityTypedQuery.getSingleResult();
-            entityManager.close();
-            Response response;
-            if (exampleEntity == null) {
-                response = Response.status(Response.Status.NOT_FOUND).build();
-            } else {
-                response = Response.status(Response.Status.OK).entity(
-                        modelMapper.map(exampleEntity, ExampleModel.class)).build();
-            }
-            asyncResponse.resume(response);
-        }).start();
+    @RolesAllowed("user")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getIt() {
+        return new StringBuilder().append("Got it!").toString();
     }
 
-    @Path(MyEntityResourcePathId)
     @GET
-    @PermitAll
-    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Operation(summary = "Get ExampleEntity by Id",
-            tags = {"Id Long"},
-            description = "Return the example Entity and connected entities",
+    @Path(MyResourceTryQuery)
+    @RolesAllowed("user")
+    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Operation(summary = "Get an array of strings from query param",
+            tags = {"Array"},
+            description = "Does nothing whith that",
             responses = {
-                    @ApiResponse(description = "The ExampleEntity", content = @Content(
-                            schema = @Schema(implementation = ExampleEntity.class)
+                    @ApiResponse(description = "The array", content = @Content(
+                            array = @ArraySchema(schema = @Schema(implementation = String.class))
                     )),
-                    @ApiResponse(responseCode = "400", description = "No Id supplied"),
-                    @ApiResponse(responseCode = "404", description = "ExampleEntity not found")
+                    @ApiResponse(responseCode = "400", description = "No array supplied since is required"),
+                    @ApiResponse(responseCode = "404", description = "Some other error because we don't find something")
             })
-    public void GetEntityById(@Suspended final AsyncResponse asyncResponse,
-                              @Parameter(
-                                      description = "Id of ExampleEntity",
-                                      schema = @Schema(
-                                              type = "Long",
-                                              description = "Id to be searched"),
-                                      required = true)
-                              @NotNull(message ="Id cannot be null") @PathParam("id") Long id) {
-        asyncResponse.setTimeoutHandler(asyncResponse1 -> asyncResponse1.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
-                .entity(timeOutMessage).build()));
-        asyncResponse.setTimeout(APITimeoutInSeconds, TimeUnit.SECONDS);
-        new Thread(() -> {
-            EntityManager entityManager = entityManagerFactory.createEntityManager();
-            ExampleEntity exampleEntity = entityManager.find(ExampleEntity.class, id);
-            entityManager.close();
-            Response response;
-            if (exampleEntity == null) {
-                response = Response.status(Response.Status.NOT_FOUND).build();
-            } else {
-                response = Response.status(Response.Status.OK).entity(
-                        modelMapper.map(exampleEntity, ExampleModel.class)).build();
-            }
-            asyncResponse.resume(response);
-        }).start();
-    }
-
-    @Path(MyEntityResourcePathId)
-    @PermitAll
-    @DELETE
-    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Operation(summary = "Delete ExampleEntity by Id",
-            tags = {"Id UUID"},
-            description = "Delete the ExampleEntity and connected entities by ExampleEntity Id",
-            responses = {
-                    @ApiResponse(description = "", content = @Content(
-                            schema = @Schema(implementation = ExampleEntity.class)
-                    )),
-                    @ApiResponse(responseCode = "400", description = "No Id supplied"),
-                    @ApiResponse(responseCode = "404", description = "ExampleEntity not found")
-            })
-    public void DeleteEntityById(@Suspended final AsyncResponse asyncResponse,
-                                 @Parameter(
-                                         description = "Id of ExampleEntity",
-                                         schema = @Schema(
-                                                 type = "Long",
-                                                 description = "Id of ExampleEntity to be deleted"),
-                                         required = true)
-                                 @NotNull(message ="Id cannot be null") @PathParam("id") Long id) {
-        asyncResponse.setTimeoutHandler(asyncResponse1 -> asyncResponse1.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
-                .entity(timeOutMessage).build()));
-        asyncResponse.setTimeout(APITimeoutInSeconds, TimeUnit.SECONDS);
-        new Thread(() -> {
-            EntityManager entityManager = entityManagerFactory.createEntityManager();
-            ExampleEntity exampleEntity = entityManager.find(ExampleEntity.class, id);
-            Response response;
-            if (exampleEntity != null) {
-                entityManager.remove(exampleEntity);
-                response = Response.status(Response.Status.OK).build();
-            } else {
-                response = Response.status(Response.Status.NOT_FOUND).build();
-            }
-            entityManager.close();
-            asyncResponse.resume(response);
-        }).start();
-    }
-
-    @Path(MyEntityResourcePathId)
-    @PUT
-    @PermitAll
-    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Operation(summary = "Get ExampleEntity by Id",
-            tags = {"Id Long"},
-            description = "Return the example Entity and connected entities",
-            responses = {
-                    @ApiResponse(description = "The ExampleEntity", content = @Content(
-                            schema = @Schema(implementation = ExampleEntity.class)
-                    )),
-                    @ApiResponse(responseCode = "400", description = "No Id supplied"),
-                    @ApiResponse(responseCode = "404", description = "ExampleEntity not found")
-            })
-    public void UpdateEntityById(@Suspended final AsyncResponse asyncResponse,
-                              @Parameter(
-                                      description = "FullEntity",
-                                      schema = @Schema(
-                                              implementation = ExampleModel.class,
-                                              description = "Entity to update"),
-                                      required = true)
-                              @NotNull(message ="Entity is mandatory") @PathParam("Entity") ExampleModel exampleModel) {
-        asyncResponse.setTimeoutHandler(asyncResponse1 -> asyncResponse1.resume(Response.status(Response.Status.SERVICE_UNAVAILABLE)
-                .entity(timeOutMessage).build()));
-        asyncResponse.setTimeout(APITimeoutInSeconds, TimeUnit.SECONDS);
-        new Thread(() -> {
-            EntityManager entityManager = entityManagerFactory.createEntityManager();
-            entityManager.getTransaction().begin();
-            ExampleEntity mergedEntity = entityManager.merge(modelMapper.map(exampleModel, ExampleEntity.class));
-            entityManager.getTransaction().commit();
-            entityManager.close();
-            Response response;
-            if (mergedEntity == null) {
-                response = Response.status(Response.Status.NOT_FOUND).build();
-            } else {
-                response = Response.status(Response.Status.OK).entity(
-                        modelMapper.map(mergedEntity, ExampleModel.class)).build();
-            }
-            asyncResponse.resume(response);
-        }).start();
-    }
-
-    @PreDestroy
-    public void PreDestroyMyEntityResource()
+    public List<String> getItWithQuery(
+            @Parameter(
+            description = "An array of strings",
+            array = @ArraySchema(
+                schema = @Schema(
+                        type = "String",
+                        format = "String",
+                        description = "Array to be searched")
+            ),
+            required = true)
+            @QueryParam("array") List<String> parameters)
     {
-        entityManagerFactory.close();
+        return parameters;
+    }
+
+    @POST
+    @Produces(MediaType.MULTIPART_FORM_DATA) // "multipart/mixed"
+    @Operation(summary = "Receive a multipart form data post",
+            tags = {"Form multipart"},
+            description = "",
+            responses = {
+                    @ApiResponse(description = "The same data incoming from the post", content = @Content(
+                            array = @ArraySchema(schema = @Schema(implementation = FormDataMultiPart.class))
+                    )),
+                    @ApiResponse(responseCode = "400", description = "No array supplied since is required"),
+                    @ApiResponse(responseCode = "404", description = "Some other error because we don't find something")
+            })
+    public MultiPart post(final FormDataMultiPart multiPart) {
+        return multiPart;
     }
 }

@@ -714,13 +714,17 @@
  */
 package org.example.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.example.infrastructure.swagger.MonetaryWrapper;
 import org.javamoney.moneta.Money;
 
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryAmountFactory;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Date;
 import java.util.List;
 
 @XmlRootElement
@@ -729,7 +733,10 @@ public class ExampleModel {
     private String name;
 
     // private MonetaryAmount amount;
+    @Schema(implementation = MonetaryWrapper.class)
     private MonetaryAmount amount;
+
+    private Date insertDate;
 
     private List<ExampleDetailModel> exampleDetailModels;
 
@@ -771,4 +778,11 @@ public class ExampleModel {
         this.exampleDetailModels = exampleDetailModels;
     }
 
+    public Date getInsertDate() {
+        return insertDate;
+    }
+
+    public void setInsertDate(Date insertDate) {
+        this.insertDate = insertDate;
+    }
 }

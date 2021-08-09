@@ -1,22 +1,21 @@
-package org.example.infrastructure;
+package org.example.infrastructure.swagger;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.introspect.Annotated;
 import io.swagger.v3.core.converter.AnnotatedType;
 import io.swagger.v3.core.converter.ModelConverter;
 import io.swagger.v3.core.converter.ModelConverterContext;
-import io.swagger.v3.core.jackson.AbstractModelConverter;
+import io.swagger.v3.core.jackson.ModelResolver;
 import io.swagger.v3.core.util.Json;
 import io.swagger.v3.oas.models.media.Schema;
 
 import javax.money.MonetaryAmount;
+import java.lang.annotation.Annotation;
 import java.math.BigDecimal;
 import java.util.Iterator;
 
-public class SwaggerMonetaryAmountConverter extends AbstractModelConverter {
-    public SwaggerMonetaryAmountConverter(ObjectMapper mapper) {
-        super(mapper);
-    }
+public class SwaggerMonetaryAmountConverter implements ModelConverter {
 
     @Override
     public Schema resolve(AnnotatedType type, ModelConverterContext context, Iterator<ModelConverter> chain) {
@@ -25,7 +24,9 @@ public class SwaggerMonetaryAmountConverter extends AbstractModelConverter {
             if (_type != null) {
                 Class<?> cls = _type.getRawClass();
                 if (MonetaryAmount.class.isAssignableFrom(cls)) {
-                    return new Schema<MonetaryWrapper>();
+                    Schema schema = new Schema<MonetaryWrapper>();
+                    // super.resolveSchemaMembers(schema, type);
+                    return schema;
                 }
             }
         }
@@ -36,24 +37,4 @@ public class SwaggerMonetaryAmountConverter extends AbstractModelConverter {
         }
     }
 
-    private class MonetaryWrapper {
-        private BigDecimal amount;
-        private String currency;
-
-        public BigDecimal getAmount() {
-            return amount;
-        }
-
-        public void setAmount(BigDecimal amount) {
-            this.amount = amount;
-        }
-
-        public String getCurrency() {
-            return currency;
-        }
-
-        public void setCurrency(String currency) {
-            this.currency = currency;
-        }
-    }
 }

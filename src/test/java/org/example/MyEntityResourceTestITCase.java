@@ -715,14 +715,17 @@
 package org.example;
 
 import org.eclipse.microprofile.jwt.tck.util.TokenUtils;
+import org.example.controllers.webapi.MyEntityResource;
+import org.example.controllers.webapi.MyResource;
 import org.example.entities.ExampleDetailEntity;
 import org.example.entities.ExampleEntity;
 import org.example.models.ExampleModel;
+import org.javamoney.moneta.Money;
 import org.junit.Test;
 
+import javax.money.MonetaryAmount;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -731,6 +734,7 @@ import javax.ws.rs.core.Response;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
+import java.util.Date;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -810,6 +814,8 @@ public class MyEntityResourceTestITCase extends CdiBaseTest {
         exampleDetailEntity.setName("ExampleDetailEntityName");
         exampleEntity.setExampleDetailEntity(Collections.singletonList(exampleDetailEntity));
         exampleEntity.setName("ExampleEntityName");
+        exampleEntity.setAmount(Money.of(10, "EUR"));
+        exampleEntity.setInsertDate(new Date());
         entityManager.persist(exampleEntity);
         transaction.commit();
         entityManager.close();

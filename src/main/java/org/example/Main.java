@@ -729,8 +729,13 @@ import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpContainer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpContainerProvider;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.inject.hk2.Hk2BootstrapBinder;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.logging.LoggingFeature;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.filter.UriConnegFilter;
+import org.glassfish.jersey.server.validation.ValidationFeature;
+import org.glassfish.jersey.server.wadl.WadlFeature;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.glassfish.jersey.servlet.ServletProperties;
 import org.jvnet.hk2.external.runtime.Hk2LocatorUtilities;
@@ -767,6 +772,12 @@ public class Main {
                 .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_SERVER, Level.FINEST.getName())
                 .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL, Level.FINEST.getName());
         resourceConfig.register(AutoScanFeature.class);
+        resourceConfig.register(JacksonFeature.class);
+        resourceConfig.register(UriConnegFilter.class);
+        resourceConfig.register(ValidationFeature.class);
+        resourceConfig.register(WadlFeature.class);
+        resourceConfig.register(GrizzlyHttpContainerProvider.class);
+        resourceConfig.register(MultiPartFeature.class);
         resourceConfig.register(new AbstractBinder() {
             @Override
             protected void configure() {
