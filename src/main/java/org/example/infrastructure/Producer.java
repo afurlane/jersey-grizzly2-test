@@ -741,7 +741,7 @@ public class Producer {
     // Interesting
     // https://stackoverflow.com/questions/21781026/how-to-send-java-util-logging-to-log4j2
     private static final String persistenceUnitName = "example-unit";
-    private ModelMapper modelMapper;
+    // private ModelMapper modelMapper;
 
     @Produces
     public Logger getLogger(InjectionPoint p)
@@ -759,6 +759,7 @@ public class Producer {
         return modelMapper;
     }
 
+/*
     @PostConstruct
     public void InitDefaults() {
         modelMapper = new ModelMapper();
@@ -772,4 +773,5 @@ public class Producer {
            mapper.map(src -> src.getName(), ExampleDetailModel::setName);
         });
     }
+*/
 }

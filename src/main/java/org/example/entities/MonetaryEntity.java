@@ -21,24 +21,11 @@ public class MonetaryEntity {
         Amount = amount;
     }
 
-    public void setAmount(MonetaryAmount amount) {
-        Amount = amount.getNumber().numberValue(BigDecimal.class);
-    }
-
     public String getCurrency() {
         return Currency;
     }
 
     public void setCurrency(String currency) {
         Currency = currency;
-    }
-
-    public void setCurrency(MonetaryAmount amount) {
-        Currency = amount.getCurrency().getCurrencyCode();
-    }
-
-    public void setFromMonetaryAmount(MonetaryAmount amount) {
-        Currency = amount.getCurrency().getCurrencyCode();
-        Amount = amount.getNumber().numberValue(BigDecimal.class);
     }
 }

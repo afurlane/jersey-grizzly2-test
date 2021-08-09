@@ -732,11 +732,8 @@ public class ExampleEntity {
 
     private String name;
 
-    @Transient
-    private MonetaryAmount amount;
-
     @Embedded
-    private MonetaryEntity _amount;
+    private MonetaryEntity amount;
 
     private Date insertDate;
 
@@ -773,14 +770,6 @@ public class ExampleEntity {
         this.name = name;
     }
 
-    public MonetaryAmount getAmount() { return amount; }
-
-    public void setAmount(MonetaryAmount amount) {
-        this.amount = amount;
-        this._amount = new MonetaryEntity();
-        this._amount.setFromMonetaryAmount(amount);
-    }
-
     public List<ExampleDetailEntity> getExampleDetailEntity() {
         return exampleDetailEntities;
     }
@@ -797,13 +786,10 @@ public class ExampleEntity {
         this.insertDate = insertDate;
     }
 
-    public MonetaryEntity get_amount() {
-        return _amount;
+    public MonetaryEntity getAmount() {
+        return amount;
     }
-
-    public void set_amount(MonetaryEntity _amount) {
-        this._amount = _amount;
-        if (this.amount == null)
-            this.amount = Money.of(_amount.getAmount(), _amount.getCurrency());
+    public void setAmount(MonetaryEntity amount) {
+        this.amount = amount;
     }
 }
