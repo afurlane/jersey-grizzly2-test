@@ -717,18 +717,14 @@ package org.example;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.infrastructure.hk2.AutoScanFeature;
 import org.example.infrastructure.hk2.HttpSessionFactory;
-import org.glassfish.grizzly.Grizzly;
-import org.glassfish.grizzly.http.server.HttpHandler;
+import org.example.infrastructure.mapper.ModelMapperProducer;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.servlet.WebappContext;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.hk2.api.ServiceLocatorFactory;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
-import org.glassfish.hk2.utilities.general.Hk2ThreadLocal;
-import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpContainer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpContainerProvider;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
-import org.glassfish.jersey.inject.hk2.Hk2BootstrapBinder;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -738,18 +734,15 @@ import org.glassfish.jersey.server.validation.ValidationFeature;
 import org.glassfish.jersey.server.wadl.WadlFeature;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.glassfish.jersey.servlet.ServletProperties;
-import org.jvnet.hk2.external.runtime.Hk2LocatorUtilities;
 
 import javax.enterprise.inject.se.SeContainer;
 import javax.enterprise.inject.se.SeContainerInitializer;
-import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletRegistration;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.file.WatchEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -778,6 +771,7 @@ public class Main {
         resourceConfig.register(WadlFeature.class);
         resourceConfig.register(GrizzlyHttpContainerProvider.class);
         resourceConfig.register(MultiPartFeature.class);
+        resourceConfig.register(ModelMapperProducer.class);
         resourceConfig.register(new AbstractBinder() {
             @Override
             protected void configure() {

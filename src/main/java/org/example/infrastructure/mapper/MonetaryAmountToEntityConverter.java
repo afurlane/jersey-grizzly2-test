@@ -1,4 +1,4 @@
-package org.example.infrastructure.jpa;
+package org.example.infrastructure.mapper;
 
 import org.example.entities.MonetaryEntity;
 import org.modelmapper.Converter;

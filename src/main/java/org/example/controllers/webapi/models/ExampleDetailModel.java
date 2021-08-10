@@ -712,23 +712,29 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.example.infrastructure;
+package org.example.controllers.webapi.models;
 
-public class EndpointLogLine {
+public class ExampleDetailModel {
 
-    private static final String DEFAULT_FORMAT = "   %-7s %s";
-    final String httpMethod;
-    final String path;
-    final String format;
+    private Long id;
+    private String name;
 
-    public EndpointLogLine(String httpMethod, String path, String format) {
-        this.httpMethod = httpMethod;
-        this.path = path;
-        this.format = format == null ? DEFAULT_FORMAT : format;
+    public ExampleDetailModel() { }
+    public ExampleDetailModel(String name) {
+        this.name = name;
     }
 
-    @Override
-    public String toString() {
-        return String.format(format, httpMethod, path);
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
     }
 }

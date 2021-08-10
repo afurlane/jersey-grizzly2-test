@@ -714,9 +714,6 @@
  */
 package org.example;
 
-import io.swagger.v3.core.converter.ModelConverter;
-import io.swagger.v3.core.converter.ModelConverters;
-import io.swagger.v3.core.util.Json;
 import io.swagger.v3.jaxrs2.integration.JaxrsOpenApiContextBuilder;
 import io.swagger.v3.jaxrs2.integration.resources.AcceptHeaderOpenApiResource;
 import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
@@ -730,18 +727,16 @@ import io.swagger.v3.oas.models.info.License;
 import org.eclipse.microprofile.auth.LoginConfig;
 import org.example.controllers.webapi.MyEntityResource;
 import org.example.controllers.webapi.MyResource;
-import org.example.infrastructure.*;
-import org.example.infrastructure.swagger.SwaggerMonetaryAmountConverter;
+import org.example.infrastructure.jersey.CustomConstraintViolationExceptionMapper;
+import org.example.infrastructure.jersey.EndpointLoggingListener;
+import org.example.infrastructure.jersey.JsonProcessingExceptionMapper;
 import org.example.infrastructure.swagger.SwaggerOASMoneyMapperProcessor;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Model;
-import javax.money.MonetaryAmountFactory;
 import javax.servlet.ServletConfig;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

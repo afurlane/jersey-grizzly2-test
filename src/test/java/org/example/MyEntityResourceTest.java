@@ -717,7 +717,7 @@ package org.example;
 import org.apache.logging.log4j.Logger;
 import org.example.controllers.webapi.MyEntityResource;
 import org.example.entities.ExampleEntity;
-import org.example.models.ExampleModel;
+import org.example.controllers.webapi.models.ExampleModel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.*;

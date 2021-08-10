@@ -712,63 +712,41 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.example.infrastructure;
+package org.example.infrastructure.jersey;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
-import java.util.List;
-import java.util.stream.Collectors;
+import org.apache.logging.log4j.Logger;
 
-@Provider
-public class CustomConstraintViolationExceptionMapper
-        implements ExceptionMapper<ConstraintViolationException> {
+import javax.enterprise.inject.Default;
+import javax.inject.Inject;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
 
-    @Override
-    public Response toResponse(ConstraintViolationException exception) {
+@Default
+public class ResourceLogDetails {
 
-        List<ValidationError> errors = exception.getConstraintViolations().stream()
-                .map(this::toValidationError)
-                .collect(Collectors.toList());
+    @Inject
+    private Logger logger;
 
-        return Response.status(Response.Status.BAD_REQUEST).entity(errors)
-                .type(MediaType.APPLICATION_JSON).build();
+    private final Comparator<EndpointLogLine> COMPARATOR
+            = Comparator.comparing((EndpointLogLine e) -> e.path)
+            .thenComparing((EndpointLogLine e) -> e.httpMethod);
+
+    private Set<EndpointLogLine> logLines = new TreeSet<>(COMPARATOR);
+
+    public void log() {
+        StringBuilder sb = new StringBuilder("\nAll endpoints for Jersey application\n");
+        logLines.stream().forEach((line) -> {
+            sb.append(line).append("\n");
+        });
+        logger.info(sb.toString());
     }
 
-    private ValidationError toValidationError(ConstraintViolation constraintViolation) {
-        ValidationError error = new ValidationError();
-        error.setPath(constraintViolation.getPropertyPath().toString());
-        error.setMessage(constraintViolation.getMessage());
-        return error;
+    public void clearEndpointLogLines() {
+        this.logLines.clear();
     }
 
-    public class ValidationError {
-
-        private String path;
-        private String message;
-
-        public ValidationError() {
-        }
-
-        public String getPath() {
-            return path;
-        }
-
-        public void setPath(String path) {
-            this.path = path;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public void setMessage(String message) {
-            this.message = message;
-        }
+    public void addEndpointLogLines(Set<EndpointLogLine> logLines) {
+        this.logLines.addAll(logLines);
     }
 }
-
-

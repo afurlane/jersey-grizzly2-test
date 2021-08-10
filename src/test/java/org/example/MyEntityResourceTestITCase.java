@@ -720,11 +720,9 @@ import org.example.controllers.webapi.MyResource;
 import org.example.entities.ExampleDetailEntity;
 import org.example.entities.ExampleEntity;
 import org.example.entities.MonetaryEntity;
-import org.example.models.ExampleModel;
-import org.javamoney.moneta.Money;
+import org.example.controllers.webapi.models.ExampleModel;
 import org.junit.Test;
 
-import javax.money.MonetaryAmount;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.client.Entity;
@@ -819,7 +817,7 @@ public class MyEntityResourceTestITCase extends CdiBaseTest {
         exampleDetailEntity.setName("ExampleDetailEntityName");
         exampleEntity.setExampleDetailEntity(Collections.singletonList(exampleDetailEntity));
         exampleEntity.setName("ExampleEntityName");
-        exampleEntity.setAmount(MonetaryEntity);
+        exampleEntity.setAmount(monetaryEntity);
         exampleEntity.setInsertDate(new Date());
         entityManager.persist(exampleEntity);
         transaction.commit();

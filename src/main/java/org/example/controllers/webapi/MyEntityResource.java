@@ -722,7 +722,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.microprofile.jwt.Claim;
 import org.example.entities.ExampleEntity;
-import org.example.models.ExampleModel;
+import org.example.controllers.webapi.models.ExampleModel;
 import org.modelmapper.ModelMapper;
 
 import javax.annotation.PreDestroy;
@@ -730,10 +730,9 @@ import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.PermitAll;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.json.JsonString;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -748,7 +747,7 @@ import java.util.concurrent.TimeUnit;
 
 @Path(MyEntityResource.MyEntityResourcePath)
 @DeclareRoles({"admin","user"})
-public class    MyEntityResource {
+public class MyEntityResource {
 
     final public static String MyEntityResourcePath = "myresourceentity";
     final public static String MyEntityResourcePathId = "{id}";
@@ -764,8 +763,10 @@ public class    MyEntityResource {
 
     // EJB -> look at specification
     // @PersistenceUnit(unitName = "example-unit")
-    @Inject
-    public EntityManagerFactory entityManagerFactory;
+    // public EntityManagerFactory entityManagerFactory;
+
+    @Inject @Named("example-unit")
+    private EntityManager entityManager;
 
     @Inject
     private ModelMapper modelMapper;
@@ -795,7 +796,6 @@ public class    MyEntityResource {
                .entity(timeOutMessage).build()));
         asyncResponse.setTimeout(APITimeoutInSeconds, TimeUnit.SECONDS);
         new Thread(() -> {
-            EntityManager entityManager = entityManagerFactory.createEntityManager();
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
             CriteriaQuery<ExampleEntity> criteriaQuery = criteriaBuilder.createQuery(ExampleEntity.class);
             Root<ExampleEntity> exampleEntityRoot = criteriaQuery.from(ExampleEntity.class);
@@ -808,8 +808,8 @@ public class    MyEntityResource {
             if (exampleEntity == null) {
                 response = Response.status(Response.Status.NOT_FOUND).build();
             } else {
-                response = Response.status(Response.Status.OK).entity(
-                        modelMapper.map(exampleEntity, ExampleModel.class)).build();
+                ExampleModel exampleModel = modelMapper.map(exampleEntity, ExampleModel.class);
+                response = Response.status(Response.Status.OK).entity(exampleModel).build();
             }
             asyncResponse.resume(response);
         }).start();
@@ -841,7 +841,6 @@ public class    MyEntityResource {
                 .entity(timeOutMessage).build()));
         asyncResponse.setTimeout(APITimeoutInSeconds, TimeUnit.SECONDS);
         new Thread(() -> {
-            EntityManager entityManager = entityManagerFactory.createEntityManager();
             ExampleEntity exampleEntity = entityManager.find(ExampleEntity.class, id);
             entityManager.close();
             Response response;
@@ -881,7 +880,6 @@ public class    MyEntityResource {
                 .entity(timeOutMessage).build()));
         asyncResponse.setTimeout(APITimeoutInSeconds, TimeUnit.SECONDS);
         new Thread(() -> {
-            EntityManager entityManager = entityManagerFactory.createEntityManager();
             ExampleEntity exampleEntity = entityManager.find(ExampleEntity.class, id);
             Response response;
             if (exampleEntity != null) {
@@ -921,7 +919,6 @@ public class    MyEntityResource {
                 .entity(timeOutMessage).build()));
         asyncResponse.setTimeout(APITimeoutInSeconds, TimeUnit.SECONDS);
         new Thread(() -> {
-            EntityManager entityManager = entityManagerFactory.createEntityManager();
             entityManager.getTransaction().begin();
             ExampleEntity mergedEntity = entityManager.merge(modelMapper.map(exampleModel, ExampleEntity.class));
             entityManager.getTransaction().commit();
@@ -940,6 +937,6 @@ public class    MyEntityResource {
     @PreDestroy
     public void PreDestroyMyEntityResource()
     {
-        entityManagerFactory.close();
+        entityManager.close();
     }
 }

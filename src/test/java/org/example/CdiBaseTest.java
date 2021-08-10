@@ -723,9 +723,10 @@ import javax.ws.rs.core.UriBuilder;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.example.infrastructure.ObjectMapperProvider;
+import org.example.infrastructure.jersey.ObjectMapperProvider;
 import org.example.infrastructure.hk2.AutoScanFeature;
 import org.example.infrastructure.hk2.HttpSessionFactory;
+import org.example.infrastructure.mapper.ModelMapperProducer;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpContainerProvider;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -786,6 +787,7 @@ public class CdiBaseTest extends JerseyTest {
         resourceConfig.register(WadlFeature.class);
         resourceConfig.register(GrizzlyHttpContainerProvider.class);
         resourceConfig.register(MultiPartFeature.class);
+        resourceConfig.register(ModelMapperProducer.class);
 
         resourceConfig.register(new AbstractBinder() {
             @Override

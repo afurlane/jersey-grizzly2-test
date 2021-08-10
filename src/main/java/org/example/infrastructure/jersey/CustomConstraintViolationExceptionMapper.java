@@ -712,66 +712,63 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.example.infrastructure;
+package org.example.infrastructure.jersey;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.example.entities.ExampleDetailEntity;
-import org.example.entities.ExampleEntity;
-import org.example.models.ExampleDetailModel;
-import org.example.models.ExampleModel;
-import org.modelmapper.ModelMapper;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.inject.Produces;
-import javax.enterprise.inject.spi.InjectionPoint;
-import javax.inject.Singleton;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+@Provider
+public class CustomConstraintViolationExceptionMapper
+        implements ExceptionMapper<ConstraintViolationException> {
 
-/**
- * This is the producer class; you could have producer methods anywhere in your code but,
- * keeping it together helps a lot deining scopes and way to build items. There is another
- * benefit of keeping it in a single package/class. It's related to circular reference.
- * If you have a producer method that needs a reference from another producer method, you know..
- */
-@Singleton
-public class Producer {
+    @Override
+    public Response toResponse(ConstraintViolationException exception) {
 
-    // Interesting
-    // https://stackoverflow.com/questions/21781026/how-to-send-java-util-logging-to-log4j2
-    private static final String persistenceUnitName = "example-unit";
-    // private ModelMapper modelMapper;
+        List<ValidationError> errors = exception.getConstraintViolations().stream()
+                .map(this::toValidationError)
+                .collect(Collectors.toList());
 
-    @Produces
-    public Logger getLogger(InjectionPoint p)
-    {
-        return LogManager.getLogger(p.getClass().getCanonicalName());
+        return Response.status(Response.Status.BAD_REQUEST).entity(errors)
+                .type(MediaType.APPLICATION_JSON).build();
     }
 
-    @Produces
-    public EntityManagerFactory getEntityManagerFactory() {
-        return Persistence.createEntityManagerFactory(persistenceUnitName);
+    private ValidationError toValidationError(ConstraintViolation constraintViolation) {
+        ValidationError error = new ValidationError();
+        error.setPath(constraintViolation.getPropertyPath().toString());
+        error.setMessage(constraintViolation.getMessage());
+        return error;
     }
 
-    @Produces
-    public ModelMapper getModelMapper() {
-        return modelMapper;
-    }
+    public class ValidationError {
 
-/*
-    @PostConstruct
-    public void InitDefaults() {
-        modelMapper = new ModelMapper();
-        modelMapper.createTypeMap(ExampleEntity.class, ExampleModel.class).addMappings(mapper -> {
-            mapper.map(src -> src.getExampleDetailEntity(), ExampleModel::setExampleDetailModels);
-            mapper.map(src -> src.getName(), ExampleModel::setName);
-            mapper.map(src -> src.getId(), ExampleModel::setId);
-        });
-        modelMapper.createTypeMap(ExampleDetailEntity.class, ExampleDetailModel.class).addMappings(mapper -> {
-           mapper.map(src -> src.getId(), ExampleDetailModel::setId);
-           mapper.map(src -> src.getName(), ExampleDetailModel::setName);
-        });
+        private String path;
+        private String message;
+
+        public ValidationError() {
+        }
+
+        public String getPath() {
+            return path;
+        }
+
+        public void setPath(String path) {
+            this.path = path;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
     }
-*/
 }
+
+

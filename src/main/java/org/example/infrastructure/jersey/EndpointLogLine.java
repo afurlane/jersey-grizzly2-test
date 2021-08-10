@@ -712,77 +712,23 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.example.models;
+package org.example.infrastructure.jersey;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import io.swagger.v3.oas.annotations.media.Schema;
-import org.example.infrastructure.swagger.MonetaryWrapper;
-import org.javamoney.moneta.Money;
+public class EndpointLogLine {
 
-import javax.money.MonetaryAmount;
-import javax.money.MonetaryAmountFactory;
-import javax.xml.bind.annotation.XmlRootElement;
-import java.util.Date;
-import java.util.List;
+    private static final String DEFAULT_FORMAT = "   %-7s %s";
+    final String httpMethod;
+    final String path;
+    final String format;
 
-@XmlRootElement
-public class ExampleModel {
-    private Long id;
-    private String name;
-
-    // private MonetaryAmount amount;
-    @Schema(implementation = MonetaryWrapper.class)
-    private MonetaryAmount amount;
-
-    private Date insertDate;
-
-    private List<ExampleDetailModel> exampleDetailModels;
-
-    public ExampleModel() {}
-
-    public ExampleModel(String name) {
-        this.name = name;
+    public EndpointLogLine(String httpMethod, String path, String format) {
+        this.httpMethod = httpMethod;
+        this.path = path;
+        this.format = format == null ? DEFAULT_FORMAT : format;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public MonetaryAmount getAmount() {
-        return amount;
-    }
-
-    public void setAmount(MonetaryAmount amount) {
-        this.amount = amount;
-    }
-
-    public List<ExampleDetailModel> getExampleDetailModels() {
-        return exampleDetailModels;
-    }
-
-    public void setExampleDetailModels(List<ExampleDetailModel> exampleDetailModels) {
-        this.exampleDetailModels = exampleDetailModels;
-    }
-
-    public Date getInsertDate() {
-        return insertDate;
-    }
-
-    public void setInsertDate(Date insertDate) {
-        this.insertDate = insertDate;
+    @Override
+    public String toString() {
+        return String.format(format, httpMethod, path);
     }
 }

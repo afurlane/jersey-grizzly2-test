@@ -712,139 +712,55 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.example.infrastructure;
+package org.example.infrastructure.jersey;
 
-import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
+import jdk.jfr.Name;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.glassfish.jersey.server.model.Resource;
-import org.glassfish.jersey.server.model.ResourceMethod;
-import org.glassfish.jersey.server.model.ResourceModel;
-import org.glassfish.jersey.server.monitoring.ApplicationEvent;
-import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
-import org.glassfish.jersey.server.monitoring.RequestEvent;
-import org.glassfish.jersey.server.monitoring.RequestEventListener;
-
-import javax.annotation.PostConstruct;
+import javax.enterprise.context.Dependent;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
+import javax.enterprise.inject.Produces;
+import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
-import javax.servlet.ServletContext;
-import javax.ws.rs.core.Context;
+import javax.inject.Named;
+import javax.inject.Singleton;
+import javax.persistence.*;
 
 /**
- * This class is a nice example of how to extract information from deployed jax-rs application
+ * This is the producer class; you could have producer methods anywhere in your code but,
+ * keeping it together helps a lot deining scopes and way to build items. There is another
+ * benefit of keeping it in a single package/class. It's related to circular reference.
+ * If you have a producer method that needs a reference from another producer method, you know..
  */
-public class EndpointLoggingListener implements ApplicationEventListener {
+@Singleton
+public class Producer {
 
-    @Context
-    ServletContext httpServletContext;
+    // Interesting
+    // https://stackoverflow.com/questions/21781026/how-to-send-java-util-logging-to-log4j2
+    private static final String persistenceUnitName = "example-unit";
+    // private ModelMapper modelMapper;
 
-    @Inject
-    ResourceLogDetails resourceLogDetails;
-
-    private static final TypeResolver TYPE_RESOLVER = new TypeResolver();
-
-    private String applicationPath = null;
-    private boolean withOptions = false;
-    private boolean withWadl = false;
-
-    @Override
-    public void onEvent(ApplicationEvent event) {
-        if (event.getType() == ApplicationEvent.Type.INITIALIZATION_APP_FINISHED) {
-            final ResourceModel resourceModel = event.getResourceModel();
-            resourceLogDetails.clearEndpointLogLines();
-            resourceModel.getResources().stream().forEach((resource) -> {
-                resourceLogDetails.addEndpointLogLines(getLinesFromResource(resource));
-            });
-            resourceLogDetails.log();
-        }
+    @Produces
+    public Logger getLogger(InjectionPoint p)
+    {
+        return LogManager.getLogger(p.getClass().getCanonicalName());
     }
 
-    @Override
-    public RequestEventListener onRequest(RequestEvent requestEvent) {
-        return null;
+    @Produces
+    public EntityManagerFactory getEntityManagerFactory(InjectionPoint injectionPoint) {
+        return Persistence.createEntityManagerFactory(persistenceUnitName);
     }
 
-    public EndpointLoggingListener withOptions() {
-        this.withOptions = true;
-        return this;
+    @Produces
+    @Named(persistenceUnitName)
+    public EntityManager getEntityManager(InjectionPoint injectionPoint) {
+        return getEntityManagerFactory(injectionPoint).createEntityManager();
     }
 
-    public EndpointLoggingListener withWadl() {
-        this.withWadl = true;
-        return this;
-    }
-
-    private Set<EndpointLogLine> getLinesFromResource(Resource resource) {
-        Set<EndpointLogLine> logLines = new HashSet<>();
-        populate(this.applicationPath, false, resource, logLines);
-        return logLines;
-    }
-
-    private void populate(String basePath, Class<?> klass, boolean isLocator,
-                          Set<EndpointLogLine> endpointLogLines) {
-        populate(basePath, isLocator, Resource.from(klass), endpointLogLines);
-    }
-
-    private void populate(String basePath, boolean isLocator, Resource resource,
-                          Set<EndpointLogLine> endpointLogLines) {
-        if (!isLocator) {
-            basePath = normalizePath(basePath, resource.getPath());
-        }
-
-        for (ResourceMethod method : resource.getResourceMethods()) {
-            if (!withOptions && method.getHttpMethod().equalsIgnoreCase("OPTIONS")) {
-                continue;
-            }
-            if (!withWadl && basePath.contains(".wadl")) {
-                continue;
-            }
-            endpointLogLines.add(new EndpointLogLine(method.getHttpMethod(), basePath, null));
-        }
-
-        for (Resource childResource : resource.getChildResources()) {
-            for (ResourceMethod method : childResource.getAllMethods()) {
-                if (method.getType() == ResourceMethod.JaxrsType.RESOURCE_METHOD) {
-                    final String path = normalizePath(basePath, childResource.getPath());
-                    if (!withOptions && method.getHttpMethod().equalsIgnoreCase("OPTIONS")) {
-                        continue;
-                    }
-                    if (!withWadl && path.contains(".wadl")) {
-                        continue;
-                    }
-                    endpointLogLines.add(new EndpointLogLine(method.getHttpMethod(), path, null));
-                } else if (method.getType() == ResourceMethod.JaxrsType.SUB_RESOURCE_LOCATOR) {
-                    final String path = normalizePath(basePath, childResource.getPath());
-                    final ResolvedType responseType = TYPE_RESOLVER
-                            .resolve(method.getInvocable().getResponseType());
-                    final Class<?> erasedType = !responseType.getTypeBindings().isEmpty()
-                            ? responseType.getTypeBindings().getBoundType(0).getErasedType()
-                            : responseType.getErasedType();
-                    populate(path, erasedType, true, endpointLogLines);
-                }
-            }
-        }
-    }
-
-    private static String normalizePath(String basePath, String path) {
-        if (path == null) {
-            return basePath;
-        }
-        if (basePath.endsWith("/")) {
-            return path.startsWith("/") ? basePath + path.substring(1) : basePath + path;
-        }
-        return path.startsWith("/") ? basePath + path : basePath + "/" + path;
-    }
-
-    @PostConstruct
-    public void getApplicationBaseUrl () {
-        /* this.applicationPath = String.format("%s://%s:%s%s",
-                httpServletContext.getScheme(), httpServletContext.getServerName(),
-                httpServletContext.getServerPort(), httpServletContext.getContextPath());
-
-         */
-        this.applicationPath = String.format(httpServletContext.getRealPath(httpServletContext.getContextPath()));
-    }
+    // @Produces
+    // @Named(persistenceUnitName)
+    // @PersistenceContext(unitName=persistenceUnitName)
+    // public EntityManager entityManager;
 }

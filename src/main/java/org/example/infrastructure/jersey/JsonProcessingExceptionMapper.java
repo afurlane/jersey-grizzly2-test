@@ -712,29 +712,27 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.example.models;
+package org.example.infrastructure.jersey;
 
-public class ExampleDetailModel {
+import com.fasterxml.jackson.core.JsonProcessingException;
 
-    private Long id;
-    private String name;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
 
-    public ExampleDetailModel() { }
-    public ExampleDetailModel(String name) {
-        this.name = name;
-    }
+@Provider
+public class JsonProcessingExceptionMapper implements ExceptionMapper<JsonProcessingException> {
 
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
+        public static class Error {
+            public String key;
+            public String message;
+        }
 
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
+        @Override
+        public Response toResponse(JsonProcessingException exception) {
+            Error error = new Error();
+            error.key = "bad-json";
+            error.message = exception.getMessage();
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
+        }
 }

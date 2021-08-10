@@ -714,9 +714,6 @@
  */
 package org.example.entities;
 
-import org.javamoney.moneta.Money;
-
-import javax.money.MonetaryAmount;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -789,6 +786,7 @@ public class ExampleEntity {
     public MonetaryEntity getAmount() {
         return amount;
     }
+
     public void setAmount(MonetaryEntity amount) {
         this.amount = amount;
     }

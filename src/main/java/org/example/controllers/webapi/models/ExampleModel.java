@@ -712,27 +712,67 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.example.infrastructure;
+package org.example.controllers.webapi.models;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import javax.money.MonetaryAmount;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Date;
+import java.util.List;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
+@XmlRootElement
+public class ExampleModel {
+    private Long id;
+    private String name;
 
-@Provider
-public class JsonProcessingExceptionMapper implements ExceptionMapper<JsonProcessingException> {
+    private MonetaryAmount amount;
 
-        public static class Error {
-            public String key;
-            public String message;
-        }
+    private Date insertDate;
 
-        @Override
-        public Response toResponse(JsonProcessingException exception) {
-            Error error = new Error();
-            error.key = "bad-json";
-            error.message = exception.getMessage();
-            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
-        }
+    private List<ExampleDetailModel> exampleDetailModels;
+
+    public ExampleModel() {}
+
+    public ExampleModel(String name) {
+        this.name = name;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public MonetaryAmount getAmount() {
+        return amount;
+    }
+
+    public void setAmount(MonetaryAmount amount) {
+        this.amount = amount;
+    }
+
+    public List<ExampleDetailModel> getExampleDetailModels() {
+        return exampleDetailModels;
+    }
+
+    public void setExampleDetailModels(List<ExampleDetailModel> exampleDetailModels) {
+        this.exampleDetailModels = exampleDetailModels;
+    }
+
+    public Date getInsertDate() {
+        return insertDate;
+    }
+
+    public void setInsertDate(Date insertDate) {
+        this.insertDate = insertDate;
+    }
 }

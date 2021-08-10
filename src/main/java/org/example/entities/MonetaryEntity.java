@@ -1,8 +1,5 @@
 package org.example.entities;
 
-import org.hibernate.validator.constraints.Length;
-
-import javax.money.MonetaryAmount;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
