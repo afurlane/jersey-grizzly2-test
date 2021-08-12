@@ -724,6 +724,10 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.servlet.ServletConfig;
+import jakarta.ws.rs.core.Application;
+import jakarta.ws.rs.core.Context;
 import org.eclipse.microprofile.auth.LoginConfig;
 import org.example.controllers.webapi.MyEntityResource;
 import org.example.controllers.webapi.MyResource;
@@ -733,10 +737,6 @@ import org.example.infrastructure.jersey.JsonProcessingExceptionMapper;
 import org.example.infrastructure.swagger.SwaggerOASMoneyMapperProcessor;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.servlet.ServletConfig;
-import javax.ws.rs.core.Application;
-import javax.ws.rs.core.Context;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -745,7 +745,8 @@ import java.util.stream.Stream;
 @ApplicationScoped
 public class MyApplication extends Application {
 
-    @Context ServletConfig servletConfig;
+    @Context
+    ServletConfig servletConfig;
 
     // Cannot inject in costructor with WELD, in this configuration.
     @PostConstruct

@@ -714,14 +714,11 @@
  */
 package org.example.infrastructure.hk2;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.glassfish.hk2.api.Factory;
-
-import org.glassfish.jersey.spi.Contract;
-
-import javax.inject.Inject;
-import javax.inject.Provider;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 public class HttpSessionFactory implements Factory<HttpSession> {
 

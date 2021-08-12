@@ -714,11 +714,10 @@
  */
 package org.example.servicesclient;
 
+import jakarta.inject.Inject;
 import org.http.chebi.ChebiWebServiceFault_Exception;
 import org.http.chebi.ChebiWebServicePortType;
 import org.http.chebi.ChebiWebServiceService;
-
-import javax.inject.Inject;
 
 public class SOAPClientTest {
 

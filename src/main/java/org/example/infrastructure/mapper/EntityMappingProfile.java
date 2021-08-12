@@ -1,12 +1,11 @@
 package org.example.infrastructure.mapper;
 
+import jakarta.inject.Singleton;
 import org.example.entities.ExampleDetailEntity;
 import org.example.entities.ExampleEntity;
 import org.example.controllers.webapi.models.ExampleDetailModel;
 import org.example.controllers.webapi.models.ExampleModel;
 import org.modelmapper.ModelMapper;
-
-import javax.inject.Singleton;
 
 @Singleton
 public class EntityMappingProfile implements MappingProfile {

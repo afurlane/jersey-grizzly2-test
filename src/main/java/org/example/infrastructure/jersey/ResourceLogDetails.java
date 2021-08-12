@@ -714,10 +714,10 @@
  */
 package org.example.infrastructure.jersey;
 
+import jakarta.enterprise.inject.Default;
+import jakarta.inject.Inject;
 import org.apache.logging.log4j.Logger;
 
-import javax.enterprise.inject.Default;
-import javax.inject.Inject;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
