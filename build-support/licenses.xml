@@ -190,6 +190,12 @@
             </urls>
         </license>
         <license>
+            <name>COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0</name>
+            <urls>
+                <url>https://glassfish.dev.java.net/public/CDDLv1.0.html</url>
+            </urls>
+        </license>
+        <license>
             <name>MPL 1.1</name>
             <names>
                 <name>MPL 1.1</name>

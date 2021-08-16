@@ -1053,24 +1053,27 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <!-- use 2.9.1 for Java 7 projects -->
             <version>${assertj-core.version}</version>
             <scope>test</scope>
         </dependency>
         <!-- Google catch exception code -->
+        <!--
         <dependency>
             <groupId>com.googlecode.catch-exception</groupId>
             <artifactId>catch-exception</artifactId>
             <version>${catch-exception.version}</version>
             <scope>test</scope>
         </dependency>
+        -->
         <!-- Cucumber Behaviour Driven Design-->
+        <!--
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-java8</artifactId>
             <version>${cucumber.version}</version>
             <scope>test</scope>
         </dependency>
+        -->
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-junit</artifactId>
@@ -1115,7 +1118,7 @@
         <dependency>
             <groupId>org.glassfish.grizzly</groupId>
             <artifactId>grizzly-http-servlet</artifactId>
-            <version>2.4.4</version>
+            <version>3.0.0</version>
         </dependency>
     </dependencies>
 
@@ -1429,6 +1432,7 @@
                             <targetPath>swagger-ui</targetPath>
                         </resource>
                     </webResources>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
             <plugin>
@@ -1652,7 +1656,7 @@
         -->
         <java.version>11</java.version>
         <maven-dependency-plugin.version>3.1.1</maven-dependency-plugin.version>
-        <maven-war-plugin.version>3.2.3</maven-war-plugin.version>
+        <maven-war-plugin.version>3.3.1</maven-war-plugin.version>
         <surefire-plugin.version>2.22.1</surefire-plugin.version>
         <failsafe-plugin.version>2.22.1</failsafe-plugin.version>
         <surefire-report-plugin.version>2.22.1</surefire-report-plugin.version>
@@ -1695,8 +1699,8 @@
         <license-maven-plugin.version>4.0.rc2</license-maven-plugin.version>
         <ayoy-license-verifier-maven-plugin.version>1.1.0</ayoy-license-verifier-maven-plugin.version>
         <dependency-check-maven.version>6.2.2</dependency-check-maven.version>
-        <cucumber.version>6.9.1</cucumber.version>
-        <jaxws-maven-plugin.version>3.0.0</jaxws-maven-plugin.version>
+        <cucumber.version>6.11.0</cucumber.version>
+        <jaxws-maven-plugin.version>3.0.2</jaxws-maven-plugin.version>
         <jaxws-api.version>2.3.1</jaxws-api.version>
         <javax.jws-api.version>1.1</javax.jws-api.version>
         <jaxws-ri.version>3.0.0</jaxws-ri.version>

@@ -714,12 +714,12 @@
  */
 package org.example;
 
-import javax.enterprise.inject.se.SeContainer;
-import javax.enterprise.inject.se.SeContainerInitializer;
+import jakarta.enterprise.inject.se.SeContainer;
+import jakarta.enterprise.inject.se.SeContainerInitializer;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLParameters;
-import javax.servlet.http.HttpSession;
-import javax.ws.rs.core.UriBuilder;
+import jakarta.servlet.http.HttpSession;
+import jakarta.ws.rs.core.UriBuilder;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -725,15 +725,15 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
 
 import javax.enterprise.inject.Instance;
-import javax.json.JsonString;
+import jakarta.json.JsonString;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.ws.rs.container.AsyncResponse;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.container.AsyncResponse;
+import jakarta.ws.rs.core.Response;
 
 import java.util.Optional;
 
@@ -782,7 +782,7 @@ public class MyEntityResourceTest {
     @Test
     public void TestGetEntityById()
     {
-        doReturn(entityManager).when(entityManagerFactory).createEntityManager();
+        // doReturn(entityManager).when(entityManagerFactory).createEntityManager();
         when(entityManager.getCriteriaBuilder()).thenReturn(criteriaBuilder);
         when(criteriaBuilder.createQuery(ExampleEntity.class)).thenReturn(entityCriteriaQuery);
         when(entityCriteriaQuery.from(ExampleEntity.class)).thenReturn(exampleEntityRoot);
