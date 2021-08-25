@@ -730,7 +730,6 @@ import jakarta.ws.rs.container.Suspended;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.apache.logging.log4j.Logger;
-import org.eclipse.microprofile.jwt.Claim;
 import org.example.entities.ExampleEntity;
 import org.example.controllers.webapi.models.ExampleModel;
 import org.modelmapper.ModelMapper;
@@ -742,7 +741,6 @@ import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Path(MyEntityResource.MyEntityResourcePath)
@@ -754,18 +752,12 @@ public class MyEntityResource {
     final public static int APITimeoutInSeconds = 60;
     final public static String timeOutMessage = "Operation time out.";
 
-//    @Inject
-//    private JsonWebToken jwt;
-
-    @Inject
-    @Claim("email")
-    private Instance<Optional<JsonString>> emailAddress;
-
     // EJB -> look at specification
     // @PersistenceUnit(unitName = "example-unit")
     // public EntityManagerFactory entityManagerFactory;
 
-    @Inject @Named("example-unit")
+    @Inject
+    @Named("example-unit")
     private EntityManager entityManager;
 
     @Inject

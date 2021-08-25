@@ -899,16 +899,6 @@
             <version>${fasterxml-jackson.version}</version>
         </dependency>
         <!-- JWT MicroProfile -->
-        <dependency>
-            <groupId>org.eclipse.microprofile.jwt</groupId>
-            <artifactId>microprofile-jwt-auth-api</artifactId>
-            <version>${eclipse.jwt.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.smallrye</groupId>
-            <artifactId>smallrye-jwt</artifactId>
-            <version>${smallrye-jwt.version}</version>
-        </dependency>
         <!-- CDI support -->
         <dependency>
             <groupId>org.glassfish.jersey.ext.cdi</groupId>
@@ -919,6 +909,33 @@
             <artifactId>weld-se-core</artifactId>
             <version>${weld.version}</version>
         </dependency>
+
+        <!-- JJWT -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>${jjwt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${jjwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>${jjwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- jBCrypt -->
+        <dependency>
+            <groupId>de.svenkubiak</groupId>
+            <artifactId>jBCrypt</artifactId>
+            <version>${jbcrypt.version}</version>
+        </dependency>
+
 
         <!-- indexer of java annotations, speedup loading -->
         <dependency>
@@ -1119,6 +1136,17 @@
             <groupId>org.glassfish.grizzly</groupId>
             <artifactId>grizzly-http-servlet</artifactId>
             <version>3.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.9.7</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
@@ -1391,6 +1419,9 @@
                     <target>${java.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <optimize>true</optimize>
+                    <compilerArgs>
+                        <arg>-Xlint:deprecation</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
@@ -1609,7 +1640,9 @@
                                 <wsdlUrl>http://www.ebi.ac.uk/webservices/chebi/2.0/webservice?wsdl</wsdlUrl>
                             </wsdlUrls>
                             <!-- for JDK 6 compilation compatibility -->
+                            <!--
                             <xnocompile>false</xnocompile>
+                            -->
                             <packageName>org.http.chebi</packageName>
                             <!-- conflict with clover -->
                             <!--
@@ -1713,5 +1746,7 @@
         <moneta.version>1.4.2</moneta.version>
         <jackson-datatype-money.version>1.2.2</jackson-datatype-money.version>
         <fasterxml-jackson.version>2.12.1</fasterxml-jackson.version>
+        <jjwt.version>0.11.2</jjwt.version>
+        <jbcrypt.version>0.4.1</jbcrypt.version>
     </properties>
 </project>

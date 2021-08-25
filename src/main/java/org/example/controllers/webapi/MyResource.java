@@ -720,19 +720,14 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import jakarta.enterprise.inject.Instance;
-import jakarta.inject.Inject;
-import jakarta.json.JsonString;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import org.eclipse.microprofile.jwt.Claim;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPart;
 
 import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.RolesAllowed;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Root resource (exposed at "myresource" path)
@@ -743,13 +738,6 @@ public class MyResource {
 
     final public static String MyResourcePath = "myresource";
     final public static String MyResourceTryQuery = "tryQuery";
-
-//    @Inject
-//    private JsonWebToken jwt;
-
-    @Inject
-    @Claim("email")
-    private Instance<Optional<JsonString>> emailAddress;
 
     /**
      * Method handling HTTP GET requests. The returned object will be sent

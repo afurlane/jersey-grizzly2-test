@@ -728,12 +728,19 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.servlet.ServletConfig;
 import jakarta.ws.rs.core.Application;
 import jakarta.ws.rs.core.Context;
-import org.eclipse.microprofile.auth.LoginConfig;
 import org.example.controllers.webapi.MyEntityResource;
 import org.example.controllers.webapi.MyResource;
+import org.example.controllers.webapi.user.api.resource.UserResource;
 import org.example.infrastructure.jersey.CustomConstraintViolationExceptionMapper;
 import org.example.infrastructure.jersey.EndpointLoggingListener;
 import org.example.infrastructure.jersey.JsonProcessingExceptionMapper;
+import org.example.infrastructure.jersey.ObjectMapperProvider;
+import org.example.infrastructure.security.api.exeptionmapper.AccessDeniedExceptionMapper;
+import org.example.infrastructure.security.api.exeptionmapper.AuthenticationExceptionMapper;
+import org.example.infrastructure.security.api.exeptionmapper.AuthenticationTokenRefreshmentExceptionMapper;
+import org.example.infrastructure.security.api.filter.AuthenticationFilter;
+import org.example.infrastructure.security.api.filter.AuthorizationFilter;
+import org.example.infrastructure.security.api.resource.AuthenticationResource;
 import org.example.infrastructure.swagger.SwaggerOASMoneyMapperProcessor;
 
 import javax.annotation.PostConstruct;
@@ -741,7 +748,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@LoginConfig(authMethod = "MP-JWT", realmName = "jwt-jaspi")
 @ApplicationScoped
 public class MyApplication extends Application {
 
@@ -790,12 +796,20 @@ public class MyApplication extends Application {
     {
         // ConfigureApplication();
 
-        return Stream.of(MyResource.class,
-        EndpointLoggingListener.class,
-        CustomConstraintViolationExceptionMapper.class,
-        JsonProcessingExceptionMapper.class,
-        MyEntityResource.class,
-        AcceptHeaderOpenApiResource.class,
-        OpenApiResource.class).collect(Collectors.toSet());
+        return Stream.of(AuthenticationResource.class,
+                UserResource.class,
+                AuthenticationFilter.class,
+                AuthorizationFilter.class,
+                AccessDeniedExceptionMapper.class,
+                AuthenticationExceptionMapper.class,
+                AuthenticationTokenRefreshmentExceptionMapper.class,
+                ObjectMapperProvider.class,
+                MyResource.class,
+                EndpointLoggingListener.class,
+                CustomConstraintViolationExceptionMapper.class,
+                JsonProcessingExceptionMapper.class,
+                MyEntityResource.class,
+                AcceptHeaderOpenApiResource.class,
+                OpenApiResource.class).collect(Collectors.toSet());
     }
 }

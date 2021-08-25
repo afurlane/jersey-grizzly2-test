@@ -714,13 +714,21 @@
  */
 package org.example.infrastructure.jersey;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Initialized;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.event.Observes;
+import jakarta.enterprise.inject.Disposes;
 import jakarta.enterprise.inject.spi.InjectionPoint;
 import jakarta.inject.Named;
 import jakarta.inject.Singleton;
+import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.Produces;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.persistence.*;
 
 /**
@@ -729,13 +737,14 @@ import javax.persistence.*;
  * benefit of keeping it in a single package/class. It's related to circular reference.
  * If you have a producer method that needs a reference from another producer method, you know..
  */
-@Singleton
+@ApplicationScoped
 public class Producer {
 
     // Interesting
     // https://stackoverflow.com/questions/21781026/how-to-send-java-util-logging-to-log4j2
     private static final String persistenceUnitName = "example-unit";
-    // private ModelMapper modelMapper;
+    // EntityManagerFactory can be global per application
+    private EntityManagerFactory factory;
 
     @Produces
     public Logger getLogger(InjectionPoint p)
@@ -744,18 +753,34 @@ public class Producer {
     }
 
     @Produces
-    public EntityManagerFactory getEntityManagerFactory(InjectionPoint injectionPoint) {
-        return Persistence.createEntityManagerFactory(persistenceUnitName);
-    }
-
-    @Produces
     @Named(persistenceUnitName)
+    @RequestScoped
     public EntityManager getEntityManager(InjectionPoint injectionPoint) {
-        return getEntityManagerFactory(injectionPoint).createEntityManager();
+        return factory.createEntityManager();
     }
 
-    // @Produces
-    // @Named(persistenceUnitName)
-    // @PersistenceContext(unitName=persistenceUnitName)
-    // public EntityManager entityManager;
+    public void closeEntityManager(@Disposes EntityManager entityManager) {
+        if (entityManager.isOpen()) {
+            entityManager.close();
+        }
+    }
+
+    @PreDestroy
+    public void destroy() {
+        if (factory.isOpen()) {
+            factory.close();
+        }
+    }
+
+    @PostConstruct
+    public void init() {
+        factory = Persistence.createEntityManagerFactory(persistenceUnitName);
+    }
+
+    // Hack to force the EntityManager provider (Hibernate in this case) to create
+    // tables and populate the database when the application starts up
+    public void init(@Observes @Initialized(ApplicationScoped.class) Object init) {
+        factory.createEntityManager().close();
+    }
+
 }

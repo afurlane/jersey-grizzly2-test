@@ -226,6 +226,12 @@
                 <url>https://oss.oracle.com/licenses/CDDL+GPL-1.1</url>
             </urls>
         </license>
+        <license>
+            <name>ISC/BSD licence</name>
+            <urls>
+                <url>http://www.mindrot.org/files/jBCrypt/LICENSE</url>
+            </urls>
+        </license>
     </valid>
     <forbidden>
         <license>

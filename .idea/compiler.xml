@@ -13,4 +13,9 @@
       <module name="jersey-grizzly2-test" target="11" />
     </bytecodeTargetLevel>
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="jersey-grizzly2-test" options="-Xlint:deprecation" />
+    </option>
+  </component>
 </project>
