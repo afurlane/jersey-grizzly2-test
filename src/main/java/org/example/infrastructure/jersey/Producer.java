@@ -719,11 +719,9 @@ import jakarta.enterprise.context.Initialized;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.event.Observes;
 import jakarta.enterprise.inject.Disposes;
+import jakarta.enterprise.inject.Produces;
 import jakarta.enterprise.inject.spi.InjectionPoint;
 import jakarta.inject.Named;
-import jakarta.inject.Singleton;
-import jakarta.ws.rs.ApplicationPath;
-import jakarta.ws.rs.Produces;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -754,7 +752,6 @@ public class Producer {
 
     @Produces
     @Named(persistenceUnitName)
-    @RequestScoped
     public EntityManager getEntityManager(InjectionPoint injectionPoint) {
         return factory.createEntityManager();
     }

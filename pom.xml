@@ -804,6 +804,11 @@
             <version>${jakarta-activation-api.version}</version>
         </dependency>
         <dependency>
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-api</artifactId>
+            <version>${jakarta-cdi-api.version}</version>
+        </dependency>
+        <dependency>
             <groupId>jakarta.annotation</groupId>
             <artifactId>jakarta.annotation-api</artifactId>
             <version>${jakarta-annotation.version}</version>
@@ -898,7 +903,45 @@
             <artifactId>jackson-datatype-jdk8</artifactId>
             <version>${fasterxml-jackson.version}</version>
         </dependency>
-        <!-- JWT MicroProfile -->
+
+        <!-- MicroProfile -->
+        <dependency>
+            <groupId>org.eclipse.microprofile</groupId>
+            <artifactId>microprofile</artifactId>
+            <version>${microprofile.versio}</version>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.microprofile.health</groupId>
+            <artifactId>microprofile-health-api</artifactId>
+            <version>3.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.microprofile.metrics</groupId>
+            <artifactId>microprofile-metrics-api</artifactId>
+            <version>3.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.microprofile.jwt</groupId>
+            <artifactId>microprofile-jwt-auth-api</artifactId>
+            <version>1.2.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-auth-jwt</artifactId>
+            <version>4.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.microprofile.jwt</groupId>
+            <artifactId>microprofile-jwt-auth-tck</artifactId>
+            <version>1.2</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- CDI support -->
         <dependency>
             <groupId>org.glassfish.jersey.ext.cdi</groupId>
@@ -1115,13 +1158,6 @@
             <groupId>org.apache.derby</groupId>
             <artifactId>derby</artifactId>
             <version>${derby.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- JWT Microprofile -->
-        <dependency>
-            <groupId>org.eclipse.microprofile.jwt</groupId>
-            <artifactId>microprofile-jwt-auth-tck</artifactId>
-            <version>${eclipse.jwt.version}</version>
             <scope>test</scope>
         </dependency>
         <!-- JDBC DRIVER HERE!! -->
@@ -1671,7 +1707,7 @@
         <jakarta-annotation.version>2.0.0</jakarta-annotation.version>
         <jakarta-cdi-api.version>3.0.0</jakarta-cdi-api.version>
         <jakarta-ws-rs-api.version>3.0.0</jakarta-ws-rs-api.version>
-        <eclipselink.version>2.7.7</eclipselink.version>
+        <eclipselink.version>3.0.2</eclipselink.version>
         <h2.version>1.4.200</h2.version>
         <derby.version>10.15.2.0</derby.version>
         <jooq.version>3.14.4</jooq.version>
@@ -1737,16 +1773,15 @@
         <jaxws-api.version>2.3.1</jaxws-api.version>
         <javax.jws-api.version>1.1</javax.jws-api.version>
         <jaxws-ri.version>3.0.0</jaxws-ri.version>
-        <eclipse.jwt.version>1.2</eclipse.jwt.version>
         <assertj-core.version>3.18.1</assertj-core.version>
         <catch-exception.version>1.2.0</catch-exception.version>
         <surefire.and.failsafe.report.dir>target/test-report</surefire.and.failsafe.report.dir>
         <maven-surefire-report-plugi.version>2.22.2</maven-surefire-report-plugi.version>
-        <smallrye-jwt.version>3.1.0</smallrye-jwt.version>
         <moneta.version>1.4.2</moneta.version>
         <jackson-datatype-money.version>1.2.2</jackson-datatype-money.version>
         <fasterxml-jackson.version>2.12.1</fasterxml-jackson.version>
         <jjwt.version>0.11.2</jjwt.version>
         <jbcrypt.version>0.4.1</jbcrypt.version>
+        <microprofile.versio>4.1</microprofile.versio>
     </properties>
 </project>

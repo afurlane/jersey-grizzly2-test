@@ -19,6 +19,7 @@ import org.example.infrastructure.security.service.AuthenticationTokenService;
 import org.example.infrastructure.security.service.UsernamePasswordValidator;
 
 import javax.annotation.security.PermitAll;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * JAX-RS resource class that provides operations for authentication.
@@ -48,7 +49,7 @@ public class AuthenticationResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @PermitAll
-    public Response authenticate(UserCredentials credentials) {
+    public Response authenticate(UserCredentials credentials) throws NoSuchAlgorithmException {
 
         User user = usernamePasswordValidator.validateCredentials(credentials.getUsername(), credentials.getPassword());
         String token = authenticationTokenService.issueToken(user.getUsername(), user.getAuthorities());
@@ -65,7 +66,7 @@ public class AuthenticationResource {
     @POST
     @Path("refresh")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response refresh() {
+    public Response refresh() throws NoSuchAlgorithmException {
 
         AuthenticationTokenDetails tokenDetails =
                 ((TokenBasedSecurityContext) securityContext).getAuthenticationTokenDetails();

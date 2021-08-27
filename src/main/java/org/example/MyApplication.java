@@ -728,6 +728,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.servlet.ServletConfig;
 import jakarta.ws.rs.core.Application;
 import jakarta.ws.rs.core.Context;
+import org.eclipse.microprofile.auth.LoginConfig;
 import org.example.controllers.webapi.MyEntityResource;
 import org.example.controllers.webapi.MyResource;
 import org.example.controllers.webapi.user.api.resource.UserResource;
@@ -749,6 +750,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @ApplicationScoped
+@LoginConfig(authMethod = "JWT", realmName = "realm")
 public class MyApplication extends Application {
 
     @Context

@@ -7,6 +7,7 @@ import org.example.infrastructure.security.api.AuthenticationTokenDetails;
 import org.example.infrastructure.security.domain.Authority;
 import org.example.infrastructure.security.exception.AuthenticationTokenRefreshmentException;
 
+import java.security.NoSuchAlgorithmException;
 import java.time.ZonedDateTime;
 import java.util.Set;
 import java.util.UUID;
@@ -46,7 +47,7 @@ public class AuthenticationTokenService {
      * @param authorities
      * @return
      */
-    public String issueToken(String username, Set<Authority> authorities) {
+    public String issueToken(String username, Set<Authority> authorities) throws NoSuchAlgorithmException {
 
         String id = generateTokenIdentifier();
         ZonedDateTime issuedDate = ZonedDateTime.now();
@@ -81,7 +82,7 @@ public class AuthenticationTokenService {
      * @param currentTokenDetails
      * @return
      */
-    public String refreshToken(AuthenticationTokenDetails currentTokenDetails) {
+    public String refreshToken(AuthenticationTokenDetails currentTokenDetails) throws NoSuchAlgorithmException {
 
         if (!currentTokenDetails.isEligibleForRefreshment()) {
             throw new AuthenticationTokenRefreshmentException("This token cannot be refreshed");
