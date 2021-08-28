@@ -722,6 +722,7 @@ import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.http.HttpSession;
 import org.example.infrastructure.hk2.AutoScanFeature;
 import org.example.infrastructure.hk2.HttpSessionFactory;
+import org.example.infrastructure.jersey.ObjectMapperProvider;
 import org.example.infrastructure.mapper.ModelMapperProducer;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.servlet.ServletRegistration;
@@ -771,7 +772,6 @@ public class Main {
         resourceConfig.register(WadlFeature.class);
         resourceConfig.register(GrizzlyHttpContainerProvider.class);
         resourceConfig.register(MultiPartFeature.class);
-        resourceConfig.register(ModelMapperProducer.class);
         resourceConfig.register(new AbstractBinder() {
             @Override
             protected void configure() {

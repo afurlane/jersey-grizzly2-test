@@ -2,7 +2,7 @@ package org.example.controllers.webapi.user.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.example.controllers.webapi.user.domain.User;
+import org.example.entities.User;
 
 import javax.persistence.EntityManager;
 import java.util.List;

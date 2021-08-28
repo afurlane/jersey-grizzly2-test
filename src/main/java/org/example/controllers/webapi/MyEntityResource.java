@@ -733,7 +733,6 @@ import org.example.entities.ExampleEntity;
 import org.example.controllers.webapi.models.ExampleModel;
 import org.modelmapper.ModelMapper;
 
-import javax.annotation.PreDestroy;
 import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.PermitAll;
 import javax.persistence.*;
@@ -750,10 +749,6 @@ public class MyEntityResource {
     final public static String MyEntityResourcePathId = "{id}";
     final public static int APITimeoutInSeconds = 60;
     final public static String timeOutMessage = "Operation time out.";
-
-    // EJB -> look at specification
-    // @PersistenceUnit(unitName = "example-unit")
-    // public EntityManagerFactory entityManagerFactory;
 
     @Inject
     @Named("example-unit")
@@ -794,7 +789,6 @@ public class MyEntityResource {
             TypedQuery<ExampleEntity> exampleEntityTypedQuery = entityManager.createQuery(criteriaQuery)
                     .setFirstResult(0).setMaxResults(1);
             ExampleEntity exampleEntity = exampleEntityTypedQuery.getSingleResult();
-            entityManager.close();
             Response response;
             if (exampleEntity == null) {
                 response = Response.status(Response.Status.NOT_FOUND).build();
@@ -833,7 +827,6 @@ public class MyEntityResource {
         asyncResponse.setTimeout(APITimeoutInSeconds, TimeUnit.SECONDS);
         new Thread(() -> {
             ExampleEntity exampleEntity = entityManager.find(ExampleEntity.class, id);
-            entityManager.close();
             Response response;
             if (exampleEntity == null) {
                 response = Response.status(Response.Status.NOT_FOUND).build();
@@ -879,7 +872,6 @@ public class MyEntityResource {
             } else {
                 response = Response.status(Response.Status.NOT_FOUND).build();
             }
-            entityManager.close();
             asyncResponse.resume(response);
         }).start();
     }
@@ -913,7 +905,6 @@ public class MyEntityResource {
             entityManager.getTransaction().begin();
             ExampleEntity mergedEntity = entityManager.merge(modelMapper.map(exampleModel, ExampleEntity.class));
             entityManager.getTransaction().commit();
-            entityManager.close();
             Response response;
             if (mergedEntity == null) {
                 response = Response.status(Response.Status.NOT_FOUND).build();
@@ -923,11 +914,5 @@ public class MyEntityResource {
             }
             asyncResponse.resume(response);
         }).start();
-    }
-
-    @PreDestroy
-    public void PreDestroyMyEntityResource()
-    {
-        entityManager.close();
     }
 }

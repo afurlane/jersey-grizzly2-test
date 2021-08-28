@@ -729,6 +729,7 @@ import jakarta.servlet.ServletConfig;
 import jakarta.ws.rs.core.Application;
 import jakarta.ws.rs.core.Context;
 import org.eclipse.microprofile.auth.LoginConfig;
+import org.example.controllers.webapi.MyAuthResource;
 import org.example.controllers.webapi.MyEntityResource;
 import org.example.controllers.webapi.MyResource;
 import org.example.controllers.webapi.user.api.resource.UserResource;
@@ -736,13 +737,8 @@ import org.example.infrastructure.jersey.CustomConstraintViolationExceptionMappe
 import org.example.infrastructure.jersey.EndpointLoggingListener;
 import org.example.infrastructure.jersey.JsonProcessingExceptionMapper;
 import org.example.infrastructure.jersey.ObjectMapperProvider;
-import org.example.infrastructure.security.api.exeptionmapper.AccessDeniedExceptionMapper;
-import org.example.infrastructure.security.api.exeptionmapper.AuthenticationExceptionMapper;
-import org.example.infrastructure.security.api.exeptionmapper.AuthenticationTokenRefreshmentExceptionMapper;
-import org.example.infrastructure.security.api.filter.AuthenticationFilter;
-import org.example.infrastructure.security.api.filter.AuthorizationFilter;
-import org.example.infrastructure.security.api.resource.AuthenticationResource;
 import org.example.infrastructure.swagger.SwaggerOASMoneyMapperProcessor;
+import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 
 import javax.annotation.PostConstruct;
 import java.util.Set;
@@ -750,7 +746,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @ApplicationScoped
-@LoginConfig(authMethod = "JWT", realmName = "realm")
+@LoginConfig(authMethod = "MP-JWT", realmName = "realm")
 public class MyApplication extends Application {
 
     @Context
@@ -798,20 +794,19 @@ public class MyApplication extends Application {
     {
         // ConfigureApplication();
 
-        return Stream.of(AuthenticationResource.class,
-                UserResource.class,
-                AuthenticationFilter.class,
-                AuthorizationFilter.class,
-                AccessDeniedExceptionMapper.class,
-                AuthenticationExceptionMapper.class,
-                AuthenticationTokenRefreshmentExceptionMapper.class,
+        return Stream.of(
                 ObjectMapperProvider.class,
-                MyResource.class,
                 EndpointLoggingListener.class,
                 CustomConstraintViolationExceptionMapper.class,
                 JsonProcessingExceptionMapper.class,
-                MyEntityResource.class,
                 AcceptHeaderOpenApiResource.class,
-                OpenApiResource.class).collect(Collectors.toSet());
+                OpenApiResource.class,
+                RolesAllowedDynamicFeature.class,
+
+                MyEntityResource.class,
+                MyResource.class,
+                MyAuthResource.class,
+                UserResource.class
+                ).collect(Collectors.toSet());
     }
 }

@@ -723,6 +723,7 @@ import jakarta.ws.rs.core.UriBuilder;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.infrastructure.jersey.EndpointLoggingListener;
 import org.example.infrastructure.jersey.ObjectMapperProvider;
 import org.example.infrastructure.hk2.AutoScanFeature;
 import org.example.infrastructure.hk2.HttpSessionFactory;
@@ -776,7 +777,7 @@ public class CdiBaseTest extends JerseyTest {
         container = containerInit.initialize();
         grizzlyWebTestContainerFactory = new GrizzlyWebTestContainerFactory();
 
-        ResourceConfig resourceConfig = new ResourceConfig().forApplicationClass(MyApplication.class)
+        ResourceConfig resourceConfig = new ResourceConfig().forApplicationClass(MyApplication.class, MyApplication.class.getClasses())
                 .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_SERVER, Level.FINEST.getName())
                 .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL, Level.FINEST.getName());
         resourceConfig.register(AutoScanFeature.class);
@@ -787,7 +788,6 @@ public class CdiBaseTest extends JerseyTest {
         resourceConfig.register(WadlFeature.class);
         resourceConfig.register(GrizzlyHttpContainerProvider.class);
         resourceConfig.register(MultiPartFeature.class);
-        resourceConfig.register(ModelMapperProducer.class);
 
         resourceConfig.register(new AbstractBinder() {
             @Override

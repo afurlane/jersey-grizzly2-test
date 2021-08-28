@@ -712,37 +712,88 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.example.infrastructure.mapper;
+package org.example.controllers.webapi;
 
-import jakarta.enterprise.inject.Instance;
-import jakarta.enterprise.inject.spi.InjectionPoint;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
-import jakarta.ws.rs.Produces;
-import org.modelmapper.ModelMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.MultiPart;
 
-import javax.annotation.PostConstruct;
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.RolesAllowed;
+import java.util.List;
 
-// Just for show how to provide a mapper per context!
-@Singleton
-public class ModelMapperProducer {
+/**
+ * Root resource (exposed at "myresource" path)
+ */
+@Path(MyAuthResource.MyAuthResourcePath)
+@DeclareRoles({"admin","user"})
+public class MyAuthResource {
 
-    private final ModelMapper modelMapper;
+    final public static String MyAuthResourcePath = "myauthresource";
+    final public static String MyResourceTryQuery = "tryQuery";
 
-    @Inject
-    Instance<MappingProfile> mappingProfileInstance;
-
-    public ModelMapperProducer() {
-        modelMapper = new ModelMapper();
+    /**
+     * Method handling HTTP GET requests. The returned object will be sent
+     * to the client as "text/plain" media type.
+     *
+     * @return String that will be returned as a text/plain response.
+     */
+    @GET
+    @RolesAllowed("user")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getIt() {
+        return new StringBuilder().append("Got it!").toString();
     }
 
-    @Produces
-    public ModelMapper getModelMapper (InjectionPoint p) {
-        return modelMapper;
+    @GET
+    @Path(MyResourceTryQuery)
+    @RolesAllowed("user")
+    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Operation(summary = "Get an array of strings from query param",
+            tags = {"Array"},
+            description = "Does nothing whith that",
+            responses = {
+                    @ApiResponse(description = "The array", content = @Content(
+                            array = @ArraySchema(schema = @Schema(implementation = String.class))
+                    )),
+                    @ApiResponse(responseCode = "400", description = "No array supplied since is required"),
+                    @ApiResponse(responseCode = "404", description = "Some other error because we don't find something")
+            })
+    public List<String> getItWithQuery(
+            @Parameter(
+            description = "An array of strings",
+            array = @ArraySchema(
+                schema = @Schema(
+                        type = "String",
+                        format = "String",
+                        description = "Array to be searched")
+            ),
+            required = true)
+            @QueryParam("array") List<String> parameters)
+    {
+        return parameters;
     }
 
-    @PostConstruct
-    public void InitDefaults() {
-        mappingProfileInstance.forEach(mappingProfile -> mappingProfile.configure(modelMapper));
+    @POST
+    @Produces(MediaType.MULTIPART_FORM_DATA) // "multipart/mixed"
+    @Operation(summary = "Receive a multipart form data post",
+            tags = {"Form multipart"},
+            description = "",
+            responses = {
+                    @ApiResponse(description = "The same data incoming from the post", content = @Content(
+                            array = @ArraySchema(schema = @Schema(implementation = FormDataMultiPart.class))
+                    )),
+                    @ApiResponse(responseCode = "400", description = "No array supplied since is required"),
+                    @ApiResponse(responseCode = "404", description = "Some other error because we don't find something")
+            })
+    public MultiPart post(final FormDataMultiPart multiPart) {
+        return multiPart;
     }
 }

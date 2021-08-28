@@ -882,9 +882,15 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>jakarta.el</groupId>
+            <artifactId>jakarta.el-api</artifactId>
+            <version>${jakarta.el-api.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>jakarta.el</artifactId>
-            <version>3.0.3</version>
+            <version>${jakarta.el-impl.version}</version>
         </dependency>
 
         <!-- Jackson extended support -->
@@ -1707,6 +1713,8 @@
         <jakarta-annotation.version>2.0.0</jakarta-annotation.version>
         <jakarta-cdi-api.version>3.0.0</jakarta-cdi-api.version>
         <jakarta-ws-rs-api.version>3.0.0</jakarta-ws-rs-api.version>
+        <jakarta.el-api.version>4.0.0</jakarta.el-api.version>
+        <jakarta.el-impl.version>4.0.1</jakarta.el-impl.version>
         <eclipselink.version>3.0.2</eclipselink.version>
         <h2.version>1.4.200</h2.version>
         <derby.version>10.15.2.0</derby.version>

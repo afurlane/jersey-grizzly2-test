@@ -716,7 +716,6 @@ package org.example.infrastructure.jersey;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.Initialized;
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.event.Observes;
 import jakarta.enterprise.inject.Disposes;
 import jakarta.enterprise.inject.Produces;
@@ -727,6 +726,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.enterprise.context.RequestScoped;
 import javax.persistence.*;
 
 /**
@@ -741,6 +741,10 @@ public class Producer {
     // Interesting
     // https://stackoverflow.com/questions/21781026/how-to-send-java-util-logging-to-log4j2
     private static final String persistenceUnitName = "example-unit";
+    // EJB -> look at specification
+    // @PersistenceUnit(unitName = "example-unit")
+    // public EntityManagerFactory entityManagerFactory;
+
     // EntityManagerFactory can be global per application
     private EntityManagerFactory factory;
 
@@ -752,6 +756,7 @@ public class Producer {
 
     @Produces
     @Named(persistenceUnitName)
+    @RequestScoped
     public EntityManager getEntityManager(InjectionPoint injectionPoint) {
         return factory.createEntityManager();
     }
@@ -776,8 +781,10 @@ public class Producer {
 
     // Hack to force the EntityManager provider (Hibernate in this case) to create
     // tables and populate the database when the application starts up
+    // This get fired before @PostConstruct; shame!
+    /*
     public void init(@Observes @Initialized(ApplicationScoped.class) Object init) {
         factory.createEntityManager().close();
     }
-
+    */
 }

@@ -1,10 +1,7 @@
-package org.example.controllers.webapi.user.domain;
-
-import org.example.infrastructure.security.domain.Authority;
+package org.example.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
 
 /**
  * Persistence model that represents a user.
@@ -36,10 +33,10 @@ public class User implements Serializable {
     @Column(nullable = false)
     private boolean active;
 
-    @ElementCollection(targetClass = Authority.class, fetch = FetchType.EAGER)
-    @Enumerated(EnumType.STRING)
-    @Column(name = "authority")
-    private Set<Authority> authorities;
+    // @ElementCollection(targetClass = Authority.class, fetch = FetchType.EAGER)
+    // @Enumerated(EnumType.STRING)
+    // @Column(name = "authority")
+    // private Set<Authority> authorities;
 
     public Long getId() {
         return id;
@@ -97,13 +94,13 @@ public class User implements Serializable {
         this.active = active;
     }
 
-    public Set<Authority> getAuthorities() {
-        return authorities;
-    }
+    // public Set<Authority> getAuthorities() {
+    //    return authorities;
+    //}
 
-    public void setAuthorities(Set<Authority> authorities) {
-        this.authorities = authorities;
-    }
+    // public void setAuthorities(Set<Authority> authorities) {
+    //     this.authorities = authorities;
+    // }
 
     @Override
     public boolean equals(Object o) {

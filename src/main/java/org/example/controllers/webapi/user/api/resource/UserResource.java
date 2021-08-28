@@ -5,7 +5,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import org.example.controllers.webapi.user.api.model.QueryUserResult;
-import org.example.controllers.webapi.user.domain.User;
+import org.example.entities.User;
 import org.example.controllers.webapi.user.service.UserService;
 
 import javax.annotation.security.PermitAll;
@@ -67,7 +67,7 @@ public class UserResource {
         if (principal == null) {
             QueryUserResult queryUserResult = new QueryUserResult();
             queryUserResult.setUsername("anonymous");
-            queryUserResult.setAuthorities(new HashSet<>());
+            // queryUserResult.setAuthorities(new HashSet<>());
             return Response.ok(queryUserResult).build();
         }
 
@@ -89,7 +89,7 @@ public class UserResource {
         queryUserResult.setLastName(user.getLastName());
         queryUserResult.setEmail(user.getEmail());
         queryUserResult.setUsername(user.getUsername());
-        queryUserResult.setAuthorities(user.getAuthorities());
+        // queryUserResult.setAuthorities(user.getAuthorities());
         queryUserResult.setActive(user.isActive());
         return queryUserResult;
     }

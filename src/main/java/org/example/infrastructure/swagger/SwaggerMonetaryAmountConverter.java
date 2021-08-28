@@ -715,18 +715,13 @@
 package org.example.infrastructure.swagger;
 
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.introspect.Annotated;
 import io.swagger.v3.core.converter.AnnotatedType;
 import io.swagger.v3.core.converter.ModelConverter;
 import io.swagger.v3.core.converter.ModelConverterContext;
-import io.swagger.v3.core.jackson.ModelResolver;
 import io.swagger.v3.core.util.Json;
 import io.swagger.v3.oas.models.media.Schema;
 
 import javax.money.MonetaryAmount;
-import java.lang.annotation.Annotation;
-import java.math.BigDecimal;
 import java.util.Iterator;
 
 public class SwaggerMonetaryAmountConverter implements ModelConverter {

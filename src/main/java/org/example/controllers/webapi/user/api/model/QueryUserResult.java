@@ -1,10 +1,6 @@
 package org.example.controllers.webapi.user.api.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.example.infrastructure.security.domain.Authority;
-
-import java.util.Set;
-
 import static com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 /**
@@ -20,7 +16,7 @@ public class QueryUserResult {
     private String lastName;
     private String email;
     private String username;
-    private Set<Authority> authorities;
+//     private Set<Authority> authorities;
     private Boolean active;
 
     public QueryUserResult() {
@@ -67,6 +63,7 @@ public class QueryUserResult {
         this.username = username;
     }
 
+/*
     public Set<Authority> getAuthorities() {
         return authorities;
     }
@@ -74,6 +71,7 @@ public class QueryUserResult {
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;
     }
+*/
 
     public Boolean getActive() {
         return active;

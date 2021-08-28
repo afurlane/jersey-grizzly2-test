@@ -712,37 +712,77 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.example.infrastructure.mapper;
+package org.example;
 
-import jakarta.enterprise.inject.Instance;
-import jakarta.enterprise.inject.spi.InjectionPoint;
+import jakarta.enterprise.inject.spi.Bean;
+import jakarta.enterprise.inject.spi.BeanManager;
 import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
-import jakarta.ws.rs.Produces;
-import org.modelmapper.ModelMapper;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import org.example.controllers.webapi.MyResource;
+import org.example.infrastructure.JWTService;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
+import org.junit.Before;
+import org.junit.Test;
 
-import javax.annotation.PostConstruct;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.List;
 
-// Just for show how to provide a mapper per context!
-@Singleton
-public class ModelMapperProducer {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-    private final ModelMapper modelMapper;
+public class MyAuthResourceTestITCase extends CdiBaseTest {
 
-    @Inject
-    Instance<MappingProfile> mappingProfileInstance;
 
-    public ModelMapperProducer() {
-        modelMapper = new ModelMapper();
+    /**
+     * Test to see that the message "Got it!" is sent in the response.
+     */
+    @Test
+    public void testGetIt() {
+        JWTService jwtService = null;
+        BeanManager beanManager = container.getBeanManager();
+        Bean<?> bean = (Bean<?>)beanManager.resolve(beanManager.getBeans(JWTService.class));
+        JWTService foo=(JWTService) beanManager.getReference(bean,
+                bean.getBeanClass(), beanManager.createCreationalContext(bean));
+        String jwt = jwtService.generateJWT();
+        Response response = target().path(MyResource.MyResourcePath)
+                .request().header("authorization", "Bearer " + jwt).buildGet().invoke();
+        // String responseMsg = target().path(MyResource.MyResourcePath).request().get(String.class);
+        assertEquals("Got it!", response.readEntity(String.class));
     }
 
-    @Produces
-    public ModelMapper getModelMapper (InjectionPoint p) {
-        return modelMapper;
+    @Test
+    public void getItWithQuery() {
+        List responseMsg = target().path(MyResource.MyResourcePath)
+                .path(MyResource.MyResourceTryQuery).request().get(List.class);
+        assertNotNull(responseMsg);
     }
 
-    @PostConstruct
-    public void InitDefaults() {
-        mappingProfileInstance.forEach(mappingProfile -> mappingProfile.configure(modelMapper));
+    @Test
+    public void TestMultipart() throws IOException, URISyntaxException {
+
+        // https://www.rfc-editor.org/rfc/rfc3778.txt
+        Response response;
+        FormDataMultiPart multiPart;
+        Client client = ClientBuilder.newBuilder().register(MultiPartFeature.class).build();
+        FileDataBodyPart filePart = new FileDataBodyPart("file", new File(ClassLoader.getSystemResource("Example.pdf").toURI()),
+                MediaType.APPLICATION_OCTET_STREAM_TYPE);
+        try (FormDataMultiPart formDataMultiPart = new FormDataMultiPart();) {
+            formDataMultiPart.field("foo", "bar").bodyPart(filePart);
+
+            WebTarget target = client.target(target().path(MyResource.MyResourcePath).getUri());
+            response = target.request().post(Entity.entity(formDataMultiPart, formDataMultiPart.getMediaType()));
+            multiPart = response.readEntity(FormDataMultiPart.class);
+        }
+        //Use response object to verify upload success
+        client.close();
     }
 }
