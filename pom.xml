@@ -780,17 +780,15 @@
         <!--
         <dependency>
             <groupId>org.glassfish.grizzly</groupId>
-            <artifactId><grizzly></grizzly>-http2</artifactId>
+            <artifactId>grizzly-http-server</artifactId>
         </dependency>
         <dependency>
             <groupId>org.glassfish.grizzly</groupId>
             <artifactId>grizzly-npm-bootstrap</artifactId>
-            <version></version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.grizzly</groupId>
             <artifactId>grizzly-npm-api</artifactId>
-            <version></version>
         </dependency>
         -->
         <!-- HK2 Injection -->
@@ -829,12 +827,6 @@
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>
         </dependency>
-        <!--
-        <dependency>
-            <groupId>org.glassfish.jersey.security</groupId>
-            <artifactId>oauth1-server</artifactId>
-        </dependency>
-        -->
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-jackson</artifactId>
@@ -853,19 +845,10 @@
         </dependency>
         <!-- JAXB RI, Jakarta XML Binding -->
         <dependency>
-            <groupId>javax.xml</groupId>
-            <artifactId>jaxb-impl</artifactId>
-            <version>${jaxb-xml-bind-impl.version}</version>
+            <groupId>jakarta.xml.ws</groupId>
+            <artifactId>jakarta.xml.ws-api</artifactId>
+            <version>${jakarta.xml-ws-api.verson}</version>
         </dependency>
-
-        <!--
-        <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-impl</artifactId>
-            <version>${jaxb-xml-bind.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        -->
         <!-- Jersey media -->
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
@@ -1043,26 +1026,9 @@
 
         <!-- JPA Support -->
         <dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>javax.persistence-api</artifactId>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
             <version>${persistence-api.version}</version>
-        </dependency>
-        <!-- JOOQ support -->
-        <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq</artifactId>
-            <version>${jooq.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq-meta</artifactId>
-            <version>${jooq.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq-codegen</artifactId>
-            <version>${jooq.version}</version>
         </dependency>
 
         <!-- Model Mapper support -->
@@ -1079,9 +1045,9 @@
             <version>${jakarta-ws-rs-api.version}</version>
         </dependency>
         <dependency>
-            <groupId>javax.jws</groupId>
-            <artifactId>javax.jws-api</artifactId>
-            <version>${javax.jws-api.version}</version>
+            <groupId>jakarta.jws</groupId>
+            <artifactId>jakarta.jws-api</artifactId>
+            <version>${jakarta.jws-api.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.xml.ws</groupId>
@@ -1188,6 +1154,12 @@
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
             <version>1.9.7</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>eclipselink</artifactId>
+            <version>3.0.2</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -1713,14 +1685,15 @@
         <jakarta-annotation.version>2.0.0</jakarta-annotation.version>
         <jakarta-cdi-api.version>3.0.0</jakarta-cdi-api.version>
         <jakarta-ws-rs-api.version>3.0.0</jakarta-ws-rs-api.version>
+        <jakarta.jws-api.version>3.0.0</jakarta.jws-api.version>
         <jakarta.el-api.version>4.0.0</jakarta.el-api.version>
         <jakarta.el-impl.version>4.0.1</jakarta.el-impl.version>
+        <jakarta.xml-ws-api.verson>3.0.0</jakarta.xml-ws-api.verson>
         <eclipselink.version>3.0.2</eclipselink.version>
         <h2.version>1.4.200</h2.version>
         <derby.version>10.15.2.0</derby.version>
-        <jooq.version>3.14.4</jooq.version>
         <modelmapper.version>2.3.0</modelmapper.version>
-        <persistence-api.version>2.2</persistence-api.version>
+        <persistence-api.version>3.0.0</persistence-api.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mockito.version>2.25.0</mockito.version>
         <!-- Maven & build Settings -->

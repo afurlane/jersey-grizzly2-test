@@ -714,20 +714,22 @@
  */
 package org.example.infrastructure.jersey;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.context.Initialized;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.event.Observes;
 import jakarta.enterprise.inject.Disposes;
 import jakarta.enterprise.inject.Produces;
 import jakarta.enterprise.inject.spi.InjectionPoint;
 import jakarta.inject.Named;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.enterprise.context.RequestScoped;
-import javax.persistence.*;
 
 /**
  * This is the producer class; you could have producer methods anywhere in your code but,
@@ -757,7 +759,7 @@ public class Producer {
     @Produces
     @Named(persistenceUnitName)
     @RequestScoped
-    public EntityManager getEntityManager(InjectionPoint injectionPoint) {
+    public EntityManager getEntityManager() {
         return factory.createEntityManager();
     }
 
@@ -782,9 +784,7 @@ public class Producer {
     // Hack to force the EntityManager provider (Hibernate in this case) to create
     // tables and populate the database when the application starts up
     // This get fired before @PostConstruct; shame!
-    /*
     public void init(@Observes @Initialized(ApplicationScoped.class) Object init) {
         factory.createEntityManager().close();
     }
-    */
 }

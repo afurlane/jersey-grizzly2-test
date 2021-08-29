@@ -718,11 +718,15 @@ import jakarta.enterprise.inject.se.SeContainer;
 import jakarta.enterprise.inject.se.SeContainerInitializer;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLParameters;
+
+import jakarta.enterprise.inject.spi.Bean;
+import jakarta.enterprise.inject.spi.BeanManager;
 import jakarta.servlet.http.HttpSession;
 import jakarta.ws.rs.core.UriBuilder;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.infrastructure.JWTService;
 import org.example.infrastructure.jersey.EndpointLoggingListener;
 import org.example.infrastructure.jersey.ObjectMapperProvider;
 import org.example.infrastructure.hk2.AutoScanFeature;
@@ -777,7 +781,12 @@ public class CdiBaseTest extends JerseyTest {
         container = containerInit.initialize();
         grizzlyWebTestContainerFactory = new GrizzlyWebTestContainerFactory();
 
-        ResourceConfig resourceConfig = new ResourceConfig().forApplicationClass(MyApplication.class, MyApplication.class.getClasses())
+        BeanManager beanManager = container.getBeanManager();
+        Bean<?> bean = (Bean<?>)beanManager.resolve(beanManager.getBeans(MyApplication.class));
+        MyApplication myApplication=(MyApplication) beanManager.getReference(bean,
+                bean.getBeanClass(), beanManager.createCreationalContext(bean));
+
+        ResourceConfig resourceConfig = new ResourceConfig().forApplication(myApplication)
                 .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_SERVER, Level.FINEST.getName())
                 .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL, Level.FINEST.getName());
         resourceConfig.register(AutoScanFeature.class);

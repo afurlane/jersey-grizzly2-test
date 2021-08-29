@@ -714,10 +714,7 @@
  */
 package org.example.entities;
 
-import javax.persistence.*;
-import javax.xml.bind.annotation.XmlTransient;
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.*;
 
 @Entity(name = "ExampleDetailEntity")
 @Table(name = "exampledetailentity")

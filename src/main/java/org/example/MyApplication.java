@@ -741,6 +741,8 @@ import org.example.infrastructure.swagger.SwaggerOASMoneyMapperProcessor;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 
 import javax.annotation.PostConstruct;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -809,4 +811,10 @@ public class MyApplication extends Application {
                 UserResource.class
                 ).collect(Collectors.toSet());
     }
+
+    @Override
+    public Map<String, Object> getProperties() {
+        return Collections.emptyMap();
+    }
+
 }

@@ -714,6 +714,8 @@
  */
 package org.example;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import org.eclipse.microprofile.jwt.tck.util.TokenUtils;
 import org.example.controllers.webapi.MyEntityResource;
 import org.example.controllers.webapi.MyResource;
@@ -723,8 +725,6 @@ import org.example.entities.MonetaryEntity;
 import org.example.controllers.webapi.models.ExampleModel;
 import org.junit.Test;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;

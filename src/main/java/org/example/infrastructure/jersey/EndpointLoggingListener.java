@@ -779,7 +779,7 @@ public class EndpointLoggingListener implements ApplicationEventListener {
 
     private Set<EndpointLogLine> getLinesFromResource(Resource resource) {
         Set<EndpointLogLine> logLines = new HashSet<>();
-        populate(this.applicationPath, false, resource, logLines);
+        populate(this.getApplicationPath(), false, resource, logLines);
         return logLines;
     }
 
@@ -838,13 +838,17 @@ public class EndpointLoggingListener implements ApplicationEventListener {
         return path.startsWith("/") ? basePath + path : basePath + "/" + path;
     }
 
-    @PostConstruct
-    public void getApplicationBaseUrl () {
-        /* this.applicationPath = String.format("%s://%s:%s%s",
-                httpServletContext.getScheme(), httpServletContext.getServerName(),
-                httpServletContext.getServerPort(), httpServletContext.getContextPath());
+    private String getApplicationPath() {
+        if (this.applicationPath == null) {
+            if (this.httpServletContext == null)
+                return "";
+            this.applicationPath = String.format(httpServletContext.getRealPath(httpServletContext.getContextPath()));
+        }
+        return this.applicationPath;
+    }
 
-         */
+    @PostConstruct
+    private void PostDo() {
         this.applicationPath = String.format(httpServletContext.getRealPath(httpServletContext.getContextPath()));
     }
 }

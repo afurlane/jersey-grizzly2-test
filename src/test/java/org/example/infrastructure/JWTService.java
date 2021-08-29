@@ -4,11 +4,11 @@ import io.vertx.ext.auth.JWTOptions;
 import io.vertx.ext.auth.PubSecKeyOptions;
 import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.auth.jwt.JWTAuthOptions;
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Default;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.apache.logging.log4j.Logger;
 
-import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@ApplicationScoped
 @Default
+@Singleton
 public class JWTService {
 
     @Inject
@@ -31,7 +31,7 @@ public class JWTService {
         JWTAuth provider = JWTAuth.create(null, new JWTAuthOptions()
                 .addPubSecKey(new PubSecKeyOptions()
                         .setAlgorithm("RS256")
-                        .setSecretKey(key)
+                        .setBuffer(key)
                 ));
 
         MPJWTToken token = new MPJWTToken();
@@ -72,6 +72,6 @@ public class JWTService {
 
     private String stripX509PEMHeadersKey(String key) {
         // Strip various headers!
-        return key.replaceAll("^-+BEGIN (?:RSA ?+)(PRIVATE|PUBLIC) KEY-+|-+END (?:RSA ?+)(PRIVATE|PUBLIC) KEY-+$", "");
+        return key.replaceAll("^-+BEGIN (RSA )?(PRIVATE|PUBLIC) KEY-+|-+END (RSA )?(PRIVATE|PUBLIC) KEY-+$", "");
     }
 }

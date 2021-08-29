@@ -10,10 +10,10 @@
         <properties>
             <!-- See https://www.eclipse.org/eclipselink/documentation/2.5/jpa/extensions/p_validation_only.htm#validation-only -->
             <property name="eclipselink.target-database" value="Auto"/>
-            <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:derby:memory:derbyDB;create=true"/>
-            <property name="javax.persistence.jdbc.user" value="APP"/>
-            <property name="javax.persistence.jdbc.password" value="APP"/>
+            <property name="jakarta.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:derby:memory:derbyDB;create=true"/>
+            <property name="jakarta.persistence.jdbc.user" value="APP"/>
+            <property name="jakarta.persistence.jdbc.password" value="APP"/>
             <property name="eclipselink.connection-pool.default.initial" value="2" />
             <property name="eclipselink.connection-pool.shared" value="false"/>
             <property name="eclipselink.connection-pool.default.min" value="16"/>

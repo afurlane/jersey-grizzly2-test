@@ -728,7 +728,6 @@ import org.example.infrastructure.JWTService;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -741,16 +740,17 @@ import static org.junit.Assert.assertNotNull;
 
 public class MyAuthResourceTestITCase extends CdiBaseTest {
 
+    @Inject
+    private JWTService bubbo;
 
     /**
      * Test to see that the message "Got it!" is sent in the response.
      */
     @Test
     public void testGetIt() {
-        JWTService jwtService = null;
         BeanManager beanManager = container.getBeanManager();
         Bean<?> bean = (Bean<?>)beanManager.resolve(beanManager.getBeans(JWTService.class));
-        JWTService foo=(JWTService) beanManager.getReference(bean,
+        JWTService jwtService=(JWTService) beanManager.getReference(bean,
                 bean.getBeanClass(), beanManager.createCreationalContext(bean));
         String jwt = jwtService.generateJWT();
         Response response = target().path(MyResource.MyResourcePath)
