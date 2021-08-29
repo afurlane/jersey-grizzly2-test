@@ -718,19 +718,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.integration.api.ObjectMapperProcessor;
 import jakarta.inject.Inject;
 import org.apache.logging.log4j.Logger;
-import org.zalando.jackson.datatype.money.MoneyModule;
+import org.modelmapper.ModelMapper;
 
 public class SwaggerOASMoneyMapperProcessor implements ObjectMapperProcessor {
 
     @Inject
     private Logger log;
 
-    private static MoneyModule moneyModule = new MoneyModule().withQuotedDecimalNumbers();
-    // private static SwaggerMonetaryAmountConverter swaggerMonetaryAmountConverter;
-
     @Override
     public void processJsonObjectMapper(ObjectMapper objectMapper) {
-        objectMapper.registerModule(moneyModule);
         /*
         if (swaggerMonetaryAmountConverter == null)
             swaggerMonetaryAmountConverter = new SwaggerMonetaryAmountConverter(objectMapper);

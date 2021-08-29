@@ -714,10 +714,8 @@
  */
 package org.example.controllers.webapi.models;
 
-import com.fasterxml.jackson.databind.Module;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.example.entities.MonetaryEntity;
-import org.zalando.jackson.datatype.money.MoneyModule;
 
 import javax.money.MonetaryAmount;
 import javax.xml.bind.annotation.XmlRootElement;

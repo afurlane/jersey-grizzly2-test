@@ -901,40 +901,31 @@
             <type>pom</type>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.eclipse.microprofile.health</groupId>
-            <artifactId>microprofile-health-api</artifactId>
-            <version>3.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.microprofile.metrics</groupId>
-            <artifactId>microprofile-metrics-api</artifactId>
-            <version>3.0</version>
-            <scope>provided</scope>
-        </dependency>
+
         <dependency>
             <groupId>org.eclipse.microprofile.jwt</groupId>
-            <artifactId>microprofile-jwt-auth-api</artifactId>
+            <artifactId>microprofile-jwt-auth-tck</artifactId>
             <version>1.2.1</version>
-            <scope>provided</scope>
         </dependency>
-        <!-- THIS IS NEEDED BECAUSE the previous package is still not upgraded to jakarta!! -->
-        <dependency>
-            <groupId>javax.json</groupId>
-            <artifactId>javax.json-api</artifactId>
-            <version>1.1.4</version>
-        </dependency>
+
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-auth-jwt</artifactId>
             <version>4.1.2</version>
+            <scope>compile</scope>
         </dependency>
+
         <dependency>
-            <groupId>org.eclipse.microprofile.jwt</groupId>
-            <artifactId>microprofile-jwt-auth-tck</artifactId>
-            <version>1.2</version>
-            <scope>provided</scope>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-auth-oauth2</artifactId>
+            <version>4.1.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.smallrye</groupId>
+            <artifactId>smallrye-jwt</artifactId>
+            <version>3.1.0</version>
         </dependency>
 
         <!-- CDI support -->
@@ -973,7 +964,6 @@
             <artifactId>jBCrypt</artifactId>
             <version>${jbcrypt.version}</version>
         </dependency>
-
 
         <!-- indexer of java annotations, speedup loading -->
         <dependency>
@@ -1056,11 +1046,6 @@
             <version>${jakarta.jws-api.version}</version>
         </dependency>
         <dependency>
-            <groupId>jakarta.xml.ws</groupId>
-            <artifactId>jakarta.xml.ws-api</artifactId>
-            <version>${jakarta-ws-rs-api.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.javamoney</groupId>
             <artifactId>moneta</artifactId>
             <version>${moneta.version}</version>
@@ -1068,12 +1053,13 @@
         </dependency>
 
         <!-- Jackson additional module -->
+        <!--
         <dependency>
             <groupId>org.zalando</groupId>
             <artifactId>jackson-datatype-money</artifactId>
             <version>${jackson-datatype-money.version}</version>
         </dependency>
-
+        -->
         <!-- Testing support -->
         <dependency>
             <groupId>org.glassfish.jersey.test-framework.providers</groupId>
@@ -1162,12 +1148,6 @@
             <version>1.9.7</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>org.eclipse.persistence</groupId>
-            <artifactId>eclipselink</artifactId>
-            <version>3.0.2</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
     <profiles>
@@ -1186,7 +1166,7 @@
                                 <container>
                                     <containerId>tomcat8x</containerId>
                                 </container>
-                            </configuration>
+                                </configuration>
                         </plugin>
                     </plugins>
                 </pluginManagement>
@@ -1758,7 +1738,6 @@
         <cucumber.version>6.11.0</cucumber.version>
         <jaxws-maven-plugin.version>3.0.2</jaxws-maven-plugin.version>
         <jaxws-api.version>2.3.1</jaxws-api.version>
-        <javax.jws-api.version>1.1</javax.jws-api.version>
         <jaxws-ri.version>3.0.0</jaxws-ri.version>
         <assertj-core.version>3.18.1</assertj-core.version>
         <catch-exception.version>1.2.0</catch-exception.version>
