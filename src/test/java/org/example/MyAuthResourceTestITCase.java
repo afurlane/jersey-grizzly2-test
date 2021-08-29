@@ -723,6 +723,7 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.example.controllers.webapi.MyAuthResource;
 import org.example.controllers.webapi.MyResource;
 import org.example.infrastructure.JWTService;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
@@ -753,7 +754,7 @@ public class MyAuthResourceTestITCase extends CdiBaseTest {
         JWTService jwtService=(JWTService) beanManager.getReference(bean,
                 bean.getBeanClass(), beanManager.createCreationalContext(bean));
         String jwt = jwtService.generateJWT();
-        Response response = target().path(MyResource.MyResourcePath)
+        Response response = target().path(MyAuthResource.MyAuthResourcePath)
                 .request().header("authorization", "Bearer " + jwt).buildGet().invoke();
         // String responseMsg = target().path(MyResource.MyResourcePath).request().get(String.class);
         assertEquals("Got it!", response.readEntity(String.class));

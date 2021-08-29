@@ -720,6 +720,7 @@ import com.fasterxml.classmate.TypeResolver;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;
 import jakarta.servlet.ServletContext;
 import jakarta.ws.rs.core.Context;
@@ -730,8 +731,6 @@ import org.glassfish.jersey.server.monitoring.ApplicationEvent;
 import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
 import org.glassfish.jersey.server.monitoring.RequestEvent;
 import org.glassfish.jersey.server.monitoring.RequestEventListener;
-
-import javax.annotation.PostConstruct;
 
 /**
  * This class is a nice example of how to extract information from deployed jax-rs application

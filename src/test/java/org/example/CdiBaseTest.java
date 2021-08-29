@@ -716,8 +716,6 @@ package org.example;
 
 import jakarta.enterprise.inject.se.SeContainer;
 import jakarta.enterprise.inject.se.SeContainerInitializer;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLParameters;
 
 import jakarta.enterprise.inject.spi.Bean;
 import jakarta.enterprise.inject.spi.BeanManager;
@@ -726,12 +724,9 @@ import jakarta.ws.rs.core.UriBuilder;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.example.infrastructure.JWTService;
-import org.example.infrastructure.jersey.EndpointLoggingListener;
 import org.example.infrastructure.jersey.ObjectMapperProvider;
 import org.example.infrastructure.hk2.AutoScanFeature;
 import org.example.infrastructure.hk2.HttpSessionFactory;
-import org.example.infrastructure.mapper.ModelMapperProducer;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpContainerProvider;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -749,6 +744,8 @@ import org.glassfish.jersey.test.TestProperties;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLParameters;
 import java.net.URI;
 import java.util.logging.Level;
 

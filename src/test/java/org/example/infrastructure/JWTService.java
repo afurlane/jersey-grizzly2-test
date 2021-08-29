@@ -28,11 +28,12 @@ public class JWTService {
 
     public String generateJWT() {
         String key = readPemFile();
-        JWTAuth provider = JWTAuth.create(null, new JWTAuthOptions()
-                .addPubSecKey(new PubSecKeyOptions()
-                        .setAlgorithm("RS256")
-                        .setBuffer(key)
-                ));
+        PubSecKeyOptions pubSecKeyOptions = new PubSecKeyOptions();
+        pubSecKeyOptions.setAlgorithm("RS256");
+        pubSecKeyOptions.setBuffer(key);
+        JWTAuthOptions jwtAuthOptions = new JWTAuthOptions();
+        jwtAuthOptions.addPubSecKey(pubSecKeyOptions);
+        JWTAuth provider = JWTAuth.create(null, jwtAuthOptions);
 
         MPJWTToken token = new MPJWTToken();
         token.setAud("targetService");
@@ -56,7 +57,7 @@ public class JWTService {
         String key = null;
         try {
             key = readResourceAsString("privateKey.pem");
-            key = stripX509PEMHeadersKey(key);
+            // key = stripX509PEMHeadersKey(key);
         } catch (IOException | URISyntaxException e) {
             logger.error("Error reading private key file", e);
         }
@@ -64,10 +65,10 @@ public class JWTService {
     }
 
     private String readResourceAsString(String resourceName) throws URISyntaxException, IOException {
-        List<String> fileLines = Files.readAllLines(
-                Path.of(JWTService.class.getClassLoader().getResource(resourceName).toURI()),
-                StandardCharsets.US_ASCII);
-        return fileLines.stream().collect(Collectors.joining()).trim();
+        byte[] bytes = Files.readAllBytes(
+                Path.of(JWTService.class.getClassLoader().getResource(resourceName).toURI()));
+        String returnValue = new String(bytes, StandardCharsets.US_ASCII);
+        return returnValue;
     }
 
     private String stripX509PEMHeadersKey(String key) {

@@ -1,5 +1,7 @@
 package org.example.controllers.webapi.user.api.resource;
 
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -8,10 +10,7 @@ import org.example.controllers.webapi.user.api.model.QueryUserResult;
 import org.example.entities.User;
 import org.example.controllers.webapi.user.service.UserService;
 
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import java.security.Principal;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 

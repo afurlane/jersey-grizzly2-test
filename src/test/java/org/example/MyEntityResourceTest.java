@@ -714,6 +714,7 @@
  */
 package org.example;
 
+import jakarta.enterprise.inject.Instance;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
@@ -730,7 +731,6 @@ import org.mockito.*;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
 
-import javax.enterprise.inject.Instance;
 import jakarta.json.JsonString;
 import jakarta.ws.rs.container.AsyncResponse;
 import jakarta.ws.rs.core.Response;
@@ -773,7 +773,7 @@ public class MyEntityResourceTest {
     JsonWebToken jwt;
 */
     @Mock
-    Instance<Optional<JsonString>> emailAddress;
+Instance<Optional<JsonString>> emailAddress;
 
     @InjectMocks
     MyEntityResource myEntityResource;

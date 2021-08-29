@@ -714,14 +714,13 @@
  */
 package org.example.infrastructure.mapper;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.inject.Instance;
 import jakarta.enterprise.inject.spi.InjectionPoint;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.Produces;
 import org.modelmapper.ModelMapper;
-
-import javax.annotation.PostConstruct;
 
 // Just for show how to provide a mapper per context!
 @Singleton

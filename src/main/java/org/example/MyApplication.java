@@ -724,6 +724,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.servlet.ServletConfig;
 import jakarta.ws.rs.core.Application;
@@ -740,7 +741,6 @@ import org.example.infrastructure.jersey.ObjectMapperProvider;
 import org.example.infrastructure.swagger.SwaggerOASMoneyMapperProcessor;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 
-import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
