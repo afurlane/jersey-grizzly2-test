@@ -725,8 +725,6 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import org.eclipse.microprofile.jwt.Claim;
-import org.eclipse.microprofile.jwt.ClaimValue;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPart;
 
@@ -743,8 +741,8 @@ public class MyAuthResource {
     final public static String MyResourceTryQuery = "tryQuery";
 
     @Inject
-    @Claim("custom-value")
-    private ClaimValue<String> custom;
+    // @Claim("custom-value")
+    // private ClaimValue<String> custom;
 
     /**
      * Method handling HTTP GET requests. The returned object will be sent

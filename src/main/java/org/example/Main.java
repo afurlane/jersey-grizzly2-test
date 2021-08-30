@@ -715,15 +715,16 @@
 package org.example;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.smallrye.jwt.auth.jaxrs.SmallRyeJWTAuthJaxRsFeature;
 import jakarta.enterprise.inject.se.SeContainer;
 import jakarta.enterprise.inject.se.SeContainerInitializer;
+import jakarta.enterprise.inject.spi.Bean;
+import jakarta.enterprise.inject.spi.BeanManager;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.http.HttpSession;
 import org.example.infrastructure.hk2.AutoScanFeature;
 import org.example.infrastructure.hk2.HttpSessionFactory;
-import org.example.infrastructure.jersey.ObjectMapperProvider;
-import org.example.infrastructure.mapper.ModelMapperProducer;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.servlet.ServletRegistration;
 import org.glassfish.grizzly.servlet.WebappContext;
@@ -759,10 +760,15 @@ public class Main {
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
      * @return HttpServer.
      */
-    private static HttpServer BootApp() throws IOException {
+    private static HttpServer BootApp(SeContainer container) throws IOException {
         final WebappContext webappContext = new WebappContext("jersey-grizzly2-test-wac");
 
-        final ResourceConfig resourceConfig = ResourceConfig.forApplicationClass(MyApplication.class)
+        BeanManager beanManager = container.getBeanManager();
+        Bean<?> bean = (Bean<?>)beanManager.resolve(beanManager.getBeans(MyApplication.class));
+        MyApplication myApplication=(MyApplication) beanManager.getReference(bean,
+                bean.getBeanClass(), beanManager.createCreationalContext(bean));
+
+        final ResourceConfig resourceConfig = ResourceConfig.forApplication(myApplication)
                 .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_SERVER, Level.FINEST.getName())
                 .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL, Level.FINEST.getName());
         resourceConfig.register(AutoScanFeature.class);
@@ -772,6 +778,7 @@ public class Main {
         resourceConfig.register(WadlFeature.class);
         resourceConfig.register(GrizzlyHttpContainerProvider.class);
         resourceConfig.register(MultiPartFeature.class);
+        resourceConfig.register(SmallRyeJWTAuthJaxRsFeature.class);
         resourceConfig.register(new AbstractBinder() {
             @Override
             protected void configure() {
@@ -812,7 +819,7 @@ public class Main {
         ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
         try {
 
-            final HttpServer httpServer = BootApp();
+            final HttpServer httpServer = BootApp(container);
 
             // add jvm shutdown hook
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {

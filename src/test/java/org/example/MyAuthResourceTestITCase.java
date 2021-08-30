@@ -714,9 +714,7 @@
  */
 package org.example;
 
-import jakarta.enterprise.inject.spi.Bean;
 import jakarta.enterprise.inject.spi.BeanManager;
-import jakarta.inject.Inject;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -725,7 +723,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.example.controllers.webapi.MyAuthResource;
 import org.example.controllers.webapi.MyResource;
-import org.example.infrastructure.JWTService;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
@@ -741,19 +738,17 @@ import static org.junit.Assert.assertNotNull;
 
 public class MyAuthResourceTestITCase extends CdiBaseTest {
 
-    @Inject
-    private JWTService bubbo;
-
     /**
      * Test to see that the message "Got it!" is sent in the response.
      */
     @Test
     public void testGetIt() {
         BeanManager beanManager = container.getBeanManager();
-        Bean<?> bean = (Bean<?>)beanManager.resolve(beanManager.getBeans(JWTService.class));
-        JWTService jwtService=(JWTService) beanManager.getReference(bean,
-                bean.getBeanClass(), beanManager.createCreationalContext(bean));
-        String jwt = jwtService.generateJWT();
+        // Bean<?> bean = (Bean<?>)beanManager.resolve(beanManager.getBeans(JWTService.class));
+        // JWTService jwtService=(JWTService) beanManager.getReference(bean,
+       //         bean.getBeanClass(), beanManager.createCreationalContext(bean));
+       //  String jwt = jwtService.generateJWT();
+        String jwt = "";
         Response response = target().path(MyAuthResource.MyAuthResourcePath)
                 .request().header("authorization", "Bearer " + jwt).buildGet().invoke();
         // String responseMsg = target().path(MyResource.MyResourcePath).request().get(String.class);

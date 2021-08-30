@@ -716,7 +716,6 @@ package org.example;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import org.eclipse.microprofile.jwt.tck.util.TokenUtils;
 import org.example.controllers.webapi.MyEntityResource;
 import org.example.controllers.webapi.MyResource;
 import org.example.entities.ExampleDetailEntity;
@@ -748,23 +747,9 @@ public class MyEntityResourceTestITCase extends CdiBaseTest {
 
     }
 
-    private String GetToken () {
-        KeyPair pair = null;
-        String token = "";
-        try {
-            pair = TokenUtils.generateKeyPair(1024);
-            token = TokenUtils.signClaims(pair.getPrivate(), "kid", "/Token1.json", null, null);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return token == "" ? token : "Bearer " + token;
-    }
-
     @Test
     public void testGGetEntityByIdWhithNullParam() throws NoSuchAlgorithmException {
-        String token = GetToken();
+        String token = "";
         Response responseMsg = target().path(MyEntityResource.MyEntityResourcePath)
                 .request().header(HttpHeaders.AUTHORIZATION, token).get();
         ExampleModel exampleEntity = responseMsg.readEntity(ExampleModel.class);
@@ -787,7 +772,7 @@ public class MyEntityResourceTestITCase extends CdiBaseTest {
     @Test
     public void testGGetEntityById() {
         Long id = 2L;
-        String token = GetToken();
+        String token = "";
         Response responseMsg = target().path(MyEntityResource.MyEntityResourcePath)
                 .path(id.toString()).request().header(HttpHeaders.AUTHORIZATION, token).get();
         assertNotNull(responseMsg);
