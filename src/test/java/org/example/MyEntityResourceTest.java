@@ -742,7 +742,6 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MyEntityResourceTest {
-    private final long waitThreadTimeout = 5_000;
 
     @Mock
     EntityManagerFactory entityManagerFactory;
@@ -795,6 +794,7 @@ Instance<Optional<JsonString>> emailAddress;
         myEntityResource.GetEntityById(asyncResponse);
 
         // If you use ArgumentCaptor you should be sure that the other thread has completed.
+        long waitThreadTimeout = 5_000;
         Sleep(waitThreadTimeout);
         verify(asyncResponse, atLeastOnce()).resume(captor.capture());
         Response res = captor.getValue();

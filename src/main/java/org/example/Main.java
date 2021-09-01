@@ -714,6 +714,7 @@
  */
 package org.example;
 
+import com.fasterxml.jackson.core.util.JacksonFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.smallrye.jwt.auth.jaxrs.SmallRyeJWTAuthJaxRsFeature;
 import jakarta.enterprise.inject.se.SeContainer;
@@ -725,6 +726,7 @@ import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.http.HttpSession;
 import org.example.infrastructure.hk2.AutoScanFeature;
 import org.example.infrastructure.hk2.HttpSessionFactory;
+import org.example.infrastructure.jersey.ObjectMapperProvider;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.servlet.ServletRegistration;
 import org.glassfish.grizzly.servlet.WebappContext;
@@ -733,7 +735,6 @@ import org.glassfish.hk2.api.ServiceLocatorFactory;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpContainerProvider;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
-import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -764,7 +765,7 @@ public class Main {
         final WebappContext webappContext = new WebappContext("jersey-grizzly2-test-wac");
 
         BeanManager beanManager = container.getBeanManager();
-        Bean<?> bean = (Bean<?>)beanManager.resolve(beanManager.getBeans(MyApplication.class));
+        Bean<?> bean = beanManager.resolve(beanManager.getBeans(MyApplication.class));
         MyApplication myApplication=(MyApplication) beanManager.getReference(bean,
                 bean.getBeanClass(), beanManager.createCreationalContext(bean));
 
@@ -772,6 +773,7 @@ public class Main {
                 .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_SERVER, Level.FINEST.getName())
                 .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL, Level.FINEST.getName());
         resourceConfig.register(AutoScanFeature.class);
+        resourceConfig.register(ObjectMapperProvider.class);
         resourceConfig.register(JacksonFeature.class);
         resourceConfig.register(UriConnegFilter.class);
         resourceConfig.register(ValidationFeature.class);
@@ -799,9 +801,6 @@ public class Main {
         ServletRegistration servlet = webappContext.addServlet("jersey-grizzly2-test-app", new ServletContainer(resourceConfig));
         servlet.addMapping("/*");
 
-        // ServletRegistration hello = webappContext.addServlet("myServlet", MyServlet.class);
-        // hello.addMapping("/servlet/*");
-
         HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), false);
         webappContext.deploy(httpServer);
         httpServer.start();
@@ -810,13 +809,13 @@ public class Main {
 
     /**
      * Main method.
-     * @param args
+     * @param args from command line
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException, IOException {
 
         SeContainerInitializer containerInit = SeContainerInitializer.newInstance();
         SeContainer container = containerInit.initialize();
-        ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
+        new ObjectMapper().findAndRegisterModules();
         try {
 
             final HttpServer httpServer = BootApp(container);
@@ -834,15 +833,14 @@ public class Main {
                 }
             }));
 
-            System.out.println(String.format("Application started.%nStop the application using CTRL+C"));
+            System.out.println("Application started.%nStop the application using CTRL+C");
 
             // block and wait shut down signal, like CTRL+C
             Thread.currentThread().join();
 
-        } catch (InterruptedException ex) {
+        } catch (InterruptedException | IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
         }
         container.close();
     }

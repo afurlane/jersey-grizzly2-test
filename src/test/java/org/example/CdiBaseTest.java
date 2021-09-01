@@ -714,6 +714,8 @@
  */
 package org.example;
 
+import com.fasterxml.jackson.core.util.JacksonFeature;
+import io.smallrye.jwt.auth.jaxrs.SmallRyeJWTAuthJaxRsFeature;
 import jakarta.enterprise.inject.se.SeContainer;
 import jakarta.enterprise.inject.se.SeContainerInitializer;
 
@@ -729,7 +731,6 @@ import org.example.infrastructure.hk2.AutoScanFeature;
 import org.example.infrastructure.hk2.HttpSessionFactory;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpContainerProvider;
-import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -779,11 +780,11 @@ public class CdiBaseTest extends JerseyTest {
         grizzlyWebTestContainerFactory = new GrizzlyWebTestContainerFactory();
 
         BeanManager beanManager = container.getBeanManager();
-        Bean<?> bean = (Bean<?>)beanManager.resolve(beanManager.getBeans(MyApplication.class));
+        Bean<?> bean = beanManager.resolve(beanManager.getBeans(MyApplication.class));
         MyApplication myApplication=(MyApplication) beanManager.getReference(bean,
                 bean.getBeanClass(), beanManager.createCreationalContext(bean));
 
-        ResourceConfig resourceConfig = new ResourceConfig().forApplication(myApplication)
+        ResourceConfig resourceConfig = ResourceConfig.forApplication(myApplication)
                 .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_SERVER, Level.FINEST.getName())
                 .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL, Level.FINEST.getName());
         resourceConfig.register(AutoScanFeature.class);
@@ -794,7 +795,7 @@ public class CdiBaseTest extends JerseyTest {
         resourceConfig.register(WadlFeature.class);
         resourceConfig.register(GrizzlyHttpContainerProvider.class);
         resourceConfig.register(MultiPartFeature.class);
-
+        resourceConfig.register(SmallRyeJWTAuthJaxRsFeature.class);
         resourceConfig.register(new AbstractBinder() {
             @Override
             protected void configure() {

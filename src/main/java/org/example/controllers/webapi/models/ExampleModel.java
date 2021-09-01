@@ -715,10 +715,10 @@
 package org.example.controllers.webapi.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import org.example.entities.MonetaryEntity;
 
 import javax.money.MonetaryAmount;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 import java.util.List;
 
