@@ -714,13 +714,15 @@
  */
 package org.example;
 
-import jakarta.enterprise.inject.spi.BeanManager;
+import io.smallrye.jwt.build.Jwt;
+import io.smallrye.jwt.build.JwtClaimsBuilder;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.jwt.Claims;
 import org.example.controllers.webapi.MyAuthResource;
 import org.example.controllers.webapi.MyResource;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
@@ -743,12 +745,11 @@ public class MyAuthResourceTestITCase extends CdiBaseTest {
      */
     @Test
     public void testGetIt() {
-        BeanManager beanManager = container.getBeanManager();
-        // Bean<?> bean = (Bean<?>)beanManager.resolve(beanManager.getBeans(JWTService.class));
-        // JWTService jwtService=(JWTService) beanManager.getReference(bean,
-       //         bean.getBeanClass(), beanManager.createCreationalContext(bean));
-       //  String jwt = jwtService.generateJWT();
-        String jwt = "";
+            JwtClaimsBuilder builder1 = Jwt.claims();
+        builder1.subject("testuser");
+        builder1.claim(Claims.groups, "user");
+        builder1.claim("customClaim", "custom-value").issuer("https://issuer.org");
+        String jwt = builder1.sign();
         Response response = target().path(MyAuthResource.MyAuthResourcePath)
                 .request().header("authorization", "Bearer " + jwt).buildGet().invoke();
         // String responseMsg = target().path(MyResource.MyResourcePath).request().get(String.class);

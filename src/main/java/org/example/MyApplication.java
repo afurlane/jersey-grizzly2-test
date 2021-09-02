@@ -803,7 +803,7 @@ public class MyApplication extends Application {
                 JsonProcessingExceptionMapper.class,
                 AcceptHeaderOpenApiResource.class,
                 OpenApiResource.class,
-                RolesAllowedDynamicFeature.class,
+                /* RolesAllowedDynamicFeature.class, */
 
                 MyEntityResource.class,
                 MyResource.class,
