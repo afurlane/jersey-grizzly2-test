@@ -716,7 +716,6 @@ package org.example;
 
 import com.fasterxml.jackson.core.util.JacksonFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.smallrye.jwt.auth.jaxrs.SmallRyeJWTAuthJaxRsFeature;
 import jakarta.enterprise.inject.se.SeContainer;
 import jakarta.enterprise.inject.se.SeContainerInitializer;
 import jakarta.enterprise.inject.spi.Bean;
@@ -780,7 +779,6 @@ public class Main {
         resourceConfig.register(WadlFeature.class);
         resourceConfig.register(GrizzlyHttpContainerProvider.class);
         resourceConfig.register(MultiPartFeature.class);
-        resourceConfig.register(SmallRyeJWTAuthJaxRsFeature.class);
         resourceConfig.register(new AbstractBinder() {
             @Override
             protected void configure() {

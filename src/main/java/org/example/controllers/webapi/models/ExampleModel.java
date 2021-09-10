@@ -714,11 +714,8 @@
  */
 package org.example.controllers.webapi.models;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import org.example.entities.MonetaryEntity;
 
-import javax.money.MonetaryAmount;
 import java.util.Date;
 import java.util.List;
 
@@ -726,9 +723,6 @@ import java.util.List;
 public class ExampleModel {
     private Long id;
     private String name;
-
-    @Schema(implementation = MonetaryEntity.class, name = "MonetaryAmount")
-    private MonetaryAmount amount;
 
     private Date insertDate;
 
@@ -754,14 +748,6 @@ public class ExampleModel {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public MonetaryAmount getAmount() {
-        return amount;
-    }
-
-    public void setAmount(MonetaryAmount amount) {
-        this.amount = amount;
     }
 
     public List<ExampleDetailModel> getExampleDetailModels() {

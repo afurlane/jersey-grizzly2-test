@@ -729,7 +729,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.servlet.ServletConfig;
 import jakarta.ws.rs.core.Application;
 import jakarta.ws.rs.core.Context;
-import org.eclipse.microprofile.auth.LoginConfig;
 import org.example.controllers.webapi.MyAuthResource;
 import org.example.controllers.webapi.MyEntityResource;
 import org.example.controllers.webapi.MyResource;
@@ -739,7 +738,6 @@ import org.example.infrastructure.jersey.EndpointLoggingListener;
 import org.example.infrastructure.jersey.JsonProcessingExceptionMapper;
 import org.example.infrastructure.jersey.ObjectMapperProvider;
 import org.example.infrastructure.swagger.SwaggerOASMoneyMapperProcessor;
-import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 
 import java.util.Collections;
 import java.util.Map;

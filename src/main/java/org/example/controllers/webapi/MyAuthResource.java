@@ -740,9 +740,9 @@ public class MyAuthResource {
     final public static String MyAuthResourcePath = "myauthresource";
     final public static String MyResourceTryQuery = "tryQuery";
 
-    @Inject
-    // @Claim("custom-value")
-    // private ClaimValue<String> custom;
+//    @Inject
+//    @Claim("custom-value")
+//    private ClaimValue<String> custom;
 
     /**
      * Method handling HTTP GET requests. The returned object will be sent

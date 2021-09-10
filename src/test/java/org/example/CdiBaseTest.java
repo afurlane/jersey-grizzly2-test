@@ -715,7 +715,6 @@
 package org.example;
 
 import com.fasterxml.jackson.core.util.JacksonFeature;
-import io.smallrye.jwt.auth.jaxrs.SmallRyeJWTAuthJaxRsFeature;
 import jakarta.enterprise.inject.se.SeContainer;
 import jakarta.enterprise.inject.se.SeContainerInitializer;
 
@@ -795,7 +794,6 @@ public class CdiBaseTest extends JerseyTest {
         resourceConfig.register(WadlFeature.class);
         resourceConfig.register(GrizzlyHttpContainerProvider.class);
         resourceConfig.register(MultiPartFeature.class);
-        resourceConfig.register(SmallRyeJWTAuthJaxRsFeature.class);
         resourceConfig.register(new AbstractBinder() {
             @Override
             protected void configure() {
