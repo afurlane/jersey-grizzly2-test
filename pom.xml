@@ -983,7 +983,6 @@
             <groupId>org.eclipse.microprofile.jwt</groupId>
             <artifactId>microprofile-jwt-auth-api-ee</artifactId>
             <version>1.2.1</version>
-            <systemPath></systemPath>
             <scope>compile</scope>
         </dependency>
         <dependency>
