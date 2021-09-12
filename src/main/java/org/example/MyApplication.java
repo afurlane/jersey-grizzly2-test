@@ -729,6 +729,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.servlet.ServletConfig;
 import jakarta.ws.rs.core.Application;
 import jakarta.ws.rs.core.Context;
+import org.eclipse.microprofile.auth.LoginConfig;
 import org.example.controllers.webapi.MyAuthResource;
 import org.example.controllers.webapi.MyEntityResource;
 import org.example.controllers.webapi.MyResource;
