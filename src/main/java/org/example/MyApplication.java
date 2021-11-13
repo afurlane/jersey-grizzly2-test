@@ -734,6 +734,7 @@ import org.example.controllers.webapi.MyAuthResource;
 import org.example.controllers.webapi.MyEntityResource;
 import org.example.controllers.webapi.MyResource;
 import org.example.controllers.webapi.user.api.resource.UserResource;
+import org.example.infrastructure.hk2.TestBeanServiceBinder;
 import org.example.infrastructure.jersey.CustomConstraintViolationExceptionMapper;
 import org.example.infrastructure.jersey.EndpointLoggingListener;
 import org.example.infrastructure.jersey.JsonProcessingExceptionMapper;
@@ -803,7 +804,7 @@ public class MyApplication extends Application {
                 AcceptHeaderOpenApiResource.class,
                 OpenApiResource.class,
                 /* RolesAllowedDynamicFeature.class, */
-
+                TestBeanServiceBinder.class,
                 MyEntityResource.class,
                 MyResource.class,
                 MyAuthResource.class,

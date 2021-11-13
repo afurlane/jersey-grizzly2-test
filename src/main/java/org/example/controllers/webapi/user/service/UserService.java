@@ -1,8 +1,10 @@
 package org.example.controllers.webapi.user.service;
 
+import jakarta.annotation.ManagedBean;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.example.entities.User;
 
 import java.util.List;
@@ -14,9 +16,12 @@ import java.util.Optional;
  * @author cassiomolin
  */
 @ApplicationScoped
+@ManagedBean
 public class UserService {
 
-    @Inject
+    // @Inject
+    // private EntityManager em;
+    @PersistenceContext
     private EntityManager em;
 
     /**
