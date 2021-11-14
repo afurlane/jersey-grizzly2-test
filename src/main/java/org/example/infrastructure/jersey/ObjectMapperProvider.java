@@ -717,9 +717,7 @@ package org.example.infrastructure.jersey;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-// import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-// import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import jakarta.ws.rs.ext.ContextResolver;
 import jakarta.ws.rs.ext.Provider;
 
@@ -737,13 +735,7 @@ public class ObjectMapperProvider implements ContextResolver<ObjectMapper> {
     }
 
     private ObjectMapper createObjectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        // mapper.findAndRegisterModules();
-        // From the mapper in @author cassiomolin
-        // mapper.registerModule(new Jdk8Module());
-        // mapper.registerModule(new JavaTimeModule());
-        // mapper.registerModule(new ParameterNamesModule());
-
+        ObjectMapper mapper = JsonMapper.builder().build();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
         // mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
@@ -753,7 +745,6 @@ public class ObjectMapperProvider implements ContextResolver<ObjectMapper> {
 
         // mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        // mapper.findAndRegisterModules();
         return mapper;
     }
 }

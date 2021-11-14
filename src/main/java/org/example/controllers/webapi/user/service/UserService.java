@@ -15,13 +15,9 @@ import java.util.Optional;
  *
  * @author cassiomolin
  */
-@ApplicationScoped
-@ManagedBean
 public class UserService {
 
-    // @Inject
-    // private EntityManager em;
-    @PersistenceContext
+    @Inject
     private EntityManager em;
 
     /**

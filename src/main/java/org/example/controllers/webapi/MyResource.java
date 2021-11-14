@@ -722,8 +722,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.annotation.security.DeclareRoles;
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import org.example.services.TestBeanService;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPart;
 
@@ -738,6 +740,9 @@ public class MyResource {
 
     final public static String MyResourcePath = "myresource";
     final public static String MyResourceTryQuery = "tryQuery";
+
+    @Inject
+    private TestBeanService testBeanService;
 
     /**
      * Method handling HTTP GET requests. The returned object will be sent
