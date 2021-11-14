@@ -753,7 +753,7 @@ public class ObjectMapperProvider implements ContextResolver<ObjectMapper> {
 
         // mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        mapper.findAndRegisterModules();
+        // mapper.findAndRegisterModules();
         return mapper;
     }
 }
