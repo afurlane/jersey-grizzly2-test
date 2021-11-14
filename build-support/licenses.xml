@@ -160,6 +160,16 @@
             </urls>
         </license>
         <license>
+            <name>BSD-3-Clause</name>
+            <names>
+                <name>BSD-3-Clause</name>
+            </names>
+            <urls>
+                <url>https://opensource.org/licenses/BSD-3-Clause</url>
+                <url>https://asm.ow2.io/license.html</url>
+            </urls>
+        </license>
+        <license>
             <name>Apache License 2.0</name>
             <names>
                 <name>Apache License, 2.0</name>

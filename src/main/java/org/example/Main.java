@@ -716,6 +716,7 @@ package org.example;
 
 import com.fasterxml.jackson.core.util.JacksonFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationModule;
 import jakarta.enterprise.inject.se.SeContainer;
 import jakarta.enterprise.inject.se.SeContainerInitializer;
 import jakarta.enterprise.inject.spi.Bean;
@@ -813,7 +814,8 @@ public class Main {
 
         SeContainerInitializer containerInit = SeContainerInitializer.newInstance();
         SeContainer container = containerInit.initialize();
-        new ObjectMapper().findAndRegisterModules();
+        // new ObjectMapper().findAndRegisterModules();
+
         try {
 
             final HttpServer httpServer = BootApp(container);
