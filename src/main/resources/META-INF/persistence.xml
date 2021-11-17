@@ -2,8 +2,9 @@
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
              version="2.0">
-    <persistence-unit name="example-unit" transaction-type="RESOURCE_LOCAL">
+    <persistence-unit name="example-unit" transaction-type="JTA">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <jta-data-source>jdbc/EclipseLinkDS</jta-data-source>
         <class>org.example.entities.ExampleEntity</class>
         <class>org.example.entities.ExampleDetailEntity</class>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>

@@ -729,6 +729,7 @@ import org.example.services.TestBeanService;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPart;
 
+import javax.ejb.EJB;
 import java.util.List;
 
 /**
