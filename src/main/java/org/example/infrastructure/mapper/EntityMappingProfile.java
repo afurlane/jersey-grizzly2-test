@@ -736,7 +736,6 @@ public class EntityMappingProfile implements MappingProfile {
             mapper.map(src -> src.getId(), ExampleDetailModel::setId);
             mapper.map(src -> src.getName(), ExampleDetailModel::setName);
         });
-
         return modelMapper;
     }
 }

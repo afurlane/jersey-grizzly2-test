@@ -724,6 +724,7 @@ public class ExampleModel {
     private Long id;
     private String name;
 
+    private Date timeStamp;
     private Date insertDate;
 
     private List<ExampleDetailModel> exampleDetailModels;
@@ -764,5 +765,13 @@ public class ExampleModel {
 
     public void setInsertDate(Date insertDate) {
         this.insertDate = insertDate;
+    }
+
+    public Date getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(Date timeStamp) {
+        this.timeStamp = timeStamp;
     }
 }

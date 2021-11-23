@@ -1759,7 +1759,7 @@
         <eclipselink.version>3.0.2</eclipselink.version>
         <h2.version>1.4.200</h2.version>
         <derby.version>10.15.2.0</derby.version>
-        <modelmapper.version>2.3.0</modelmapper.version>
+        <modelmapper.version>2.4.4</modelmapper.version>
         <persistence-api.version>3.0.0</persistence-api.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mockito.version>2.25.0</mockito.version>

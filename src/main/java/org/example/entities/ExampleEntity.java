@@ -716,6 +716,7 @@ package org.example.entities;
 
 import jakarta.persistence.*;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -729,6 +730,8 @@ public class ExampleEntity {
     private Long id;
 
     private String name;
+
+    private Timestamp timeStamp;
 
     @Embedded
     private MonetaryEntity amount;
@@ -768,7 +771,7 @@ public class ExampleEntity {
         this.name = name;
     }
 
-    public List<ExampleDetailEntity> getExampleDetailEntity() {
+    public List<ExampleDetailEntity>    getExampleDetailEntity() {
         return exampleDetailEntities;
     }
 
@@ -790,5 +793,13 @@ public class ExampleEntity {
 
     public void setAmount(MonetaryEntity amount) {
         this.amount = amount;
+    }
+
+    public Timestamp getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(Timestamp timeStamp) {
+        this.timeStamp = timeStamp;
     }
 }
