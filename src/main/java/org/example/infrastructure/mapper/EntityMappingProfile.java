@@ -726,16 +726,23 @@ public class EntityMappingProfile implements MappingProfile {
 
     @Override
     public ModelMapper configure(ModelMapper modelMapper) {
-        modelMapper.createTypeMap(ExampleEntity.class, ExampleModel.class)
-                .addMappings(mapper -> {
-            mapper.map(src -> src.getExampleDetailEntity(), ExampleModel::setExampleDetailModels);
-            mapper.map(src -> src.getName(), ExampleModel::setName);
-            mapper.map(src -> src.getId(), ExampleModel::setId);
-        });
         modelMapper.createTypeMap(ExampleDetailEntity.class, ExampleDetailModel.class).addMappings(mapper -> {
             mapper.map(src -> src.getId(), ExampleDetailModel::setId);
             mapper.map(src -> src.getName(), ExampleDetailModel::setName);
         });
+
+        modelMapper.createTypeMap(ExampleEntity.class, ExampleModel.class)
+                .addMappings(mapper -> {
+                    mapper.map(ExampleEntity::getExampleDetailEntity, ExampleModel::setExampleDetailModels);
+                    // mapper.map(ExampleEntity::getTimeStamp, ExampleModel::setTimeStamp);
+                    mapper.map(src -> src.getTimeStamp(), ExampleModel::setTimeStamp);
+/*
+            mapper.map(src -> src.getExampleDetailEntity(), ExampleModel::setExampleDetailModels);
+            mapper.map(src -> src.getName(), ExampleModel::setName);
+            mapper.map(src -> src.getId(), ExampleModel::setId);
+*/
+        });
+
         return modelMapper;
     }
 }

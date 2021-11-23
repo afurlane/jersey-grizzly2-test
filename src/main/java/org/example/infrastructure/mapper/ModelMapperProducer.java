@@ -715,25 +715,24 @@
 package org.example.infrastructure.mapper;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Initialized;
+import jakarta.enterprise.event.Observes;
 import jakarta.enterprise.inject.Instance;
+import jakarta.enterprise.inject.Produces;
 import jakarta.enterprise.inject.spi.InjectionPoint;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import jakarta.ws.rs.Produces;
 import org.modelmapper.ModelMapper;
 
 // Just for show how to provide a mapper per context!
-@Singleton
+@ApplicationScoped
 public class ModelMapperProducer {
 
-    private final ModelMapper modelMapper;
+    private ModelMapper modelMapper;
 
     @Inject
     Instance<MappingProfile> mappingProfileInstance;
-
-    public ModelMapperProducer() {
-        modelMapper = new ModelMapper();
-    }
 
     @Produces
     public ModelMapper getModelMapper (InjectionPoint p) {
@@ -742,6 +741,11 @@ public class ModelMapperProducer {
 
     @PostConstruct
     public void InitDefaults() {
+        modelMapper = new ModelMapper();
         mappingProfileInstance.forEach(mappingProfile -> mappingProfile.configure(modelMapper));
+    }
+
+    public void init(@Observes @Initialized(ApplicationScoped.class) Object init) {
+        // model mapper initialized.
     }
 }

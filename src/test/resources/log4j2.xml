@@ -34,7 +34,7 @@
         <Logger name="org.example" level="trace">
             <AppenderRef ref="app_file_log_rolling"/>
         </Logger>
-        <logger name="org.jboss.weld" level="info">
+        <logger name="org.jboss.weld" level="trace">
             <AppenderRef ref="app_file_log_rolling"/>
         </logger>
         <logger name="org.jboss.jandex" level="info">
