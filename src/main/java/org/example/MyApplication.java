@@ -740,6 +740,7 @@ import org.example.infrastructure.jersey.EndpointLoggingListener;
 import org.example.infrastructure.jersey.JsonProcessingExceptionMapper;
 import org.example.infrastructure.jersey.ObjectMapperProvider;
 import org.example.infrastructure.swagger.SwaggerOASMoneyMapperProcessor;
+import org.glassfish.jersey.jackson.JacksonFeature;
 
 import java.util.Collections;
 import java.util.Map;
@@ -798,6 +799,7 @@ public class MyApplication extends Application {
 
         return Stream.of(
                 ObjectMapperProvider.class,
+                JacksonFeature.class,
                 EndpointLoggingListener.class,
                 CustomConstraintViolationExceptionMapper.class,
                 JsonProcessingExceptionMapper.class,

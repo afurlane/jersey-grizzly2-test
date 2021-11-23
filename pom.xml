@@ -887,12 +887,10 @@
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>
         </dependency>
-        <!--
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-jackson</artifactId>
         </dependency>
-        -->
         <!-- JAXB API for jersey WADL support -->
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
@@ -952,8 +950,8 @@
             <artifactId>jakarta.el</artifactId>
             <version>${jakarta.el-impl.version}</version>
         </dependency>
-        <!-- -->
         <!-- Jackson extended support -->
+        <!--
         <dependency>
             <groupId>com.fasterxml.jackson.jakarta.rs</groupId>
             <artifactId>jackson-jakarta-rs-json-provider</artifactId>
@@ -978,6 +976,19 @@
             <groupId>com.fasterxml.jackson.jakarta.rs</groupId>
             <artifactId>jackson-jakarta-rs-yaml-provider</artifactId>
             <version>${fasterxml-jackson-jakarta-rs-providers.version}</version>
+        </dependency>
+        -->
+        <!--
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-jakarta-xmlbind-annotations</artifactId>
+            <version>${fasterxml-jackson.version}</version>
+        </dependency>
+        -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-afterburner</artifactId>
+            <version>${fasterxml-jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>io.smallrye.config</groupId>
@@ -1175,14 +1186,14 @@
             <groupId>org.apache.derby</groupId>
             <artifactId>derby</artifactId>
             <version>${derby.version}</version>
-            <scope>test,provided</scope>
+            <scope>provided</scope>
         </dependency>
         <!-- JDBC DRIVER HERE!! -->
         <dependency>
             <groupId>org.apache.derby</groupId>
             <artifactId>derbytools</artifactId>
             <version>${derby.version}</version>
-            <scope>test,provided</scope>
+            <scope>provided</scope>
         </dependency>
         <!-- Webapp Context -->
         <dependency>
@@ -1824,8 +1835,8 @@
         <maven-surefire-report-plugi.version>2.22.2</maven-surefire-report-plugi.version>
         <moneta.version>1.4.2</moneta.version>
         <jackson-datatype-money.version>1.2.2</jackson-datatype-money.version>
-        <fasterxml-jackson.version>2.12.4</fasterxml-jackson.version>
-        <fasterxml-jackson-jakarta-rs-providers.version>2.13.0</fasterxml-jackson-jakarta-rs-providers.version>
+        <fasterxml-jackson.version>2.12.3</fasterxml-jackson.version>
+        <fasterxml-jackson-jakarta-rs-providers.version>>2.13.0</fasterxml-jackson-jakarta-rs-providers.version>
         <microprofile.versio>4.1</microprofile.versio>
         <hibernate-validator.version>7.0.1.Final</hibernate-validator.version>
         <smallrye-jwt.version>3.2.1</smallrye-jwt.version>

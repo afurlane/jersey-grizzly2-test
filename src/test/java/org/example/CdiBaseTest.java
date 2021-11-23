@@ -786,9 +786,9 @@ public class CdiBaseTest extends JerseyTest {
         ResourceConfig resourceConfig = ResourceConfig.forApplication(myApplication)
                 .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_SERVER, Level.FINEST.getName())
                 .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL, Level.FINEST.getName());
-        resourceConfig.register(AutoScanFeature.class);
+        // resourceConfig.register(AutoScanFeature.class);
         resourceConfig.register(ObjectMapperProvider.class);
-        resourceConfig.register(JacksonFeature.class);
+        // resourceConfig.register(JacksonFeature.class);
         resourceConfig.register(UriConnegFilter.class);
         resourceConfig.register(ValidationFeature.class);
         resourceConfig.register(WadlFeature.class);

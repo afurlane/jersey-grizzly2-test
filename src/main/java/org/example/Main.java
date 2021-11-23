@@ -714,9 +714,6 @@
  */
 package org.example;
 
-import com.fasterxml.jackson.core.util.JacksonFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationModule;
 import jakarta.enterprise.inject.se.SeContainer;
 import jakarta.enterprise.inject.se.SeContainerInitializer;
 import jakarta.enterprise.inject.spi.Bean;
@@ -724,7 +721,6 @@ import jakarta.enterprise.inject.spi.BeanManager;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.http.HttpSession;
-import org.example.infrastructure.hk2.AutoScanFeature;
 import org.example.infrastructure.hk2.HttpSessionFactory;
 import org.example.infrastructure.jersey.ObjectMapperProvider;
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -735,6 +731,7 @@ import org.glassfish.hk2.api.ServiceLocatorFactory;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpContainerProvider;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -772,7 +769,7 @@ public class Main {
         final ResourceConfig resourceConfig = ResourceConfig.forApplication(myApplication)
                 .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL_SERVER, Level.FINEST.getName())
                 .property(LoggingFeature.LOGGING_FEATURE_LOGGER_LEVEL, Level.FINEST.getName());
-        resourceConfig.register(AutoScanFeature.class);
+        // resourceConfig.register(AutoScanFeature.class);
         resourceConfig.register(ObjectMapperProvider.class);
         resourceConfig.register(JacksonFeature.class);
         resourceConfig.register(UriConnegFilter.class);
