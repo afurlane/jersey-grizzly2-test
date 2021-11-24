@@ -1166,19 +1166,19 @@
         <dependency>
             <groupId>org.jboss.narayana.jta</groupId>
             <artifactId>narayana-jta-jakarta</artifactId>
-            <version>5.12.1.Final</version>
+            <version>${narayana-jta-jakarta.version}</version>
         </dependency>
         <!-- Eclipse Link as JPA Provider for testing purposes -->
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>eclipselink</artifactId>
             <version>${eclipselink.version}</version>
-            <scope>test</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator-cdi</artifactId>
-            <version>7.0.0.Final</version>
+            <version>${hibernate-validator.version}</version>
             <scope>runtime</scope>
         </dependency>
         <!-- database support -->
@@ -1749,8 +1749,8 @@
         <jersey.version>3.0.3</jersey.version>
         <log4j2.version>2.14.1</log4j2.version>
         <junit.jupiter.version>5.7.2</junit.jupiter.version>
-        <swagger.version>2.1.11</swagger.version>
-        <swagger-ui.version>4.1.0</swagger-ui.version>
+        <swagger.version>2.1.10</swagger.version>
+        <swagger-ui.version>3.51.2</swagger-ui.version>
         <weld.version>4.0.2.Final</weld.version>
         <jakarta-activation-api.version>2.0.0</jakarta-activation-api.version>
         <jakarta.servlet-api.version>5.0.0</jakarta.servlet-api.version>
@@ -1835,10 +1835,12 @@
         <maven-surefire-report-plugi.version>2.22.2</maven-surefire-report-plugi.version>
         <moneta.version>1.4.2</moneta.version>
         <jackson-datatype-money.version>1.2.2</jackson-datatype-money.version>
+        <!-- keep jackson version coehrent with jersey! -->
         <fasterxml-jackson.version>2.12.3</fasterxml-jackson.version>
         <fasterxml-jackson-jakarta-rs-providers.version>>2.13.0</fasterxml-jackson-jakarta-rs-providers.version>
         <microprofile.versio>4.1</microprofile.versio>
         <hibernate-validator.version>7.0.1.Final</hibernate-validator.version>
+        <narayana-jta-jakarta.version>5.12.1.Final</narayana-jta-jakarta.version>
         <smallrye-jwt.version>3.2.1</smallrye-jwt.version>
         <smallrye-config.version>2.6.0</smallrye-config.version>
     </properties>

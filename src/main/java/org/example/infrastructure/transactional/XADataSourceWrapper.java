@@ -1,7 +1,9 @@
 package org.example.infrastructure.transactional;
 
 import com.arjuna.ats.jdbc.TransactionalDriver;
+import com.arjuna.ats.jdbc.common.jdbcPropertyManager;
 
+import javax.naming.Context;
 import javax.sql.DataSource;
 import javax.sql.XAConnection;
 import javax.sql.XAConnectionBuilder;
@@ -96,8 +98,8 @@ public class XADataSourceWrapper implements XADataSource, DataSource {
 
         // caution: ensure the tx lifecycle listener is configured in tomcat or there will be a
         // possible race here, as recovery needs these properties too and may start first
-        // jdbcPropertyManager.getJDBCEnvironmentBean().getJndiProperties().put("Context.INITIAL_CONTEXT_FACTORY", System.getProperty(Context.INITIAL_CONTEXT_FACTORY));
-        // jdbcPropertyManager.getJDBCEnvironmentBean().getJndiProperties().put("Context.URL_PKG_PREFIXES", System.getProperty(Context.URL_PKG_PREFIXES));
+        jdbcPropertyManager.getJDBCEnvironmentBean().getJndiProperties().put("Context.INITIAL_CONTEXT_FACTORY", System.getProperty(Context.INITIAL_CONTEXT_FACTORY));
+        jdbcPropertyManager.getJDBCEnvironmentBean().getJndiProperties().put("Context.URL_PKG_PREFIXES", System.getProperty(Context.URL_PKG_PREFIXES));
 
         // Second problem: this method has almost certainly been called by a webapp,
         // which has its own InitialContext. Whilst the datasource is in there, we
