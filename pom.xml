@@ -1708,9 +1708,15 @@
                             <goal>wsimport</goal>
                         </goals>
                         <configuration>
+                            <wsdlDirectory>${project.basedir}/build-support</wsdlDirectory>
+                            <wsdlFiles>
+                                <wsdlFile>chebi.wsdl</wsdlFile>
+                            </wsdlFiles>
+                            <!--
                             <wsdlUrls>
                                 <wsdlUrl>http://www.ebi.ac.uk/webservices/chebi/2.0/webservice?wsdl</wsdlUrl>
                             </wsdlUrls>
+                            -->
                             <!-- for JDK 6 compilation compatibility -->
                             <!--
                             <xnocompile>false</xnocompile>
