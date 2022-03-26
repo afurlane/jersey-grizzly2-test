@@ -3,6 +3,7 @@ package org.example.infrastructure.transactional;
 import javax.naming.*;
 import javax.naming.spi.ObjectFactory;
 import javax.sql.XADataSource;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -24,7 +25,7 @@ public class TransactionalResourceFactory implements ObjectFactory {
                                     Hashtable environment) throws Exception {
         Reference ref = (Reference) obj;
         Enumeration addrs = ref.getAll();
-        HashMap<String, String> params = new HashMap();
+        HashMap<String, String> params = new HashMap<>();
 
         System.out.println("TransactionalResourceFactory ");
 
@@ -136,7 +137,9 @@ public class TransactionalResourceFactory implements ObjectFactory {
         XADataSource xaDataSource = null;
 
         try {
-            xaDataSource = (XADataSource) clazz.newInstance();
+            Constructor[] constructor
+                    = XADataSource.class.getConstructors();
+            xaDataSource = (XADataSource) constructor[0].newInstance();
         } catch (Exception e) {
             NamingException ex = new NamingException("Unable to instantiate " + classname);
             ex.initCause(e);

@@ -14,9 +14,9 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 public class XADataSourceWrapper implements XADataSource, DataSource {
-    private XADataSource _theXADataSource;
-    private final TransactionalDriver _theTransactionalDriver = new TransactionalDriver();
-    private String _name;
+    private final XADataSource theXADataSource;
+    private final TransactionalDriver transactionalDriver = new TransactionalDriver();
+    private final String name;
 
     /**
      * Create a wrapper around the provided XADataSource implementation,
@@ -29,8 +29,8 @@ public class XADataSourceWrapper implements XADataSource, DataSource {
      * @param theDataSource
      */
     public XADataSourceWrapper(String name, XADataSource theDataSource) {
-        _theXADataSource = theDataSource;
-        _name = name;
+        theXADataSource = theDataSource;
+        this.name = name;
     }
 
     /**
@@ -40,7 +40,7 @@ public class XADataSourceWrapper implements XADataSource, DataSource {
      * @return
      */
     public XADataSource getUnwrappedXADataSource() {
-        return _theXADataSource;
+        return theXADataSource;
     }
 
     ///////////////////////
@@ -58,7 +58,7 @@ public class XADataSourceWrapper implements XADataSource, DataSource {
      * @throws SQLException
      */
     public Connection getConnection() throws SQLException {
-        String url = TransactionalDriver.arjunaDriver + _name;
+        String url = TransactionalDriver.arjunaDriver + name;
         // although we are not setting any properties, the driver will barf if we pass 'null'.
         Properties properties = new Properties();
         return getTransactionalConnection(url, properties);
@@ -73,7 +73,7 @@ public class XADataSourceWrapper implements XADataSource, DataSource {
      * @throws SQLException
      */
     public Connection getConnection(String username, String password) throws SQLException {
-        String url = TransactionalDriver.arjunaDriver + _name;
+        String url = TransactionalDriver.arjunaDriver + name;
         Properties properties = new Properties();
         properties.setProperty(TransactionalDriver.userName, username);
         properties.setProperty(TransactionalDriver.password, password);
@@ -114,7 +114,7 @@ public class XADataSourceWrapper implements XADataSource, DataSource {
         Thread.currentThread().setContextClassLoader(webappClassLoader.getParent());
         Connection connection;
         try {
-            connection = _theTransactionalDriver.connect(url, properties);
+            connection = transactionalDriver.connect(url, properties);
         } finally {
             Thread.currentThread().setContextClassLoader(webappClassLoader);
         }
@@ -129,40 +129,40 @@ public class XADataSourceWrapper implements XADataSource, DataSource {
     // We don't really care, it's the underlying implementations problem
     // to disambiguate them if required.
 
-    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+    public boolean isWrapperFor(Class<?> iface) {
         return iface.isAssignableFrom(XADataSource.class);
     }
 
     public <T> T unwrap(Class<T> iface) throws SQLException {
         if (isWrapperFor(iface)) {
-            return (T) getUnwrappedXADataSource();
+            return (T)getUnwrappedXADataSource();
         } else {
             throw new SQLException("Not a wrapper for " + iface.getCanonicalName());
         }
     }
 
     public XAConnection getXAConnection() throws SQLException {
-        return _theXADataSource.getXAConnection();
+        return theXADataSource.getXAConnection();
     }
 
     public XAConnection getXAConnection(String user, String password) throws SQLException {
-        return _theXADataSource.getXAConnection(user, password);
+        return theXADataSource.getXAConnection(user, password);
     }
 
     public PrintWriter getLogWriter() throws SQLException {
-        return _theXADataSource.getLogWriter();
+        return theXADataSource.getLogWriter();
     }
 
     public void setLogWriter(PrintWriter out) throws SQLException {
-        _theXADataSource.setLogWriter(out);
+        theXADataSource.setLogWriter(out);
     }
 
     public void setLoginTimeout(int seconds) throws SQLException {
-        _theXADataSource.setLoginTimeout(seconds);
+        theXADataSource.setLoginTimeout(seconds);
     }
 
     public int getLoginTimeout() throws SQLException {
-        return _theXADataSource.getLoginTimeout();
+        return theXADataSource.getLoginTimeout();
     }
 
     @Override
@@ -176,7 +176,7 @@ public class XADataSourceWrapper implements XADataSource, DataSource {
     }
 
     @Override
-    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+    public Logger getParentLogger() {
         return null;
     }
 
