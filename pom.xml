@@ -788,15 +788,6 @@
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
-            <!--
-            <dependency>
-                <groupId>com.fasterxml.jackson.jakarta.rs</groupId>
-                <artifactId>jackson-jakarta-rs-providers</artifactId>
-                <version>${fasterxml-jackson-jakarta-rs-providers.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            -->
         </dependencies>
     </dependencyManagement>
 
@@ -1468,9 +1459,6 @@
                 <version>${maven-compiler.version}</version>
                 <inherited>true</inherited>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <encoding>${project.build.sourceEncoding}</encoding>
                     <optimize>true</optimize>
                     <compilerArgs>
                         <arg>-Xlint:deprecation</arg>
@@ -1560,12 +1548,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>${surefire-plugin.version}</version>
+                <version>${maven.surefire.version}</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.surefire</groupId>
                         <artifactId>surefire-junit47</artifactId>
-                        <version>${surefire-plugin.version}</version>
+                        <version>${maven.surefire.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>org.junit.jupiter</groupId>
@@ -1593,12 +1581,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${failsafe-plugin.version}</version>
+                <version>${maven.failsafe.version}</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.surefire</groupId>
                         <artifactId>surefire-junit47</artifactId>
-                        <version>${surefire-plugin.version}</version>
+                        <version>${maven.failsafe.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>org.junit.jupiter</groupId>
@@ -1788,16 +1776,15 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         -->
-        <java.version>11</java.version>
         <maven-dependency-plugin.version>3.1.1</maven-dependency-plugin.version>
         <maven-war-plugin.version>3.3.1</maven-war-plugin.version>
-        <surefire-plugin.version>2.22.1</surefire-plugin.version>
-        <failsafe-plugin.version>2.22.1</failsafe-plugin.version>
-        <surefire-report-plugin.version>2.22.1</surefire-report-plugin.version>
+        <surefire-report-plugin.version>3.0.0-M5</surefire-report-plugin.version>
         <replacer.version>1.5.3</replacer.version>
         <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <rp.build.warname>${project.artifactId}</rp.build.warname>
         <cargo.version>1.8.3</cargo.version>
         <!-- SonarQube Settings -->
@@ -1844,7 +1831,7 @@
         <!-- keep jackson version coehrent with jersey! -->
         <fasterxml-jackson.version>2.12.3</fasterxml-jackson.version>
         <fasterxml-jackson-jakarta-rs-providers.version>>2.13.0</fasterxml-jackson-jakarta-rs-providers.version>
-        <microprofile.versio>4.1</microprofile.versio>
+        <microprofile.versio>5.0</microprofile.versio>
         <hibernate-validator.version>7.0.1.Final</hibernate-validator.version>
         <narayana-jta-jakarta.version>5.12.1.Final</narayana-jta-jakarta.version>
         <smallrye-jwt.version>3.2.1</smallrye-jwt.version>

@@ -3,18 +3,8 @@
   <component name="RemoteRepositoriesConfiguration">
     <remote-repository>
       <option name="id" value="central" />
-      <option name="name" value="Central Repository" />
-      <option name="url" value="https://repo.maven.apache.org/maven2" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="central" />
       <option name="name" value="Maven Central repository" />
       <option name="url" value="https://repo1.maven.org/maven2" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="jakarta-translated" />
-      <option name="name" value="jakarta-translated" />
-      <option name="url" value="file://D:\Progetti\Progetti\jersey-grizzly2-test/jakarta-translated" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="jboss.community" />
@@ -24,12 +14,12 @@
     <remote-repository>
       <option name="id" value="central" />
       <option name="name" value="Maven Repository Switchboard" />
-      <option name="url" value="https://repo1.maven.org/maven2" />
+      <option name="url" value="https://repo1.maven.org/maven2/" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="central" />
-      <option name="name" value="Maven Repository Switchboard" />
-      <option name="url" value="https://repo1.maven.org/maven2/" />
+      <option name="id" value="apache-central" />
+      <option name="name" value="Apache Central Maven Repository" />
+      <option name="url" value="https://repo.maven.apache.org/" />
     </remote-repository>
   </component>
 </project>
