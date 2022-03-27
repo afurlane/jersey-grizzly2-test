@@ -1012,6 +1012,27 @@
             <version>${smallrye-jwt.version}</version>
             <scope>test</scope>
         </dependency>
+        <!-- JSF Support -->
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>jakarta.faces</artifactId>
+            <version>4.0.0-M1</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.servlet.jsp.jstl</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+        <dependency> <!-- Optional, only when <f:websocket> is used. -->
+            <groupId>org.glassfish</groupId>
+            <artifactId>jakarta.json</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+        <dependency> <!-- Optional, only when <f:validateBean> or <f:validateWholeBean> is used. -->
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>7.0.0.Final</version>
+        </dependency>
         <!-- CDI support -->
         <dependency>
             <groupId>org.glassfish.jersey.ext.cdi</groupId>
@@ -1219,7 +1240,7 @@
                                 <container>
                                     <containerId>tomcat8x</containerId>
                                 </container>
-                                </configuration>
+                            </configuration>
                         </plugin>
                     </plugins>
                 </pluginManagement>
@@ -1275,30 +1296,30 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <build>
-            <pluginManagement>
-            <plugins>
-            <plugin>
-                <groupId>org.codehaus.cargo</groupId>
-                <artifactId>cargo-maven2-plugin</artifactId>
-                <version>${cargo.version}</version>
-                <configuration>
-                    <container>
-                        <type>remote</type>
-                    </container>
-                    <configuration>
-                        <type>runtime</type>
-                        <properties>
-                            <cargo.hostname>${container.hostname}</cargo.hostname>
-                            <cargo.servlet.port>${container.servlet.port}</cargo.servlet.port>
-                            <cargo.remote.username>${container.username}</cargo.remote.username>
-                            <cargo.remote.password>${container.password}</cargo.remote.password>
-                            <cargo.remote.uri>${container.uri}</cargo.remote.uri>
-                        </properties>
-                    </configuration>
-                </configuration>
-            </plugin>
-            </plugins>
-            </pluginManagement>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.codehaus.cargo</groupId>
+                            <artifactId>cargo-maven2-plugin</artifactId>
+                            <version>${cargo.version}</version>
+                            <configuration>
+                                <container>
+                                    <type>remote</type>
+                                </container>
+                                <configuration>
+                                    <type>runtime</type>
+                                    <properties>
+                                        <cargo.hostname>${container.hostname}</cargo.hostname>
+                                        <cargo.servlet.port>${container.servlet.port}</cargo.servlet.port>
+                                        <cargo.remote.username>${container.username}</cargo.remote.username>
+                                        <cargo.remote.password>${container.password}</cargo.remote.password>
+                                        <cargo.remote.uri>${container.uri}</cargo.remote.uri>
+                                    </properties>
+                                </configuration>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
             </build>
         </profile>
     </profiles>
@@ -1365,9 +1386,11 @@
                     <licenseSets>
                         <licenseSet>
                             <multi>
-                                <preamble><![CDATA[This product is dual-licensed under both the GPLv2.1 and Apache 2.0 License.]]></preamble>
+                                <preamble>
+                                    <![CDATA[This product is dual-licensed under both the GPLv2.1 and Apache 2.0 License.]]></preamble>
                                 <header>${project.basedir}/licenses/GPL-2.1.txt</header>
-                                <separator>======================================================================</separator>
+                                <separator>======================================================================
+                                </separator>
                                 <header>${project.basedir}/licenses/APACHE-2.txt</header>
                             </multi>
                             <excludes>
@@ -1416,7 +1439,8 @@
                 </executions>
                 <configuration>
                     <licenseFile>${project.basedir}/build-support/licenses.xml</licenseFile>
-                    <excludedMissingLicensesFile>${project.basedir}/build-support/allowedMissingLicense.xml</excludedMissingLicensesFile>
+                    <excludedMissingLicensesFile>${project.basedir}/build-support/allowedMissingLicense.xml
+                    </excludedMissingLicensesFile>
                     <failOnForbidden>true</failOnForbidden>
                     <failOnMissing>true</failOnMissing>
                     <failOnUnknown>true</failOnUnknown>
@@ -1507,7 +1531,9 @@
                 <configuration>
                     <webResources combine.children="append">
                         <resource>
-                            <directory>${project.build.directory}/swagger-ui/META-INF/resources/webjars/swagger-ui/${swagger-ui.version}</directory>
+                            <directory>
+                                ${project.build.directory}/swagger-ui/META-INF/resources/webjars/swagger-ui/${swagger-ui.version}
+                            </directory>
                             <includes>
                                 <include>**/*.*</include>
                             </includes>
@@ -1531,7 +1557,9 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <file>${project.build.directory}/swagger-ui/META-INF/resources/webjars/swagger-ui/${swagger-ui.version}/index.html</file>
+                    <file>
+                        ${project.build.directory}/swagger-ui/META-INF/resources/webjars/swagger-ui/${swagger-ui.version}/index.html
+                    </file>
                     <replacements>
                         <replacement>
                             <token>http://petstore.swagger.io/v2/swagger.json</token>
@@ -1750,7 +1778,7 @@
     </build>
 
     <properties>
-        <jersey.version>3.0.3</jersey.version>
+        <jersey.version>3.0.4</jersey.version>
         <log4j2.version>2.14.1</log4j2.version>
         <junit.jupiter.version>5.7.2</junit.jupiter.version>
         <swagger.version>2.1.10</swagger.version>
@@ -1760,7 +1788,7 @@
         <jakarta.servlet-api.version>5.0.0</jakarta.servlet-api.version>
         <jandex.version>2.3.1.Final</jandex.version>
         <jakarta-annotation.version>2.0.0</jakarta-annotation.version>
-        <jakarta-cdi-api.version>3.0.0</jakarta-cdi-api.version>
+        <jakarta-cdi-api.version>3.0.1</jakarta-cdi-api.version>
         <jakarta-inject-api.version>2.0.0</jakarta-inject-api.version>
         <jakarta-ws-rs-api.version>3.0.0</jakarta-ws-rs-api.version>
         <jakarta.jws-api.version>3.0.0</jakarta.jws-api.version>
@@ -1814,7 +1842,8 @@
         <sonar.findbugs.reportPaths></sonar.findbugs.reportPaths>
         -->
         <sonar.jacoco.reportPaths>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPaths>
-        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/../target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/../target/site/jacoco-aggregate/jacoco.xml
+        </sonar.coverage.jacoco.xmlReportPaths>
         <!--
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
