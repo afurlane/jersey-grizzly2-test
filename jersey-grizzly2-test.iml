@@ -34,9 +34,6 @@
     <orderEntry type="library" name="Maven: javax.annotation:javax.annotation-api:1.3.2" level="project" />
     <orderEntry type="library" name="Maven: jakarta.validation:jakarta.validation-api:3.0.0" level="project" />
     <orderEntry type="library" name="Maven: jakarta.interceptor:jakarta.interceptor-api:2.0.0" level="project" />
-    <orderEntry type="library" name="Maven: org.hibernate.validator:hibernate-validator:7.0.0.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.jboss.logging:jboss-logging:3.3.0.Final" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml:classmate:1.3.3" level="project" />
     <orderEntry type="library" name="Maven: org.glassfish.jersey.ext:jersey-bean-validation:3.0.4" level="project" />
     <orderEntry type="library" name="Maven: org.glassfish.jersey.core:jersey-client:3.0.4" level="project" />
     <orderEntry type="library" name="Maven: org.glassfish.jersey.core:jersey-server:3.0.4" level="project" />
@@ -84,6 +81,7 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: io.smallrye.common:smallrye-common-classloader:1.8.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.ow2.asm:asm:9.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: io.smallrye.config:smallrye-config-common:2.6.0" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.logging:jboss-logging:3.3.0.Final" level="project" />
     <orderEntry type="library" name="Maven: io.smallrye:smallrye-jwt-common:3.2.1" level="project" />
     <orderEntry type="library" name="Maven: org.bitbucket.b_c:jose4j:0.7.8" level="project" />
     <orderEntry type="library" name="Maven: io.smallrye:smallrye-jwt-jaxrs:3.2.1" level="project" />
@@ -94,6 +92,8 @@
     <orderEntry type="library" name="Maven: org.glassfish:jakarta.faces:4.0.0-M1" level="project" />
     <orderEntry type="library" name="Maven: jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:2.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.glassfish:jakarta.json:2.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.hibernate.validator:hibernate-validator:7.0.1.Final" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml:classmate:1.3.3" level="project" />
     <orderEntry type="library" name="Maven: org.glassfish.jersey.ext.cdi:jersey-weld2-se:3.0.4" level="project" />
     <orderEntry type="library" name="Maven: org.glassfish.jersey.ext.cdi:jersey-cdi1x:3.0.4" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.weld.se:weld-se-core:4.0.2.Final" level="project" />
